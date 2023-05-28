@@ -18,6 +18,7 @@ SET_TEMPLATE = {
     "mdtime": None,
     "org": None,
     "group": None,
+    "public": False,
     "cards": {},
 }
 
@@ -29,12 +30,13 @@ CARD_TEMPLATE = {
 }
 
 
-def create_set(user_id: str, org_id: str = None, group_id: str = None) -> str:
+def create_set(user_id: str, org_id: str = None, group_id: str = None, is_public: bool = False) -> str:
     """
     Create a new set and save it
     :param user_id:
     :param org_id:
     :param group_id:
+    :param public:
     :return: The set id
     """
     template = copy(SET_TEMPLATE)
@@ -45,6 +47,7 @@ def create_set(user_id: str, org_id: str = None, group_id: str = None) -> str:
     set.mdtime = datetime.now()
     set.org = org_id
     set.group_id = group_id
+    set.public = is_public
     set.save(f"db/sets/{set.id()}.pyn")
     return set.id()
 
