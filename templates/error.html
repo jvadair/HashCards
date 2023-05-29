@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include "boilerplate.html" %}
+    <title>HashCards</title>
+</head>
+<body>
+{% include "header.html" %}
+<main>
+    {% if code == 400 %}
+        <h1>Whoops!</h1>
+    {% else %}
+        <h1>Whoops!</h1>
+    {% endif %}
+    <h4>{{ message }}</h4>
+    <button class="btn" onclick="history.back()">Go back</button>
+</main>
+{% include "footer.html" %}
+</body>
+</html>

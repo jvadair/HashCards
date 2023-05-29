@@ -1,0 +1,69 @@
+main {
+    grid-gap: 50px;
+    margin: 5% 0;
+    padding: 1%;
+}
+
+main p {
+    font-size: 125%;
+}
+
+main h2 {
+    font-size: 2em;
+    color: var(--accent)
+}
+
+h1 {
+    font-size: 4em;
+    font-weight: bolder;
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+}
+
+/* Fancy header text */
+.cutout {
+    background: var(--text); /* Fallback */
+    background: linear-gradient(90deg, rgba(246,152,57,1) 0%, rgba(211,131,132,1) 60%, rgba(155,97,255,1) 100%);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+/* Form */
+form.email-collector {
+    display: flex;
+    flex-direction: row;
+    grid-gap: 10px;
+    justify-content: center;
+    align-items: center;
+    height: 3em;
+}
+
+form.email-collector input#email {
+    border: 1px solid var(--text);
+    outline: none;
+    border-radius: 25px;
+    padding: 10px;
+    background-color: var(--overlay);
+    color: var(--text);
+    text-align: center;
+    height: inherit;
+    font-size: 1.25em;
+}
+
+form.email-collector input.btn {
+    height: inherit;
+}
+
+
+/* Viewports */
+
+
+/* Mobile viewport */
+@media screen and (max-width: 450px) {
+    h2 {
+        text-align: center;
+    }
+    form.email-collector {
+        flex-direction: column;
+    }
+}

@@ -36,7 +36,7 @@ def create_set(user_id: str, org_id: str = None, group_id: str = None, is_public
     :param user_id:
     :param org_id:
     :param group_id:
-    :param public:
+    :param is_public:
     :return: The set id
     """
     template = copy(SET_TEMPLATE)

@@ -1,0 +1,148 @@
+/* Custom fonts */
+@import url('https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@500&family=Prompt&family=Roboto&display=swap');
+/*
+font-family: 'Alegreya Sans', sans-serif;
+font-family: 'Prompt', sans-serif;
+font-family: 'Roboto', sans-serif;
+*/
+
+
+/* Custom colors and other global values */
+:root {
+    /* Custom color values */
+    --background: #141313;
+    --overlay: #282828;
+    --text: #f3e4d8;
+    --accent: #f69839;
+
+    /* Fixed height values */
+    --header-height: 75px;
+}
+
+
+/* CSS Reset */
+body, main, header, footer, article, html {
+    border: 0;
+    padding: 0;
+    margin: 0;
+}
+
+* {
+    box-sizing: border-box;
+    color: var(--text);
+    font-family: 'Alegreya Sans', sans-serif;
+}
+
+
+/* General styling */
+
+
+html, body {
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    background-color: var(--background);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Roboto', sans-serif;
+}
+
+
+/* Generic primitives */
+
+
+.btn {
+    background-color: var(--accent);
+    color: var(--background);
+    outline: none;
+    border: none;
+    padding: 1em;
+    min-width: 5em;
+    height: 2.5em;
+    cursor: pointer;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .1s;
+    border-radius: 15px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+}
+
+.btn:hover {
+    transform: scale(110%);
+    opacity: 90%;
+    backdrop-filter: blur(25px);
+    box-shadow: 0 0 .1em .1em var(--accent);
+}
+
+
+/* Header and footer */
+
+
+/* Header */
+header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: var(--header-height);
+    padding: 10px;
+}
+
+header a {
+    text-decoration: none;
+}
+
+header nav {
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    grid-gap: 15px;
+    padding: 0 15px;
+}
+
+header img {
+    height: 100%;
+    width: auto;
+}
+
+/* Footer */
+footer {
+    width: 100%;
+    border-top: 5px wave red;
+    min-height: var(--header-height);
+    align-items: center;
+    padding: 10px;
+    text-align: center;
+}
+
+footer img {
+    height: 50px;
+    max-width: auto;
+}
+
+
+/* Main content */
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 100%;
+    min-height: calc(100vh - var(--header-height));  /* Will always push footer to bottom */
+}
+
+
+/* Viewports */
+
+
+/* Mobile viewport */
+@media screen and (max-width: 950px) {
+
+}
