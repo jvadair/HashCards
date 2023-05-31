@@ -1,0 +1,96 @@
+#dash {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+/* Sidebar */
+#dash #sidebar {
+  width: 25%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  grid-gap: 15px;
+  align-items: center;
+  position: sticky;
+  top: 25px;
+}
+
+.chip {
+  width: 75%;
+}
+
+#recent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Feed */
+#dash #feed {
+  height: 100%;
+  width: 75%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  grid-gap: 15px;
+}
+
+.content-card {
+  width: 80%;
+  background-color: var(--overlay);
+  min-height: 100px;
+  border-radius: 20px;
+  padding: 25px;
+}
+
+/* Progress meter*/
+#dash #progress {
+  display: flex;
+  flex-direction: column;
+}
+
+#indicator {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+#indicator #current, #goal {
+
+}
+
+#indicator #bar {
+  width: 100%;
+  padding: 20px 15px;
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+}
+
+#indicator #bar #percentage {
+  width: 25%;  /* MANIPULATE VIA JS */
+  border-radius: 5px;
+  background-color: var(--accent);
+}
+
+
+/* Viewports */
+
+
+/* Mobile viewport */
+@media screen and (max-width: 450px) {
+  #dash {
+    flex-direction: column;
+  }
+  #dash #sidebar {
+    width: 100%;
+    height: initial;
+  }
+  #dash #feed {
+    width: 100%;
+    height: initial;
+  }
+}

@@ -80,6 +80,22 @@ h1, h2, h3, h4, h5, h6 {
     box-shadow: 0 0 .1em .1em var(--accent);
 }
 
+.chip {
+  background-color: var(--overlay);
+  padding: 5px 25px;
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  grid-gap: 15px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.chip:hover {
+  opacity: 80%;
+}
+
 
 /* Header and footer */
 
@@ -95,6 +111,7 @@ header {
 
 header a {
     text-decoration: none;
+    font-size: 125%;
 }
 
 header nav {
@@ -110,6 +127,7 @@ header nav {
 header img {
     height: 100%;
     width: auto;
+    cursor: pointer;
 }
 
 /* Footer */
@@ -139,10 +157,32 @@ main {
 }
 
 
+/* Forms */
+form {
+    display: flex;
+    flex-direction: column;
+    grid-gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+form input {
+    border: 1px solid var(--text);
+    outline: none;
+    border-radius: 25px;
+    padding: 10px;
+    background-color: var(--overlay);
+    color: var(--text);
+    text-align: center;
+    height: inherit;
+    font-size: 1.25em;
+}
+
+
 /* Viewports */
 
 
 /* Mobile viewport */
-@media screen and (max-width: 950px) {
+@media screen and (max-width: 450px) {
 
 }

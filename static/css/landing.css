@@ -30,24 +30,24 @@ h1 {
 
 /* Form */
 form.email-collector {
-    display: flex;
+    /*display: flex;*/
     flex-direction: row;
-    grid-gap: 10px;
-    justify-content: center;
-    align-items: center;
+    /*grid-gap: 10px;*/
+    /*justify-content: center;*/
+    /*align-items: center;*/
     height: 3em;
 }
 
 form.email-collector input#email {
-    border: 1px solid var(--text);
-    outline: none;
-    border-radius: 25px;
-    padding: 10px;
-    background-color: var(--overlay);
-    color: var(--text);
-    text-align: center;
-    height: inherit;
-    font-size: 1.25em;
+    /*border: 1px solid var(--text);*/
+    /*outline: none;*/
+    /*border-radius: 25px;*/
+    /*padding: 10px;*/
+    /*background-color: var(--overlay);*/
+    /*color: var(--text);*/
+    /*text-align: center;*/
+    /*height: inherit;*/
+    /*font-size: 1.25em;*/
 }
 
 form.email-collector input.btn {

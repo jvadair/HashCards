@@ -18,7 +18,17 @@ def error(code, message):
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('landing.html')
+
+
+@app.route('/dash')
+def temp_dash_design():
+    return render_template('dash.html')
+
+
+@app.route('/login')
+def login_page():
+    return render_template('auth.html')
 
 
 # API

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include "boilerplate.html" %}
+    <title>HashCards</title>
+    <link rel="stylesheet" href="/static/css/dash.css">
+</head>
+<body>
+{% include "header.html" %}
+<main>
+    <div id="dash">
+        <div id="sidebar">
+            <a class="chip" href="/new">
+                <span class="material-symbols-outlined">add</span>
+                <p>New</p>
+            </a>
+            <a class="chip" href="/sets">
+                <span class="material-symbols-outlined">library_books</span>
+                <p>My sets</p>
+            </a>
+            <div id="recent">
+                <h2>Recent</h2>
+                <p>No recent sets yet, go explore!</p>
+            </div>
+        </div>
+        <div id="feed">
+            <div id="progress" class="content-card">
+                <h2>Your Progress</h2>
+                <h3>Level 1</h3>
+                <div id="indicator">
+                    <p id="current">25</p>
+                    <div id="bar">
+                        <div id="percentage"></div>
+                    </div>
+                    <p id="goal">100</p>
+                </div>
+                <h3>Daily streak: <span style="color: var(--accent); font-size: 1.5em">3</span> days</h3>
+            </div>
+            <div id="pinned" class="content-card">
+                <h2>Pinned</h2>
+                <p>To pin a set, just click the 'pin' button.</p>
+            </div>
+            <div id="groups" class="content-card">
+                <h2>New in your groups</h2>
+                <p>Nothing to see here. Try joining a group or making a set for your group.</p>
+            </div>
+            <div class="content-card"></div>
+            <div class="content-card"></div>
+            <div class="content-card"></div>
+            <div class="content-card"></div>
+            <div class="content-card"></div>
+            <div class="content-card"></div>
+            <div class="content-card"></div>
+        </div>
+    </div>
+</main>
+{% include "footer.html" %}
+</body>
+</html>
