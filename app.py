@@ -28,7 +28,12 @@ def temp_dash_design():
 
 @app.route('/login')
 def login_page():
-    return render_template('auth.html')
+    return render_template('auth.html', auth_method='login')
+
+
+@app.route('/register')
+def register_page():
+    return render_template('auth.html', auth_method='register')
 
 
 # API
@@ -49,6 +54,11 @@ def preregister():
 @app.route('/api/v1/auth/login', methods=['POST'])
 def login():
     return error(501, "Login is not available yet.")
+
+
+@app.route('/api/v1/auth/register', methods=['POST'])
+def register():
+    return error(501, "Account registration is not available yet.")
 
 
 # Error handling

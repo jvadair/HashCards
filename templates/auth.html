@@ -8,16 +8,28 @@
 <body>
 {% include "components/header.html" %}
 <main>
-    <form action="/api/v1/auth/login" method="post">
+    <form action="/api/v1/auth/{{ auth_method }}" method="post">
         <div class="welcome">
+            {% if auth_method == 'login' %}
             <h1>Welcome back!</h1>
             <h3>Or <a href="/register">click here</a> to sign up</h3>
+            {% elif auth_method == 'register' %}
+            <h1>Howdy!</h1>
+            <h3>Already registered? <a href="/login">Click here</a> to sign in</h3>
+            {% endif %}
         </div>
+        {% if auth_method == 'login' %}
         <label for="identifier" style="display: none">Username or email</label>
         <input id="identifier" type="text" name="identifier" placeholder="Username or email">
+        {% elif auth_method == 'register' %}
+        <label for="email" style="display: none">Email</label>
+        <input id="email" type="email" name="email" placeholder="Email">
+        <label for="username" style="display: none">Username</label>
+        <input id="username" type="text" name="username" placeholder="Username">
+        {% endif %}
         <label for="password" style="display: none">Password</label>
         <input id="password" type="password" name="password" placeholder="Password">
-        <input type="submit" value="Login" class="btn">
+        <input type="submit" value="{{ 'Login' if auth_method == 'login' else 'Sign up'}}" class="btn">
     </form>
 </main>
 {% include "components/footer.html" %}
