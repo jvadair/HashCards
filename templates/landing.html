@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {% include "boilerplate.html" %}
+    {% include "components/boilerplate.html" %}
     <title>HashCards</title>
     <link rel="stylesheet" href="/static/css/landing.css">
 </head>
@@ -9,6 +9,13 @@
 {% include "components/header.html" %}
 <main>
     <div class="action">
+        {#
+        Ideas:
+        1. Make learning effortless
+        2. Mastery sans misery
+        3. The power to study
+        4. We fixed flashcards
+        #}
         <h1 class="cutout">Flashcards, sans flashy.</h1>
         <form class="email-collector" action="/api/v1/preregister" method="post">
             <label for="email" style="display: none;">Email</label>

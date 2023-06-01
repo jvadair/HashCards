@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {% include "boilerplate.html" %}
+    {% include "components/boilerplate.html" %}
     <link rel="stylesheet" href="/static/css/auth.css">
     <title>HashCards</title>
 </head>
@@ -20,16 +20,23 @@
         </div>
         {% if auth_method == 'login' %}
         <label for="identifier" style="display: none">Username or email</label>
-        <input id="identifier" type="text" name="identifier" placeholder="Username or email">
+        <input id="identifier" type="text" name="identifier" placeholder="Username or email" required>
         {% elif auth_method == 'register' %}
         <label for="email" style="display: none">Email</label>
-        <input id="email" type="email" name="email" placeholder="Email">
+        <input id="email" type="email" name="email" placeholder="Email" required>
         <label for="username" style="display: none">Username</label>
-        <input id="username" type="text" name="username" placeholder="Username">
+        <input id="username" type="text" name="username" placeholder="Username" required>
         {% endif %}
         <label for="password" style="display: none">Password</label>
-        <input id="password" type="password" name="password" placeholder="Password">
+        <input id="password" type="password" name="password" placeholder="Password" required>
         <input type="submit" value="{{ 'Login' if auth_method == 'login' else 'Sign up'}}" class="btn">
+        <div id="social_logins">
+            <h2>Or, sign in with</h2>
+            <div id="social_buttons">
+                <img src="/static/images/social_logins/nexus.png" alt="Login with Nexus">
+                <img src="/static/images/social_logins/google.png" alt="Login with Google">
+            </div>
+        </div>
     </form>
 </main>
 {% include "components/footer.html" %}

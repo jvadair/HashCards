@@ -12,6 +12,7 @@ form {
     max-width: 750px;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    grid-gap: 15px;
 }
 
 form .welcome {
@@ -35,6 +36,31 @@ form input.btn {
     width: 25%;
 }
 
+#social_logins {
+    display: flex;
+    flex-direction: column;
+    grid-gap: 10px;
+    margin-top: 25px;
+}
+
+#social_logins * {
+    margin: 0;
+}
+
+#social_logins #social_buttons {
+    display: flex;
+    flex-direction: row;
+    grid-gap: 25px;
+    align-items: center;
+    justify-content: center;
+}
+
+#social_logins #social_buttons img {
+    height: 50px;
+    width: auto;
+    border-radius: 5px;
+}
+
 
 /* Fix header links looking bad */
 header, footer {
@@ -49,6 +75,7 @@ header {
 
 footer {
     background-color: rgba(var(--background-variable-opacity), .9);
+    margin-top: 5%;
 }
 
 
