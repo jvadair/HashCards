@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include "boilerplate.html" %}
+    <link rel="stylesheet" href="/static/css/auth.css">
+    <title>HashCards</title>
+</head>
+<body>
+{% include "components/header.html" %}
+<main>
+    <form action="/api/v1/auth/login" method="post">
+        <div class="welcome">
+            <h1>Welcome back!</h1>
+            <h3>Or <a href="/register">click here</a> to sign up</h3>
+        </div>
+        <label for="identifier" style="display: none">Username or email</label>
+        <input id="identifier" type="text" name="identifier" placeholder="Username or email">
+        <label for="password" style="display: none">Password</label>
+        <input id="password" type="password" name="password" placeholder="Password">
+        <input type="submit" value="Login" class="btn">
+    </form>
+</main>
+{% include "components/footer.html" %}
+</body>
+</html>

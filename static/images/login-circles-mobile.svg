@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="450mm"
+   height="950mm"
+   viewBox="0 0 450 950"
+   version="1.1"
+   id="svg7535"
+   inkscape:version="1.2.2 (1:1.2.2+202305151914+b0a8486541)"
+   sodipodi:docname="login-circles-mobile.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7537"
+     pagecolor="#ffffff"
+     bordercolor="#999999"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.12900356"
+     inkscape:cx="-155.03448"
+     inkscape:cy="1666.6207"
+     inkscape:window-width="1366"
+     inkscape:window-height="692"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs7532">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient8768">
+      <stop
+         style="stop-color:#f69839;stop-opacity:1;"
+         offset="0"
+         id="stop8764" />
+      <stop
+         style="stop-color:#f69839;stop-opacity:0;"
+         offset="1"
+         id="stop8766" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient8768"
+       id="linearGradient8770"
+       x1="-155.68794"
+       y1="415.32797"
+       x2="-183.45741"
+       y2="1050.0715"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.352366,0,0,1.352366,7.3316821,-141.28159)" />
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="opacity:0.916396;fill:url(#linearGradient8770);fill-opacity:1;stroke-width:10.2546;paint-order:markers fill stroke"
+       id="rect8362"
+       width="401.73645"
+       height="724.15344"
+       x="-431.60898"
+       y="524.47144"
+       ry="200.86823"
+       transform="rotate(-45)" />
+  </g>
+</svg>

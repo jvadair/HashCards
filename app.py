@@ -46,6 +46,11 @@ def preregister():
         return error(400, f"The email you entered, '{email}', seems to be invalid.")
 
 
+@app.route('/api/v1/auth/login', methods=['POST'])
+def login():
+    return error(501, "Login is not available yet.")
+
+
 # Error handling
 @app.errorhandler(HTTPException)
 def handle_exception(e):
