@@ -13,6 +13,7 @@ import os
 
 SET_TEMPLATE = {
     "id": None,
+    "title": "",
     "author": None,
     "crtime": None,
     "mdtime": None,
@@ -20,6 +21,7 @@ SET_TEMPLATE = {
     "group": None,
     "public": False,
     "cards": {},
+    "subject": None,
 }
 
 CARD_TEMPLATE = {
@@ -30,10 +32,18 @@ CARD_TEMPLATE = {
 }
 
 
-def create_set(user_id: str, org_id: str = None, group_id: str = None, is_public: bool = False) -> str:
+def create_set(
+        user_id: str,
+        title: str = "",
+        subject: str = None,
+        org_id: str = None,
+        group_id: str = None,
+        is_public: bool = False) -> str:
     """
     Create a new set and save it
     :param user_id:
+    :param title:
+    :param subject:
     :param org_id:
     :param group_id:
     :param is_public:
@@ -42,12 +52,14 @@ def create_set(user_id: str, org_id: str = None, group_id: str = None, is_public
     template = copy(SET_TEMPLATE)
     set = Node(template)
     set.id = str(uuid4())
+    set.title = title
     set.author = user_id
     set.crtime = datetime.now()
     set.mdtime = datetime.now()
     set.org = org_id
     set.group_id = group_id
     set.public = is_public
+    set.subject = subject
     set.save(f"db/sets/{set.id()}.pyn")
     return set.id()
 

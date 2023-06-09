@@ -59,6 +59,12 @@ form input.btn {
     height: 50px;
     width: auto;
     border-radius: 5px;
+    transition-duration: .05s;
+}
+
+#social_logins #social_buttons img:hover {
+    cursor: pointer;
+    scale: 110%;
 }
 
 

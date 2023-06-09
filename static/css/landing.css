@@ -20,14 +20,6 @@ h1 {
     padding: 5% 0;
 }
 
-/* Fancy header text */
-.cutout {
-    background: var(--text); /* Fallback */
-    background: linear-gradient(90deg, rgba(246,152,57,1) 0%, rgba(211,131,132,1) 60%, rgba(155,97,255,1) 100%);
-    -webkit-background-clip: text;
-    color: transparent;
-}
-
 /* Form */
 form.email-collector {
     /*display: flex;*/

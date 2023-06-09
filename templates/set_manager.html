@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+{# TODO: Drag and delete #}
+<html lang="en">
+<head>
+    {% include "components/boilerplate.html" %}
+    <title>{{ set.title._val }} | HashCards</title>
+    <link rel="stylesheet" href="/static/css/set-manager.css">
+</head>
+<body>
+{% include "components/header.html" %}
+<main>
+    <div id="set-manager">
+        <div id="options-container">
+            <form id="options" action="" method="post">
+                {# TODO: Make sidebar for desktop, collapsible on mobile #}
+                <label for="options-title">Title</label>
+                <input id="options-title" name="title" type="text" placeholder="Title" value="{{ set.title._val }}">
+                <label for="options-description">Description</label>
+                <textarea id="options-description" name="description"></textarea>
+                <label for="options-subject">Subject</label>
+                <select id="options-subject" name="subject">
+                    <option value="">None</option>
+                    {# TODO #}
+                </select>
+                <label for="options-org">Subject</label>
+                <select id="options-org" name="org">
+                    <option value="">None</option>
+                    {# TODO #}
+                </select>
+                <label for="options-group">Subject</label>
+                <select id="options-group" name="group">
+                    <option value="">None</option>
+                    {# TODO #}
+                </select>
+                <label for="options-visibility">Visibility</label>
+                <select id="options-visibility" name="visibility">
+                    <option value="">Private</option>
+                    {# TODO #}
+                </select>
+            </form>
+        </div>
+        <div id="card-container">
+            <div class="card">
+                <div class="card-content">
+                    <form>
+                        <label>Front<input type="text" class="card-text"></label>
+                        <label>Back&nbsp;<input type="text" class="card-text"></label>
+                    </form>
+                </div>
+                <div class="card-image">
+                    <p class="cutout">+</p>
+                </div>
+            </div>
+            <div class="card new-card">
+                <p class="cutout">+ New card</p>
+            </div>
+        </div>
+    </div>
+</main>
+{% include "components/footer.html" %}
+</body>
+</html>

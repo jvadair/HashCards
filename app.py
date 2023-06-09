@@ -26,6 +26,11 @@ def temp_dash_design():
     return render_template('dash.html')
 
 
+@app.route('/set-manager')
+def temp_set_manager_design():
+    return render_template('set_manager.html', set=Node('db/sets/473ad80e-e2a5-4158-a81e-9bddf4d0aa88.pyn'))
+
+
 @app.route('/login')
 def login_page():
     return render_template('auth.html', auth_method='login')

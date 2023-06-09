@@ -98,6 +98,14 @@ h1, h2, h3, h4, h5, h6 {
   opacity: 80%;
 }
 
+/* Fancy gradient text */
+.cutout {
+    background: var(--text); /* Fallback */
+    background: linear-gradient(90deg, rgba(246,152,57,1) 0%, rgba(211,131,132,1) 60%, rgba(155,97,255,1) 100%);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
 
 /* Header and footer */
 
@@ -178,6 +186,16 @@ form input:not(.btn) {
     height: inherit;
     font-size: 1.25em;
 }
+
+form > *:not(.btn, label, h1, h2, h3, h4, h5, h6, p, div) {
+    border: 1px solid var(--text);
+    outline: none;
+    border-radius: 25px;
+    padding: 10px;
+    background-color: var(--overlay);
+    color: var(--text);
+}
+
 
 form input.btn {
     height: inherit;
