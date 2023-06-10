@@ -3,6 +3,14 @@
 <head>
     {% include "components/boilerplate.html" %}
     <title>HashCards</title>
+    <style>
+        /* Fix padding on mobile */
+        @media screen and (max-width: 850px) {
+            main {
+                padding: 15px;
+            }
+        }
+    </style>
 </head>
 <body>
 {% include "components/header.html" %}
