@@ -62,15 +62,40 @@
 
 #card-container .card {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     background-color: var(--overlay);
     width: 80%;
-    height: 25vh;
+    height: 30vh;
     padding: 2%;
     border-radius: 25px;
     justify-content: flex-start;
     align-items: center;
+}
+
+.card .card-header {
+    display: flex;
+    flex-direction: row;
+    height: 15%;
+    margin: 0;
+    grid-gap: 15px;
+}
+
+.card .card-header p {
+    margin: 0;
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none;
+    cursor: pointer;
+}
+
+.card .card-body {
+    display: flex;
+    flex-direction: row;
     grid-gap: 25px;
+    margin: 0;
+    height: 85%;
+    width: 100%;
+    align-items: center;
 }
 
 .card .card-content {
@@ -137,6 +162,7 @@
     border: 2px dashed var(--text);
     background-color: rgba(var(--overlay-variable-opacity), 25%);
     transition-duration: .2s;
+    justify-content: center;
 }
 
 #card-container .card.new-card:hover {
@@ -152,4 +178,80 @@
     width: 100%;
     text-align: center;
     font-size: 2em;
+}
+
+
+/* Disable mobile elements on desktop */
+#options-container #dropdown-toggle, .card .card-image p.mobile {
+    display: none;
+}
+
+
+/* Mobile and tablet viewports */
+@media screen and (max-width: 850px) {
+    .card .card-image p.mobile {
+        display: flex;
+    }
+    .card .card-image p.desktop {
+        display: none;
+    }
+
+    #set-manager {
+        flex-direction: column;
+        align-items: center;
+        grid-gap: 25px;
+    }
+    #set-manager #card-container, #options-container #options {
+        width: 100%;
+    }
+    #set-manager #options-container, #card-container .card {
+        width: 95%;
+    }
+    #set-manager #options-container {
+        border-radius: 0;
+    }
+    #options-container #dropdown-toggle {
+        display: flex;
+        /*padding: 25px;*/
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        background-color: var(--overlay);
+        border-radius: 25px;
+    }
+    #options-container #dropdown-toggle.opened {
+        border-radius: 25px 25px 0 0;
+    }
+    #dropdown-toggle p {
+        display: flex;
+        align-content: center;
+        align-items: center;
+    }
+    #options-container #options {
+        height: 0;  /* For animation */
+        display: none;
+        transition-duration: 1s;
+    }
+    #options-container #options.opened {
+        height: min-content;  /* For animation */
+        display: flex;
+        border-radius: 0 0 25px 25px;
+    }
+    #card-container .card {
+        height: 20vh;
+        min-height: 180px;
+        justify-content: center;
+    }
+    #card-container .card .card-body {
+        flex-direction: column;
+        align-items: center;
+    }
+    .card .card-image {
+        width: 50%;
+        height: 5vh;
+    }
+    .card .card-image p {
+        font-size: 1.5em;
+        height: min-content;
+    }
 }

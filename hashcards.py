@@ -14,13 +14,15 @@ import os
 SET_TEMPLATE = {
     "id": None,
     "title": "",
+    "description": "",
     "author": None,
     "crtime": None,
     "mdtime": None,
     "org": None,
     "group": None,
-    "public": False,
+    "visibility": 'private',
     "cards": {},
+    "card_order": [],
     "subject": None,
 }
 
@@ -101,8 +103,10 @@ def add_card(set_id: str, front: str, back: str, image: str = None):
     card = create_card(front, back, image=image)
     set = Node(f'db/sets/{set_id}.pyn')
     set.cards.set(card['id'], card)
+    set.card_order().append(card['id'])
     set.mdtime = datetime.now()
     set.save()
+    return card['id']
 
 
 def modify_card(set_id, card_id, **kwargs) -> None:
@@ -130,6 +134,7 @@ def delete_card(set_id, card_id) -> None:
     """
     set = Node(f'db/sets/{set_id}.pyn')
     set.cards.delete(card_id)
+    set.card_order().remove(card_id)
     set.mdtime = datetime.now()
     set.save()
 

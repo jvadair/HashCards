@@ -11,46 +11,69 @@
 <main>
     <div id="set-manager">
         <div id="options-container">
+            <div id="dropdown-toggle">
+                <p><span class="material-symbols-outlined">arrow_drop_down</span> Set details</p>
+            </div>
             <form id="options" action="" method="post">
-                {# TODO: Make sidebar for desktop, collapsible on mobile #}
                 <label for="options-title">Title</label>
                 <input id="options-title" name="title" type="text" placeholder="Title" value="{{ set.title._val }}">
                 <label for="options-description">Description</label>
-                <textarea id="options-description" name="description"></textarea>
+                <textarea id="options-description" name="description">{{ set.description._val }}</textarea>
                 <label for="options-subject">Subject</label>
                 <select id="options-subject" name="subject">
                     <option value="">None</option>
-                    {# TODO #}
+                    {% for subject in subjects %}
+                        <option value="{{ subject }}">{{ subject }}</option>
+                    {% endfor %}
+                    <script>
+                        $('#options-subject option[value="{{ set.subject._val }}"]').prop('selected', true);
+                    </script>
                 </select>
-                <label for="options-org">Subject</label>
+                <label for="options-org">Organization</label>
                 <select id="options-org" name="org">
                     <option value="">None</option>
-                    {# TODO #}
+                    {# TODO: Display the user's organizations #}
                 </select>
-                <label for="options-group">Subject</label>
+                <label for="options-group">Group</label>
                 <select id="options-group" name="group">
                     <option value="">None</option>
-                    {# TODO #}
+                    {# TODO: Display the user's groups #}
                 </select>
                 <label for="options-visibility">Visibility</label>
                 <select id="options-visibility" name="visibility">
-                    <option value="">Private</option>
-                    {# TODO #}
+                    <option value="private">Private</option>
+                    <option value="public">Public</option>
+                    <option value="group">Group</option>
+                    <option value="organization">Organization</option>
+                    <script>
+                        $('#options-visibility option[value="{{ set.visibility._val }}"]').prop('selected', true);
+                    </script>
                 </select>
             </form>
+            <script src="/static/scripts/dropdown.js"></script>
         </div>
         <div id="card-container">
-            <div class="card">
-                <div class="card-content">
-                    <form>
-                        <label>Front<input type="text" class="card-text"></label>
-                        <label>Back&nbsp;<input type="text" class="card-text"></label>
-                    </form>
+            {% for card in set.card_order._val %}
+                {% set card = set.cards.get(card) %}
+                <div class="card" data-card-id="{{ card.id._val }}">
+                    <div class="card-header">
+                        <p><span class="material-symbols-outlined drag-handle">drag_handle</span></p>
+                        <p><span class="material-symbols-outlined">delete</span></p>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-content">
+                            <form>
+                                <label>Front<input type="text" class="card-text" value="{{ card.front._val }}"></label>
+                                <label>Back&nbsp;<input type="text" class="card-text" value="{{ card.back._val }}"></label>
+                            </form>
+                        </div>
+                        <div class="card-image">
+                            <p class="cutout desktop">+</p>
+                            <p class="cutout mobile">+ Image</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-image">
-                    <p class="cutout">+</p>
-                </div>
-            </div>
+            {% endfor %}
             <div class="card new-card">
                 <p class="cutout">+ New card</p>
             </div>
@@ -58,5 +81,6 @@
     </div>
 </main>
 {% include "components/footer.html" %}
+<script src="/static/scripts/card_dragging.js"></script>
 </body>
 </html>
