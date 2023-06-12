@@ -17,7 +17,7 @@
     align-items: center;
 }
 
-#card-view h1 {
+#card-view h1, h3 {
     margin: 0;
 }
 
@@ -38,6 +38,11 @@
     justify-content: center;
     margin: 0;
     transition-duration: .2s;
+    cursor: not-allowed;
+}
+
+#card-view #card-viewer #mobile-arrows {
+    display: none;
 }
 
 #card-view .arrow#arrow-back {
@@ -69,6 +74,7 @@
     justify-content: center;
     width: 50vw;
     height: 100%;
+    cursor: pointer;
 }
 
 #card-viewer #card .front, #card-viewer #card .back {
@@ -99,7 +105,7 @@
 #card-view #scroll-notice {
     display: flex;
     flex-direction: row;
-    margin: 0;
+    margin: 0 0 50px 0;
     align-items: center;
     justify-content: center;
 }
@@ -154,4 +160,69 @@
 
 footer {
     margin-top: 5vh;
+}
+
+
+/* Viewports */
+
+
+/* Mobile viewport */
+@media screen and (max-width: 450px) {
+
+}
+
+/* Tablet viewport */
+@media screen and (max-width: 850px) {
+    #card-view {
+        justify-content: center;
+    }
+    #card-view #card-viewer .arrow.desktop {
+        display: none;
+    }
+    #card-view #card-viewer {
+        height: 50vh;
+        flex-direction: column;
+        grid-gap: 15px;
+        align-items: center;
+    }
+    #card-view #card-viewer #card {
+        width: 90vw;
+        border-radius: 15px;
+    }
+    #card-view #card-viewer #mobile-arrows {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        height: 75px;
+        grid-gap: 15px;
+    }
+    #card-view #card-viewer #mobile-arrows p {
+        width: 50%;
+        text-align: center;
+    }
+    #card-view #card-viewer #mobile-arrows .arrow.active {
+        opacity: 1;
+        cursor: pointer;
+    }
+    #card-view #widgets {
+        flex-direction: column;
+        grid-gap: 10px;
+        width: 90%;
+    }
+    #card-view #widgets .chip {
+        height: 40px;
+        margin: 0;
+        width: 100%;
+    }
+    #list-view table {
+        width: 100%;
+        border: none;
+        font-size: 1em;
+    }
+    #list-view table td:not(:last-child) {
+        border-right: 2px solid var(--text);
+    }
+    #list-view table td {
+        padding: 10px;
+    }
 }

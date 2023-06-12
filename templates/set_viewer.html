@@ -11,8 +11,9 @@
     <div id="set-viewer">
         <div id="card-view">
             <h1>{{ set.title._val }}</h1>
+            <h3>by UsernameHere</h3>
             <div id="card-viewer">
-                <p class="arrow" id="arrow-back" onclick="card_back()"><span class="material-symbols-outlined">arrow_back_ios_new</span></p>
+                <p class="arrow desktop" id="arrow-back" onclick="card_back()"><span class="material-symbols-outlined">arrow_back_ios_new</span></p>
                 <div id="card">
                     <div class="front">
                         <h2>{{ set.cards.get(set.card_order._val[0]).front._val }}</h2>
@@ -21,7 +22,11 @@
                         <h2>{{ set.cards.get(set.card_order._val[0]).back._val }}</h2>
                     </div>
                 </div>
-                <p class="arrow{{ ' active' if len(set.card_order._val) > 1 else ''}}" id="arrow-forward" onclick="card_forward()"><span class="material-symbols-outlined">arrow_forward_ios</span></p>
+                <p class="arrow desktop{{ ' active' if len(set.card_order._val) > 1 else ''}}" id="arrow-forward" onclick="card_forward()"><span class="material-symbols-outlined">arrow_forward_ios</span></p>
+                <div id="mobile-arrows">
+                    <p class="arrow mobile" id="arrow-back" onclick="card_back()"><span class="material-symbols-outlined">arrow_back_ios_new</span></p>
+                    <p class="arrow mobile{{ ' active' if len(set.card_order._val) > 1 else ''}}" id="arrow-forward" onclick="card_forward()"><span class="material-symbols-outlined">arrow_forward_ios</span></p>
+                </div>
             </div>
             <div id="widgets">
                 <a class="chip" href="./study">Study</a>

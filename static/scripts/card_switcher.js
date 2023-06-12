@@ -15,22 +15,25 @@ function update_card() {
 }
 
 function update_arrows() {
-    if (current_card_number == 1) {
-        if ($('#arrow-back').hasClass('active')) {
-            $('#arrow-back').removeClass('active')
+    let locations = ['#card-viewer', '#mobile-arrows']
+    for (let location of locations) {
+        if (current_card_number == 1) {
+            if ($(`${location} #arrow-back`).hasClass('active')) {
+                $(`${location} #arrow-back`).removeClass('active')
+            }
         }
-    }
-    else if (current_card_number == total_cards) {
-        if ($('#arrow-forward').hasClass('active')) {
-            $('#arrow-forward').removeClass('active')
+        else if (current_card_number == total_cards) {
+            if ($(`${location} #arrow-forward`).hasClass('active')) {
+                $(`${location} #arrow-forward`).removeClass('active')
+            }
         }
-    }
-    else {
-        if (!$('#arrow-forward').hasClass('active')) {
-            $('#arrow-forward').addClass('active')
-        }
-        if (!$('#arrow-back').hasClass('active')) {
-            $('#arrow-back').addClass('active')
+        else {
+            if (!$(`${location} #arrow-forward`).hasClass('active')) {
+                $(`${location} #arrow-forward`).addClass('active')
+            }
+            if (!$(`${location} #arrow-back`).hasClass('active')) {
+                $(`${location} #arrow-back`).addClass('active')
+            }
         }
     }
 }
