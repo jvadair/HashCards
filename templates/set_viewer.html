@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include "components/boilerplate.html" %}
+    <title>{{ set.title._val }} | HashCards</title>
+    <link rel="stylesheet" href="/static/css/set-viewer.css">
+</head>
+<body>
+{% include "components/header.html" %}
+<main>
+    <div id="set-viewer">
+        <div id="card-view">
+            <h1>{{ set.title._val }}</h1>
+            <div id="card-viewer">
+                <p class="arrow" id="arrow-back" onclick="card_back()"><span class="material-symbols-outlined">arrow_back_ios_new</span></p>
+                <div id="card">
+                    <div class="front">
+                        <h2>{{ set.cards.get(set.card_order._val[0]).front._val }}</h2>
+                    </div>
+                    <div class="back">
+                        <h2>{{ set.cards.get(set.card_order._val[0]).back._val }}</h2>
+                    </div>
+                </div>
+                <p class="arrow{{ ' active' if len(set.card_order._val) > 1 else ''}}" id="arrow-forward" onclick="card_forward()"><span class="material-symbols-outlined">arrow_forward_ios</span></p>
+            </div>
+            <div id="widgets">
+                <a class="chip" href="./study">Study</a>
+                <a class="chip" href="./test">Test</a>
+                <a class="chip" href="./edit">Edit</a> {# TODO: Show/hide depending on ownership #}
+                <p class="chip">Pin</p>
+                <p class="chip"><span class="material-symbols-outlined">more_horiz</span></p> {# TODO: Pop-up menu #}
+                {# IDEAS:
+                    - Add to group
+                #}
+            </div>
+            <p id="scroll-notice"><span class="material-symbols-outlined">expand_more</span>&nbsp;&nbsp;&nbsp;&nbsp;Scroll for list view...&nbsp;&nbsp;&nbsp;&nbsp;<span class="material-symbols-outlined">expand_more</span></p>
+        </div>
+        <div id="list-view">
+            <table>
+                {% for card, num in zip(set.card_order._val, range(0,len(set.card_order._val))) %}
+                    {% set card = set.cards.get(card) %}
+                    <tr>
+                        <td>{{ num }}</td>
+                        <td>{{ card.front._val }}</td>
+                        <td>{{ card.back._val }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</main>
+{% include "components/footer.html" %}
+<script src="https://cdn.jsdelivr.net/gh/nnattawat/flip@master/dist/jquery.flip.min.js"></script>
+<script src="/static/scripts/card_switcher.js"></script>
+</body>
+</html>

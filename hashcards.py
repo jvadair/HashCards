@@ -13,7 +13,7 @@ import os
 
 SET_TEMPLATE = {
     "id": None,
-    "title": "",
+    "title": "Unnamed set",
     "description": "",
     "author": None,
     "crtime": None,

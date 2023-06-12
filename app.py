@@ -9,6 +9,9 @@ app = Flask(__name__)
 r_api = registration_api.API()
 config = Node('config.json')
 
+# Update jinja global variables
+app.jinja_env.globals.update(zip=zip, len=len)
+
 
 # Specialized page functions
 def error(code, message):
@@ -30,6 +33,11 @@ def temp_dash_design():
 @app.route('/set-manager')
 def temp_set_manager_design():
     return render_template('set_manager.html', set=Node('db/sets/473ad80e-e2a5-4158-a81e-9bddf4d0aa88.pyn'), subjects=config.subjects())
+
+
+@app.route('/set-viewer')
+def temp_set_viewer_design():
+    return render_template('set_viewer.html', set=Node('db/sets/473ad80e-e2a5-4158-a81e-9bddf4d0aa88.pyn'))
 
 
 @app.route('/login')

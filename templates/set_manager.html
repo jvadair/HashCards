@@ -3,8 +3,9 @@
 <html lang="en">
 <head>
     {% include "components/boilerplate.html" %}
-    <title>{{ set.title._val }} | HashCards</title>
+    <title>Edit {{ set.title._val }} | HashCards</title>
     <link rel="stylesheet" href="/static/css/set-manager.css">
+
 </head>
 <body>
 {% include "components/header.html" %}
@@ -49,6 +50,7 @@
                         $('#options-visibility option[value="{{ set.visibility._val }}"]').prop('selected', true);
                     </script>
                 </select>
+                <btn class="delete-btn btn">Delete set</btn>
             </form>
             <script src="/static/scripts/dropdown.js"></script>
         </div>

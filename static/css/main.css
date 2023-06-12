@@ -96,6 +96,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .chip:hover {
   opacity: 80%;
+    cursor: pointer;
 }
 
 /* Fancy gradient text */
@@ -104,6 +105,13 @@ h1, h2, h3, h4, h5, h6 {
     background: linear-gradient(90deg, rgba(246,152,57,1) 0%, rgba(211,131,132,1) 60%, rgba(155,97,255,1) 100%);
     -webkit-background-clip: text;
     color: transparent;
+}
+
+/* Make google material symbols unselectable */
+.material-symbols-outlined {
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none;
 }
 
 
