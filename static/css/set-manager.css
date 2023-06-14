@@ -49,18 +49,6 @@
 }
 
 
-.delete-btn {
-    background-color: rgba(255, 50, 50, 40%);
-    color: var(--text);
-    height: 1em;
-}
-
-.delete-btn:hover {
-    box-shadow: none;
-    transform: none;
-}
-
-
 /* Cards */
 
 

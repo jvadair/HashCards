@@ -2,12 +2,48 @@
 <html lang="en">
 <head>
     {% include "components/boilerplate.html" %}
-    <title>HashCards</title>
+    <title>My Account | HashCards</title>
+    <link rel="stylesheet" href="/static/css/account-manager.css">
 </head>
 <body>
 {% include "components/header.html" %}
 <main>
-
+    <div id="account-manager">
+        <div id="nav-sidebar">
+            <a href="#account" class="chip"><span class="material-symbols-outlined">account_circle</span> <span class="chip-text">Account</span></a>
+            <a href="#profile" class="chip"><span class="material-symbols-outlined">face</span> <span class="chip-text">Profile</span></a>
+            <a href="#privacy" class="chip"><span class="material-symbols-outlined">visibility_lock</span> <span class="chip-text">Privacy</span></a>
+        </div>
+        <div id="settings">
+            <section id="account">
+                <h1><span class="material-symbols-outlined">account_circle</span> Account</h1>
+                <div id="account-email">
+                    <form>
+                        <label for="account-email-email">Email</label>
+                        <input id="account-email-email" name="email" type="email" value="{{ user.email._val }}">
+                        <input type="submit" class="btn" value="Update">
+                    </form>
+                </div>
+                <div id="account-socials">
+                    <a href="/login"><img src="/static/images/social_logins/nexus.png">Connect your Nexus Account</a>
+                    <a href="/login"><img src="/static/images/social_logins/google.png">Connect your Google Account</a>
+                </div>
+            </section>
+            <section id="profile">
+                 <h1><span class="material-symbols-outlined">face</span> Profile</h1>
+                <form>
+                    <label for="social-username">Username</label>
+                    <input id="social-username" name="username" type="text" value="{{ user.username._val }}">
+                    <input type="submit" class="btn" value="Update">
+                </form>
+            </section>
+            <section id="privacy">
+                <h1><span class="material-symbols-outlined">visibility_lock</span> Privacy</h1>
+                <button class="btn danger">Request data</button>
+                <button class="btn danger">Delete account</button>
+            </section>
+        </div>
+    </div>
 </main>
 {% include "components/footer.html" %}
 </body>

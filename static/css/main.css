@@ -82,6 +82,17 @@ h1, h2, h3, h4, h5, h6 {
     box-shadow: 0 0 .1em .1em var(--accent);
 }
 
+.btn.danger {
+    background-color: rgba(255, 50, 50, 40%);
+    color: var(--text);
+    height: 1em;
+}
+
+.btn.danger:hover {
+    box-shadow: none;
+    transform: none;
+}
+
 .chip {
   background-color: var(--overlay);
   padding: 5px 25px;
@@ -151,10 +162,9 @@ header img {
 /* Footer */
 footer {
     width: 100%;
-    border-top: 5px wave red;
     min-height: var(--header-height);
     align-items: center;
-    padding: 10px;
+    padding: 5vh;
     text-align: center;
 }
 

@@ -40,6 +40,11 @@ def temp_set_viewer_design():
     return render_template('set_viewer.html', set=Node('db/sets/473ad80e-e2a5-4158-a81e-9bddf4d0aa88.pyn'))
 
 
+@app.route('/account-manager')
+def temp_account_manager_design():
+    return render_template('account_manager.html', user=Node('db/users/05ff0aef-fe48-4e0f-b864-f13d015d0151.pyn'))
+
+
 @app.route('/login')
 def login_page():
     return render_template('auth.html', auth_method='login')
