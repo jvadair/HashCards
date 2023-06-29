@@ -24,6 +24,7 @@ SET_TEMPLATE = {
     "cards": {},
     "card_order": [],
     "subject": None,
+    "views": 0,
 }
 
 CARD_TEMPLATE = {
