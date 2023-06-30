@@ -1,5 +1,7 @@
 db
+venv
 registrationAPI
 secrets.json
 /*.pyn
 /*.xopp
+/static/images/pfp

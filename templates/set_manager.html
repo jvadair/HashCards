@@ -4,7 +4,7 @@
 <head>
     {% include "components/boilerplate.html" %}
     <title>Edit {{ set.title._val }} | HashCards</title>
-    <link rel="stylesheet" href="/static/css/set-manager.css">
+    <link rel="stylesheet" href="/static/css/set-manager.min.css">
 
 </head>
 <body>
@@ -52,7 +52,7 @@
                 </select>
                 <btn class="btn danger">Delete set</btn>
             </form>
-            <script src="/static/scripts/dropdown.js"></script>
+            <script src="/static/scripts/dropdown.min.js"></script>
         </div>
         <div id="card-container">
             {% for card in set.card_order._val %}
@@ -83,6 +83,6 @@
     </div>
 </main>
 {% include "components/footer.html" %}
-<script src="/static/scripts/card_dragging.js"></script>
+<script src="/static/scripts/card_dragging.min.js"></script>
 </body>
 </html>
