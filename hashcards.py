@@ -24,7 +24,7 @@ SET_TEMPLATE = {
     "cards": {},
     "card_order": [],
     "subject": None,
-    "views": 0,
+    "views": [],
 }
 
 CARD_TEMPLATE = {
@@ -54,6 +54,7 @@ def create_set(
     """
     template = copy(SET_TEMPLATE)
     set = Node(template)
+    author = Node(f'db/users/{user_id}.pyn', password=os.getenv("RAPI_AUTHKEY"))
     set.id = str(uuid4())
     set.title = title
     set.author = user_id
@@ -64,7 +65,20 @@ def create_set(
     set.public = is_public
     set.subject = subject
     set.save(f"db/sets/{set.id()}.pyn")
+    author.sets().append(set.id())
+    author.save()
     return set.id()
+
+
+def modify_set(set_id, **kwargs) -> None:
+    """
+    Modify an existing set and save it
+    """
+    set = Node(f'db/sets/{set_id}.pyn')
+    for kwarg in kwargs:
+        set.set(kwarg, kwargs[kwarg])
+    set.mdtime = datetime.now()
+    set.save()
 
 
 def delete_set(set_id: str) -> None:
