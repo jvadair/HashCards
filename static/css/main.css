@@ -166,6 +166,17 @@ footer {
     align-items: center;
     padding: 5vh;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+footer .branding {
+    display: flex;
+    flex-direction: column;
+}
+
+footer a {
+    text-decoration: none;
 }
 
 footer img {
