@@ -1,13 +1,25 @@
 """
-This file ensures that all user data files have all the necessary keys.
-It should be called both:
-1. When a new user is added
-2. When a new field is added
+This file ensures that all user, group, and org data files have all the necessary keys.
+update should be called when a new user/group/org is added
+update_all should be called when a new field is added
 """
 
-REQUIRED = {  # Required keys and their default values
+REQUIRED_USERS = {  # Required keys and their default values
     "level": 0,
     "experience": 0,
+    "sets": [],
+    "groups": [],
+    "orgs": []
+}
+
+REQUIRED_ORGS = {
+    "members": [],
+    "groups": []
+}
+
+REQUIRED_GROUPS = {
+    "members": [],
+    "sets": []
 }
 
 
@@ -15,20 +27,51 @@ import os
 from pyntree import Node
 
 
-def update_user(user: Node):
-    for field in REQUIRED:
-        if not user.has(field):
-            user.set(field, REQUIRED[field])
+def update(target: Node, requirement_set: dict):
+    """
+    Update a Node to ensure it conforms to the requirement set
+    :param target: A user/group/org
+    :param requirement_set: A set of required keys and their default values
+    :return:
+    """
+    for field in REQUIRED_USERS:
+        if not target.has(field):
+            target.set(field, requirement_set[field])
 
 
-def update_all():
-    users = [
+def update_all(users=True, groups=True, orgs=True):
+    """
+    Update all data files - individual sets of files can be toggled (user/group/org)
+    :param users:
+    :param groups:
+    :param orgs:
+    :return:
+    """
+    all_users = [
         Node(f'db/users/{user_filename}', autosave=True)
         for user_filename in os.listdir("db/users")
+        if not user_filename.startswith("_map")
+    ]
+    all_groups = [
+        Node(f'db/groups/{group_filename}', autosave=True)
+        for group_filename in os.listdir("db/groups")
+    ]
+    all_orgs = [
+        Node(f'db/orgs/{org_filename}', autosave=True)
+        for org_filename in os.listdir("db/orgs")
     ]
 
-    for user in users:
-        update_user(user)
+    if users:
+        for user in all_users:
+            update(user, REQUIRED_USERS)
+
+    if groups:
+        for group in all_groups:
+            update(group, REQUIRED_GROUPS)
+
+    if orgs:
+        for org in all_orgs:
+            update(org, REQUIRED_ORGS)
 
 
 if __name__ == "__main__":

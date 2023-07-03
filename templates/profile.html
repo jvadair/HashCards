@@ -1,0 +1,88 @@
+{% if type == 'user' %}
+    {% set name = db.username._val %}
+{% else %}
+    {% set name = db.name._val %}
+{% endif %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include "components/boilerplate.html" %}
+    <title>{{ name }} | HashCards</title>
+    <link rel="stylesheet" href="/static/css/profile.css">
+</head>
+<body>
+{% include "components/header.html" %}
+<main>
+    <div id="profile">
+        <div id="profile-header">
+            <div id="overview">
+                {% if type == 'user' %}
+                    <img id="profile-picture" src="/static/images/pfp/{{ db.id._val }}.jpg" alt="{{ name }}'s profile picture">
+                {% elif type == 'group' %}
+                    <p id="profile-picture"><span class="material-symbols-outlined">group</span></p>
+                {% elif type == 'org' %}
+                    <p id="profile-picture"><span class="material-symbols-outlined">workspaces</span></p>
+                {% endif %}
+                <div id="text">
+                    <h1 id="name">{{ name }}</h1>
+                    <div id="stats">
+                        {% if type == 'user' %}
+                            <h4 id="level">Lv. <span class="lv-num">{{ db.level._val }}</span></h4>
+                        {% else %}
+                            <h4 id="level"><span class="lv-num">{{ len(db.members._val) }}</span> members</h4>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% if type == 'user' %}
+                {% if session.get('id') == db.id._val %}
+                    <a id="edit-button" onclick="window.location.href='/account-manager'"><span class="material-symbols-outlined">edit</span></a>
+                {% endif %}
+            {% else %}
+                {% if session.get('id') == db.owner._val %}
+                    <a id="edit-button" onclick="window.location.href='./manage'"><span class="material-symbols-outlined">edit</span></a>
+                {% endif %}
+            {% endif %}
+        </div>
+        <div id="info">
+            {% if type == 'user' and session.get('id') != db.id._val %} {# Don't show the user groups they're in from here #}
+                <section id="shared-orgs">
+                    <h2>Shared groups and organizations</h2>
+                    <p>You aren't in any of the same groups or organizations as {{ name }}.</p>
+                </section>
+            {% else %}
+                <section id="members">
+                    <h2>Members</h2>
+                    <div id="member-box">
+                        {% for i in range(0,6) %} {# TODO: Adjust number shown based on desktop/mobile #}
+                            <div class="member">
+                                <img class="member-pfp" src="/static/images/pfp/911fa739-6ebb-467a-af1a-0d4138135413.jpg" alt="<insert name here>'s profile picture">
+                                <p>jvadair</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                <p>... and 535 more</p>
+                </section>
+            {% endif %}
+            <section id="sets"> {# TODO: Make this work with real user-owned sets & test - then do the same for groups #}
+                <h2>Public sets</h2>
+                {% set set = Node("db/sets/473ad80e-e2a5-4158-a81e-9bddf4d0aa88.pyn") %}
+                <div id="{{ set.id._val }}" class="set" onclick="window.location.href = '/set/{{ set.id._val }}'">
+                    <h3>{{ set.title._val }}</h3>
+                    {% if set.description._val %}
+                        <p>{{ set.description._val }}</p>
+                    {% else %}
+                        <p><i>No description</i></p>
+                    {% endif %}
+                </div>
+                <div class="set">
+                    <h3>The water cycle</h3>
+                    <p>This set covers the processes involved in the water cycle.</p>
+                </div>
+            </section>
+        </div>
+    </div>
+</main>
+{% include "components/footer.html" %}
+</body>
+</html>
