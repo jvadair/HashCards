@@ -12,6 +12,7 @@
         <div id="nav-sidebar">
             <a href="#account" class="chip"><span class="material-symbols-outlined">account_circle</span> <span class="chip-text">Account</span></a>
             <a href="#profile" class="chip"><span class="material-symbols-outlined">face</span> <span class="chip-text">Profile</span></a>
+                    <a href="#privacy" class="chip"><span class="material-symbols-outlined">email</span> <span class="chip-text">Email</span></a>
             <a href="#privacy" class="chip"><span class="material-symbols-outlined">visibility_lock</span> <span class="chip-text">Privacy</span></a>
         </div>
         <div id="settings">
@@ -34,6 +35,22 @@
                 <form>
                     <label for="social-username">Username</label>
                     <input id="social-username" name="username" type="text" value="{{ user.username._val }}">
+                    <input type="submit" class="btn" value="Update">
+                </form>
+            </section>
+            <section id="email-preferences">
+                 <h1><span class="material-symbols-outlined">email</span> Email Preferences</h1>
+                <form>
+                    <div class="options">
+                        <div class="option">
+                            <input id="email-preferences-updates" type="checkbox" name="updates" value="true">
+                            <label for="email-preferences-updates">Updates, improvements, and news</label>
+                        </div>
+                        <div class="option">
+                            <input id="email-preferences-requests" type="checkbox" name="requests" value="true">
+                            <label for="email-preferences-requests">Invites and requests</label>
+                        </div>
+                    </div>
                     <input type="submit" class="btn" value="Update">
                 </form>
             </section>

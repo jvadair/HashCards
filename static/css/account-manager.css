@@ -75,6 +75,31 @@ section form {
     border-radius: 5px;
 }
 
+#email-preferences form {
+    flex-direction: column;
+    align-items: flex-start;
+    grid-gap: 25px;
+}
+
+#email-preferences form .options {
+    display: flex;
+    flex-direction: column;
+    grid-gap: 10px;
+}
+
+#email-preferences form .option {
+    display: flex;
+    flex-direction: row;
+    grid-gap: 10px;
+    align-items: center;
+}
+
+#email-preferences form input[type='checkbox'] {
+    height: 1em;
+    width: 1em;
+    accent-color: var(--accent)
+}
+
 /* Mobile and tablet viewports */
 @media screen and (max-width: 850px) {
     #nav-sidebar {
