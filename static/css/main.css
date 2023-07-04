@@ -73,6 +73,7 @@ h1, h2, h3, h4, h5, h6 {
     border-radius: 15px;
     font-family: 'Roboto', sans-serif;
     font-weight: bold;
+    text-decoration: none;
 }
 
 .btn:hover {
@@ -86,6 +87,7 @@ h1, h2, h3, h4, h5, h6 {
     background-color: rgba(255, 50, 50, 40%);
     color: var(--text);
     height: 1em;
+    line-height: 0;
 }
 
 .btn.danger:hover {
@@ -168,11 +170,25 @@ footer {
     text-align: center;
     display: flex;
     flex-direction: column;
+    grid-gap: 25px;
 }
 
 footer .branding {
     display: flex;
     flex-direction: column;
+}
+
+footer #back-to-top {
+    min-height: 3em; /* Overrides the default .btn values */
+    min-width: 3em;
+    height: 3em;
+    width: 3em;
+    border-radius: 50%;
+}
+
+footer #back-to-top span {
+    font-size: 2em;
+    color: var(--background);
 }
 
 footer a {
