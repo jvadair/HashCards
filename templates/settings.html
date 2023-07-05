@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include "components/boilerplate.html" %}
+    <title>My Account | HashCards</title>
+    <link rel="stylesheet" href="/static/css/settings.min.css">
+</head>
+<body>
+{% include "components/header.html" %}
+<main>
+    {% if updated %}
+        <div id="updated">
+            <h3>Preferences updated</h3>
+        </div>
+    {% endif %}
+    <div id="settings-box">
+        <div id="nav-sidebar">
+            {# Account settings #}
+            {% if type == 'user' %}
+                <a href="#user-account" class="chip"><span class="material-symbols-outlined">account_circle</span> <span class="chip-text">Account</span></a>
+                <a href="#user-profile" class="chip"><span class="material-symbols-outlined">face</span> <span class="chip-text">Profile</span></a>
+                <a href="#user-email" class="chip"><span class="material-symbols-outlined">email</span> <span class="chip-text">Email</span></a>
+                <a href="#user-privacy" class="chip"><span class="material-symbols-outlined">visibility_lock</span> <span class="chip-text">Privacy</span></a>
+            {% endif %}
+
+            {# Shared settings #}
+            {% if type in ('group', 'org') %}
+                <a href="#shared-about" class="chip"><span class="material-symbols-outlined">settings</span> <span class="chip-text">Overview</span></a>
+                <a href="#shared-transfer" class="chip"><span class="material-symbols-outlined">swap_horizontal_circle</span> <span class="chip-text">Transfer</span></a>
+                <a href="#shared-privacy" class="chip"><span class="material-symbols-outlined">visibility_lock</span> <span class="chip-text">Privacy</span></a>
+            {% endif %}
+
+            {# Group settings #}
+            {% if type == 'group' %}
+
+            {% endif %}
+
+            {# Org settings #}
+            {% if type == 'org' %}
+
+            {% endif %}
+        </div>
+        <div id="settings">
+            {# User settings #}
+            {% if type == 'user' %}
+                <section id="user-account">
+                    <h1><span class="material-symbols-outlined">account_circle</span> Account</h1>
+                    <div id="user-account-email">
+                        <form>
+                            <label for="user-account-email-email">Email</label>
+                            <input id="user-account-email-email" name="email" type="email" value="{{ db.email._val }}">
+                            <input type="submit" class="btn" value="Update">
+                        </form>
+                    </div>
+                    <div id="user-account-account-socials">
+                        <a href="/login"><img src="/static/images/social_logins/nexus.png" alt="Nexus logo">Connect your Nexus Account</a>
+                        <a href="/login"><img src="/static/images/social_logins/google.png" alt="Google logo">Connect your Google Account</a>
+                    </div>
+                </section>
+                <section id="user-profile">
+                     <h1><span class="material-symbols-outlined">face</span> Profile</h1>
+                    <form>
+                        <label for="user-profile-social-username">Username</label>
+                        <input id="user-profile-social-username" name="username" type="text" value="{{ db.username._val }}">
+                        <input type="submit" class="btn" value="Update">
+                    </form>
+                </section>
+                <section id="user-email">
+                     <h1><span class="material-symbols-outlined">email</span> Email</h1>
+                    <form>
+                        <div class="options">
+                            <div class="option">
+                                <input id="user-email-preferences-updates" type="checkbox" name="updates" value="true">
+                                <label for="user-email-preferences-updates">Updates, improvements, and news</label>
+                            </div>
+                            <div class="option">
+                                <input id="user-email-preferences-requests" type="checkbox" name="requests" value="true">
+                                <label for="user-email-preferences-requests">Invites and requests</label>
+                            </div>
+                        </div>
+                        <input type="submit" class="btn" value="Update">
+                    </form>
+                </section>
+                <section id="user-privacy">
+                    <h1><span class="material-symbols-outlined">visibility_lock</span> Privacy</h1>
+                    <button class="btn danger">Request data</button>
+                    <button class="btn danger">Delete account</button>
+                </section>
+            {% endif %}
+
+            {# Shared settings #}
+            {% if type in ('group', 'org') %}
+                <section id="shared-about">
+                    <h1><span class="material-symbols-outlined">settings</span> Overview</h1>
+                    <form>
+                        <label for="shared-about-name" style="display: none;">Name</label>
+                        <label for="shared-about-description" style="display: none;">Description</label>
+                        <input id="shared-about-name" name="name" type="text" value="{{ db.name._val }}" placeholder="Name">
+                        <textarea name="description" id="shared-about-description" placeholder="Description">{{ db.description._val }}</textarea>
+                        <input type="submit" class="btn" value="Update">
+                    </form>
+                </section>
+                <section id="shared-transfer">
+                <h1><span class="material-symbols-outlined">swap_horizontal_circle</span> Transfer</h1>
+                    <p>This action cannot be undone.</p>
+                    <form>
+                        <label for="shared-transfer-username">New owner</label>
+                        <input id="shared-transfer-username" type="text" name="username">
+                        <input class="btn danger" type="submit" value="Transfer">
+                    </form>
+                </section>
+                <section id="shared-privacy">
+                    <h1><span class="material-symbols-outlined">visibility_lock</span> Privacy</h1>
+                    <div class="shared-privacy-visibility">
+                        <h3>Visibility</h3>
+                        <p>Public {{ {"group": "group", "org": "organization"}[type] }}s can be discovered by anyone, and anyone can request access</p>
+                        <form>
+                            <div>
+                                <input id="shared-privacy-public" name="public" type="checkbox">
+                                <label for="shared-privacy-public">Public {{ {"group": "group", "org": "organization"}[type] }}</label>
+                            </div>
+                            <input type="submit" class="btn" value="Update">
+                        </form>
+                    </div>
+                    <button class="btn danger">Request data</button>
+                    <button class="btn danger">Delete group</button>
+                </section>
+            {% endif %}
+
+            {# Group settings #}
+            {% if type == 'group' %}
+
+            {% endif %}
+
+            {# Org settings #}
+            {% if type == 'org' %}
+
+            {% endif %}
+        </div>
+    </div>
+</main>
+{% include "components/footer.html" %}
+</body>
+</html>

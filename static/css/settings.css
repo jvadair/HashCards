@@ -1,4 +1,17 @@
-#account-manager {
+#updated {
+    display: flex;
+    background-color: var(--success);
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 75px;
+}
+
+#updated > * {
+    color: var(--background);
+}
+
+#settings-box {
     display: flex;
     flex-direction: row;
     width: 100%;
@@ -54,13 +67,13 @@ section form {
     flex-direction: row;
 }
 
-#account-socials {
+#user-account-account-socials {
     display: flex;
     flex-direction: column;
     grid-gap: 15px;
 }
 
-#account-socials a {
+#user-account-account-socials a {
     display: flex;
     flex-direction: row;
     grid-gap: 5px;
@@ -69,35 +82,49 @@ section form {
     text-decoration: none;
 }
 
-#account-socials a img {
+#user-account-account-socials a img {
     height: 35px;
     width: auto;
     border-radius: 5px;
 }
 
-#email-preferences form {
+#user-email form {
     flex-direction: column;
     align-items: flex-start;
     grid-gap: 25px;
 }
 
-#email-preferences form .options {
+#user-email form .options {
     display: flex;
     flex-direction: column;
     grid-gap: 10px;
 }
 
-#email-preferences form .option {
+#user-email form .option {
     display: flex;
     flex-direction: row;
     grid-gap: 10px;
     align-items: center;
 }
 
-#email-preferences form input[type='checkbox'] {
-    height: 1em;
-    width: 1em;
-    accent-color: var(--accent)
+#shared-about form {
+    flex-direction: column;
+}
+
+#shared-about form input {
+    width: 100%;
+}
+
+#shared-about form textarea {
+    min-width: 50vw;
+    width: 100%;
+    min-height: 25vh;
+}
+
+#shared-privacy form {
+    flex-direction: column;
+    width: max-content;  /* min-content would wrap the text */
+    align-items: flex-start;
 }
 
 /* Mobile and tablet viewports */
@@ -105,17 +132,14 @@ section form {
     #nav-sidebar {
         display: none;
     }
-    #settings {
+    #settings-box {
         width: 100%;
-    }
-    section {
-        align-items: center;
-        justify-content: center;
     }
     section h1 {
         align-self: flex-start;
     }
     section form {
         flex-direction: column;
+        align-items: flex-start;
     }
 }

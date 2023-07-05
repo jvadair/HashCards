@@ -44,7 +44,32 @@ def temp_set_viewer_design():
 
 @app.route('/account-manager')
 def temp_account_manager_design():
-    return render_template('account_manager.html', user=Node('db/users/911fa739-6ebb-467a-af1a-0d4138135413.pyn'))
+    return render_template(
+        'settings.html',
+        db=Node('db/users/911fa739-6ebb-467a-af1a-0d4138135413.pyn'),
+        type='user',
+        updated=False
+    )
+
+
+@app.route('/group-manager')
+def temp_group_manager_design():
+    return render_template(
+        'settings.html',
+        db=Node('db/groups/cc6e8c4f-66b0-490f-83f6-77b43f6db0db.pyn'),
+        type='group',
+        updated=True
+    )
+
+
+@app.route('/org-manager')
+def temp_org_manager_design():
+    return render_template(
+        'settings.html',
+        db=Node('db/orgs/41699602-b74d-4972-a181-4acc0d3c0584.pyn'),
+        type='org',
+        updated=False
+    )
 
 
 @app.route('/profile')

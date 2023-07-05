@@ -16,6 +16,7 @@ font-family: 'Roboto', sans-serif;
     --overlay: #282828;
     --text: #f3e4d8;
     --accent: #f69839;
+    --success: #43AA8B;
 
     /* Fixed height values */
     --header-height: 75px;
@@ -118,6 +119,13 @@ h1, h2, h3, h4, h5, h6 {
     background: linear-gradient(90deg, rgba(246,152,57,1) 0%, rgba(211,131,132,1) 60%, rgba(155,97,255,1) 100%);
     -webkit-background-clip: text;
     color: transparent;
+}
+
+/* Customize the checkboxes as much as possible */
+input[type="checkbox"] {
+    height: 1em;
+    width: 1em;
+    accent-color: var(--accent)
 }
 
 /* Make google material symbols unselectable */

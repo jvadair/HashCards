@@ -30,7 +30,7 @@ form.email-collector {
     height: 3em;
 }
 
-form.email-collector input#email {
+form.email-collector input#user-email {
     /*border: 1px solid var(--text);*/
     /*outline: none;*/
     /*border-radius: 25px;*/

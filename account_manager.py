@@ -14,12 +14,15 @@ REQUIRED_USERS = {  # Required keys and their default values
 
 REQUIRED_ORGS = {
     "members": [],
-    "groups": []
+    "groups": [],
+    "description": "",
 }
 
 REQUIRED_GROUPS = {
     "members": [],
-    "sets": []
+    "sets": [],
+    "description": "",
+    "public": False,
 }
 
 
@@ -34,7 +37,7 @@ def update(target: Node, requirement_set: dict):
     :param requirement_set: A set of required keys and their default values
     :return:
     """
-    for field in REQUIRED_USERS:
+    for field in requirement_set:
         if not target.has(field):
             target.set(field, requirement_set[field])
 
