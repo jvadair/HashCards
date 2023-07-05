@@ -2,7 +2,11 @@
 <html lang="en">
 <head>
     {% include "components/boilerplate.html" %}
-    <title>My Account | HashCards</title>
+    {% if type == 'user' %}
+        <title>My Account | HashCards</title>
+    {% else %}
+        <title>Edit {{ db.name._val }} | HashCards</title>
+    {% endif %}
     <link rel="stylesheet" href="/static/css/settings.min.css">
 </head>
 <body>
