@@ -16,6 +16,7 @@ REQUIRED_ORGS = {
     "members": [],
     "groups": [],
     "description": "",
+    "public": False
 }
 
 REQUIRED_GROUPS = {

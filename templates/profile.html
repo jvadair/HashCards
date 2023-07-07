@@ -8,7 +8,7 @@
 <head>
     {% include "components/boilerplate.html" %}
     <title>{{ name }} | HashCards</title>
-    <link rel="stylesheet" href="/static/css/profile.css">
+    <link rel="stylesheet" href="/static/css/profile.min.css">
 </head>
 <body>
 {% include "components/header.html" %}
@@ -34,15 +34,24 @@
                     </div>
                 </div>
             </div>
+
+            {# Profile management buttons #}
             {% if type == 'user' %}
                 {% if session.get('id') == db.id._val %}
-                    <a id="edit-button" onclick="window.location.href='/account-manager'"><span class="material-symbols-outlined">edit</span></a>
+                    <a id="edit-button" class="profile-button" onclick="window.location.href='/account-manager'"><span class="material-symbols-outlined">edit</span></a>
                 {% endif %}
             {% else %}
                 {% if session.get('id') == db.owner._val %}
-                    <a id="edit-button" onclick="window.location.href='./manage'"><span class="material-symbols-outlined">edit</span></a>
+                    <a id="edit-button" class="profile-button" onclick="window.location.href='./manage'"><span class="material-symbols-outlined">edit</span></a>
+                {% else %}
+                    {% if session.get('id') in db.members._val %}
+                        <a id="leave-button" class="profile-button"><span class="material-symbols-outlined">person_remove</span></a>
+                    {% elif db.public._val %}
+                        <a id="join_button" class="profile-button"><span class="material-symbols-outlined">person_add</span></a>
+                    {% endif %}
                 {% endif %}
             {% endif %}
+
         </div>
         <div id="info">
             {% if type == 'user' and session.get('id') != db.id._val %} {# Don't show the user groups they're in from here #}
@@ -64,22 +73,32 @@
                 <p>... and 535 more</p>
                 </section>
             {% endif %}
-            <section id="sets"> {# TODO: Make this work with real user-owned sets & test - then do the same for groups #}
-                <h2>Public sets</h2>
-                {% set set = Node("db/sets/473ad80e-e2a5-4158-a81e-9bddf4d0aa88.pyn") %}
-                <div id="{{ set.id._val }}" class="set" onclick="window.location.href = '/set/{{ set.id._val }}'">
-                    <h3>{{ set.title._val }}</h3>
-                    {% if set.description._val %}
-                        <p>{{ set.description._val }}</p>
-                    {% else %}
-                        <p><i>No description</i></p>
-                    {% endif %}
-                </div>
-                <div class="set">
-                    <h3>The water cycle</h3>
-                    <p>This set covers the processes involved in the water cycle.</p>
-                </div>
-            </section>
+            {% if type in ('user', 'group') %}
+                <section id="sets"> {# TODO: Make this work with real user-owned sets & test - then do the same for groups #}
+                    <h2>Public sets</h2>
+                    {% set set = Node("db/sets/473ad80e-e2a5-4158-a81e-9bddf4d0aa88.pyn") %}
+                    <div id="{{ set.id._val }}" class="set" onclick="window.location.href = '/set/{{ set.id._val }}'">
+                        <h3>{{ set.title._val }}</h3>
+                        {% if set.description._val %}
+                            <p>{{ set.description._val }}</p>
+                        {% else %}
+                            <p><i>No description</i></p>
+                        {% endif %}
+                    </div>
+                    <div class="set">
+                        <h3>The water cycle</h3>
+                        <p>This set covers the processes involved in the water cycle.</p>
+                    </div>
+                </section>
+            {% else %}
+                <section id="groups">
+                    <h2>Public Groups</h2>
+                    <div class="group">
+                        <h3>Group name</h3>
+                        <p>Group description</p>
+                    </div>
+                </section>
+            {% endif %}
         </div>
     </div>
 </main>

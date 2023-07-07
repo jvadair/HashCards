@@ -93,6 +93,12 @@ def login_page():
     return render_template('auth.html', auth_method='login')
 
 
+@app.route('/login-jvadair')
+def temp_login_test():
+    r_api.login(session, 'jvadair', 'password')
+    return 'ok'
+
+
 @app.route('/register')
 def register_page():
     return render_template('auth.html', auth_method='register')

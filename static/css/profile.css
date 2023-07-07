@@ -1,4 +1,4 @@
-#user-profile {
+#profile {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -32,14 +32,14 @@
 
 #overview img#profile-picture {
     height: 5em;
-    width: auto;
+    width: 5em;
     border-radius: 50%;
 }
 
 #overview p#profile-picture {
     border-radius: 50%;
-    width: 2em;
-    height: 2em;
+    width: 3em;
+    height: 3em;
     padding: 1.5em;
     display: flex;
     justify-content: center;
@@ -56,7 +56,7 @@
     margin: 0;
 }
 
-#edit-button {
+.profile-button {
     background-color: var(--accent);
     border: none;
     border-radius: 50%;
@@ -68,14 +68,14 @@
     align-items: center;
     cursor: pointer;
     transition-duration: .1s;
-    opacity: .8;
+    opacity: .7;
 }
 
-#edit-button:hover {
+.profile-button:hover {
     opacity: 1;
 }
 
-#edit-button span {
+.profile-button span {
     color: var(--background);
 }
 
@@ -116,7 +116,7 @@
     grid-gap: 15px;
 }
 
-.set {
+.set, .group {
     width: 100%;
     background-color: rgba(var(--background-variable-opacity), .8);
     border-radius: 25px;
@@ -125,7 +125,7 @@
     border: 2px solid transparent;
 }
 
-.set:hover {
+.set:hover, .group:hover {
     scale: 110%;
     border: 2px solid var(--text);
     cursor: pointer;
@@ -168,7 +168,7 @@ section#members {
         border-radius: 0;
         background-color: var(--background);
     }
-    .set {
+    .set, .group {
         background-color: var(--overlay);
     }
     #member-box {
