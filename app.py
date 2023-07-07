@@ -88,6 +88,11 @@ def temp_profile_design_o():
     return render_template('profile.html', db=Node('db/orgs/41699602-b74d-4972-a181-4acc0d3c0584.pyn'), type='org')
 
 
+@app.route('/members')
+def temp_member_design():
+    return render_template('member-management.html', db=Node('db/groups/cc6e8c4f-66b0-490f-83f6-77b43f6db0db.pyn'), type='group')
+
+
 @app.route('/login')
 def login_page():
     return render_template('auth.html', auth_method='login')

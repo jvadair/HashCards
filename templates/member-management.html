@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include "components/boilerplate.html" %}
+    <title>{{ db.name._val }} | HashCards</title>
+    <link rel="stylesheet" href="/static/css/member-management.min.css">
+</head>
+<body>
+{% include "components/header.html" %}
+<main>
+    <div id="member-management">
+        <div id="overview">
+            <div id="name">
+                {% if type == 'group' %}
+                    <p id="profile-picture"><span class="material-symbols-outlined">group</span></p>
+                {% elif type == 'org' %}
+                    <p id="profile-picture"><span class="material-symbols-outlined">workspaces</span></p>
+                {% endif %}
+                <h1>{{ db.name._val }}</h1>
+            </div>
+            <div id="management-buttons">
+                <button id="remove" class="btn-circle"><span class="material-symbols-outlined">person_remove</span></button>
+                <button id="ban" class="btn-circle"><span class="material-symbols-outlined">block</span></button>
+            </div>
+            <script>
+                $('#management-buttons').hide()
+            </script>
+        </div>
+        <div id="members-list">
+            {% for user_id in db.members._val %}
+                {% set username = Node('db/users/' + user_id + '.pyn').username._val %}
+                <div class="member">
+                    <label for="{{ user_id }}"></label>
+                    <input id="{{ user_id }}" type="checkbox" onclick="toggle_user('{{ user_id }}')">
+                    <img class="member-pfp" src="/static/images/pfp/911fa739-6ebb-467a-af1a-0d4138135413.jpg" alt="{{ username }}'s profile picture">
+                    <p>{{ username }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</main>
+<script src="/static/scripts/user_select.min.js"></script>
+{% include "components/footer.html" %}
+</body>
+</html>

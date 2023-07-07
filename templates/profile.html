@@ -16,6 +16,7 @@
     <div id="profile">
         <div id="profile-header">
             <div id="overview">
+                {# Profile picture or symbol #}
                 {% if type == 'user' %}
                     <img id="profile-picture" src="/static/images/pfp/{{ db.id._val }}.jpg" alt="{{ name }}'s profile picture">
                 {% elif type == 'group' %}
@@ -38,16 +39,16 @@
             {# Profile management buttons #}
             {% if type == 'user' %}
                 {% if session.get('id') == db.id._val %}
-                    <a id="edit-button" class="profile-button" onclick="window.location.href='/account-manager'"><span class="material-symbols-outlined">edit</span></a>
+                    <a id="edit-button" class="btn-circle" onclick="window.location.href='/account-manager'"><span class="material-symbols-outlined">edit</span></a>
                 {% endif %}
             {% else %}
                 {% if session.get('id') == db.owner._val %}
-                    <a id="edit-button" class="profile-button" onclick="window.location.href='./manage'"><span class="material-symbols-outlined">edit</span></a>
+                    <a id="edit-button" class="btn-circle" onclick="window.location.href='./manage'"><span class="material-symbols-outlined">edit</span></a>
                 {% else %}
                     {% if session.get('id') in db.members._val %}
-                        <a id="leave-button" class="profile-button"><span class="material-symbols-outlined">person_remove</span></a>
+                        <a id="leave-button" class="btn-circle"><span class="material-symbols-outlined">person_remove</span></a>
                     {% elif db.public._val %}
-                        <a id="join_button" class="profile-button"><span class="material-symbols-outlined">person_add</span></a>
+                        <a id="join_button" class="btn-circle"><span class="material-symbols-outlined">person_add</span></a>
                     {% endif %}
                 {% endif %}
             {% endif %}

@@ -56,29 +56,6 @@
     margin: 0;
 }
 
-.profile-button {
-    background-color: var(--accent);
-    border: none;
-    border-radius: 50%;
-    width: 2em;
-    height: 2em;
-    padding: 1.5em;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    transition-duration: .1s;
-    opacity: .7;
-}
-
-.profile-button:hover {
-    opacity: 1;
-}
-
-.profile-button span {
-    color: var(--background);
-}
-
 #level {
     font-size: 1em;
     margin: 0;
