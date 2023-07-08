@@ -1,7 +1,11 @@
 <header id="top"> {# TODO: Hamburger menu #}
-    <img src="/static/images/logo-nobg.png" onclick="window.location.href='/'">
+    <img alt="HashCards logo" id="logo" src="/static/images/logo-nobg.png" onclick="window.location.href='/'">
     <nav>
         <a href="/">Home</a>
-        <a href="/login">Login</a>
+        {% if not session['id'] %}
+            <a href="/login">Login</a>
+        {% else %}
+            <a href="/account-manager" id="account-pfp"><img alt="Account" src="/static/images/pfp/{{ session['id'] }}.jpg"></a>
+        {% endif %}
     </nav>
 </header>

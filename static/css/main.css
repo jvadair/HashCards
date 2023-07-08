@@ -186,10 +186,21 @@ header nav {
     padding: 0 15px;
 }
 
-header img {
+header #logo {
     height: 100%;
     width: auto;
     cursor: pointer;
+}
+
+header #account-pfp {
+    height: 2em;
+    width: 2em;
+}
+
+header #account-pfp img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
 }
 
 /* Footer */
