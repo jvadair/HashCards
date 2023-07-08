@@ -14,10 +14,12 @@ function toggle_user(user_id) {
     // Update buttons, if needed
     if (currently_enabled.length === 0 && management_buttons_shown) {
         $("#management-buttons").hide();
+        $("#non-management-buttons").show();
         management_buttons_shown = false;
     }
     else if (!management_buttons_shown) {
         $("#management-buttons").show();
+        $("#non-management-buttons").hide();
         management_buttons_shown = true;
     }
 }

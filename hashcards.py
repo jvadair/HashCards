@@ -18,7 +18,6 @@ SET_TEMPLATE = {
     "author": None,
     "crtime": None,
     "mdtime": None,
-    "org": None,
     "group": None,
     "visibility": 'private',
     "cards": {},
@@ -60,8 +59,7 @@ def create_set(
     set.author = user_id
     set.crtime = datetime.now()
     set.mdtime = datetime.now()
-    set.org = org_id
-    set.group_id = group_id
+    set.group = group_id
     set.public = is_public
     set.subject = subject
     set.save(f"db/sets/{set.id()}.pyn")
