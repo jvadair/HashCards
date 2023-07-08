@@ -93,6 +93,11 @@ def temp_member_design():
     return render_template('member-management.html', db=Node('db/groups/cc6e8c4f-66b0-490f-83f6-77b43f6db0db.pyn'), type='group')
 
 
+@app.route('/cc')
+def temp_collective_creation_wizard_design():
+    return render_template('collective-creation.html', type='group')
+
+
 @app.route('/login')
 def login_page():
     return render_template('auth.html', auth_method='login')

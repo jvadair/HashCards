@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include "components/boilerplate.html" %}
+    <title>New {{ type }} | HashCards</title>
+    <link rel="stylesheet" href="/static/css/collective-creation.min.css">
+</head>
+<body>
+{% include "components/header.html" %}
+<main>
+    <div id="collective-creation">
+        <div id="overview">
+            <p id="profile-picture"><span class="material-symbols-outlined">add</span></p>
+            <h1>New {{ type }}</h1>
+        </div>
+        <div id="details">
+            <form>
+                <label for="title">Title</label>
+                <input id="title" name="title" type="text" placeholder="Title">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" placeholder="Description"></textarea>
+                <div id="final">
+                    <div>
+                        <input id="public" name="public" type="checkbox">
+                        <label for="public">Make public</label>
+                    </div>
+                    <input type="submit" value="Create" class="btn">
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+{% include "components/footer.html" %}
+</body>
+</html>
