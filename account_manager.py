@@ -9,14 +9,15 @@ REQUIRED_USERS = {  # Required keys and their default values
     "experience": 0,
     "sets": [],
     "groups": [],
-    "orgs": []
+    "orgs": [],
+    "pfp": "_default",
 }
 
 REQUIRED_ORGS = {
     "members": [],
     "groups": [],
     "description": "",
-    "public": False
+    "public": False,
 }
 
 REQUIRED_GROUPS = {
@@ -41,6 +42,7 @@ def update(target: Node, requirement_set: dict):
     for field in requirement_set:
         if not target.has(field):
             target.set(field, requirement_set[field])
+    target.save()
 
 
 def update_all(users=True, groups=True, orgs=True):

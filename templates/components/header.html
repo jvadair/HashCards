@@ -5,7 +5,7 @@
         {% if not session['id'] %}
             <a href="/login">Login</a>
         {% else %}
-            <a href="/account-manager" id="account-pfp"><img alt="Account" src="/static/images/pfp/{{ session['id'] }}.jpg"></a>
+            <a href="/account" id="account-pfp"><img alt="Account" src="/static/images/pfp/{{ session['pfp'] }}.jpg"></a>
         {% endif %}
     </nav>
 </header>

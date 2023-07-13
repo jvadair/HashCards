@@ -100,5 +100,9 @@
     "Educational Psychology",
     "Media Studies",
     "Communication Studies"
-  ]
+  ],
+  "SMTP_SERVER": "smtppro.zoho.com",
+  "SMTP_EMAIL": "hello@hashcards.net",
+  "SMTP_PORT": "465",
+  "SMTP_ENVPASS": "HC_SMTPPWD"
 }

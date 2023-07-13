@@ -14,6 +14,11 @@ SUPPORTED_EXTENSIONS = [
 
 
 def validate_photo(filename):
+    """
+    Determine if a file contains a valid extension
+    :param filename:
+    :return:
+    """
     return True if filename.rsplit('.', maxsplit=1)[1] in SUPPORTED_EXTENSIONS else False
 
 

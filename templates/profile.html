@@ -18,7 +18,7 @@
             <div id="overview">
                 {# Profile picture or symbol #}
                 {% if type == 'user' %}
-                    <img id="profile-picture" src="/static/images/pfp/{{ db.id._val }}.jpg" alt="{{ name }}'s profile picture">
+                    <img id="profile-picture" src="/static/images/pfp/{{ db.pfp._val }}.jpg" alt="{{ name }}'s profile picture">
                 {% elif type == 'group' %}
                     <p id="profile-picture"><span class="material-symbols-outlined">group</span></p>
                 {% elif type == 'org' %}

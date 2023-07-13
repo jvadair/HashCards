@@ -1,4 +1,5 @@
 db
+db-old
 venv
 registrationAPI
 secrets.json
@@ -6,3 +7,5 @@ secrets.json
 /*.xopp
 /static/images/pfp
 LOG.md
+setenv.sh
+config.json
