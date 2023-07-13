@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template, session, Response
-from registrationAPI import registration_api
+from registrationAPI import registration_api, sendmail
 from pyntree import Node
 from tools import is_valid_email
 from datetime import datetime
@@ -127,7 +127,7 @@ def preregister():
             return error(400, "That email is already registered!")
         preregister_list.set(email, datetime.now())
         preregister_list.save()
-        registration_api.sendmail.send_template('email/preregister.html', "You pre-registered for HashCards!", email)
+        sendmail.send_template('email/preregister.html', "You pre-registered for HashCards!", email)
         return render_template("thank_you.html", message="We'll let you know as soon as you can start using HashCards!")
     else:
         return error(400, f"The email you entered, '{email}', seems to be invalid.")
