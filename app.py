@@ -1,4 +1,5 @@
-from flask import Flask, request, render_template, session, Response
+from flask import Flask, request, render_template, session, Response, redirect
+import hashcards
 from registrationAPI import registration_api, sendmail
 from pyntree import Node
 from tools import is_valid_email
@@ -11,6 +12,15 @@ app = Flask(__name__)
 app.secret_key = os.urandom(32)
 r_api = registration_api.API()
 config = Node('config.json')
+LOGIN_REQUIRED = (
+    "/new",
+)
+
+
+# First-run or reset scenario
+if not os.path.exists('db/sets'):
+    os.mkdir('db/sets')
+
 
 # Update jinja global variables
 app.jinja_env.globals.update(zip=zip, len=len, Node=Node)
@@ -30,7 +40,10 @@ def error(code, message):
 
 @app.route('/')
 def index():
-    return render_template('landing.html')
+    if session.get('id'):
+        return render_template('dash.html', user=get_user_db(session['id']))
+    else:
+        return render_template('landing.html')
 
 
 # @app.route('/dash')
@@ -50,7 +63,7 @@ def index():
 
 @app.route('/account')
 def account_settings():
-    if session['id']:
+    if session.get('id'):
         return render_template(
             'settings.html',
             db=get_user_db(session['id']),
@@ -117,6 +130,25 @@ def register_page():
     return render_template('auth.html', auth_method='register')
 
 
+@app.route('/new')
+def new_set():
+    set_id = hashcards.create_set(session['id'])
+    return redirect(f'/set/{set_id}/edit')
+
+
+@app.route('/set/<set_id>/')
+def set_viewer(set_id):
+    return render_template('set_viewer.html', set=Node(f'db/sets/{set_id}.pyn'))
+
+
+@app.route('/set/<set_id>/edit/')
+def set_manager(set_id):
+    if hashcards.is_author(set_id, session.get('id')):
+        return render_template('set_manager.html', set=Node(f'db/sets/{set_id}.pyn'))
+    else:
+        return error(401, "You are not the author of this set, so you can't edit it. If you do happen to be the owner, please try switching accounts.")
+
+
 # API
 @app.route('/api/v1/preregister', methods=['POST'])
 def preregister():
@@ -161,7 +193,7 @@ def register():
 @app.route('/api/v1/verify')
 def verify_user():
     token = request.args.get('token')
-    user_id = r_api.verify(token)
+    user_id = r_api.verify(token)  # Returns user ID or error
     if type(user_id) is tuple:
         return error(*reversed(user_id))
     else:
@@ -173,10 +205,27 @@ def verify_user():
 
 @app.route('/api/v1/auth/logout')
 def logout():
-    if session['id']:
+    if session.get('id'):
         return r_api.logout(session)
     else:
         return error(400, "You are not logged in.")
+
+
+@app.route('/api/v1/set/update')
+def update_set():
+    data = dict(request.json)
+    set_id = data.pop('set_id')
+    if hashcards.is_author(set_id, session['id']):
+        hashcards.modify_set(set_id, **data)
+    else:
+        return error(401, "You are not the author of this set, so you can't edit it. If you do happen to be the owner, please try switching accounts.")
+
+
+# Login-restricted pages
+@app.before_request
+def check_permissions():
+    if request.path in LOGIN_REQUIRED and not session.get('id'):
+        return error(401, "You must be logged in to view this page.")
 
 
 # Error handling

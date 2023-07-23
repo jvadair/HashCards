@@ -22,9 +22,18 @@ SET_TEMPLATE = {
     "visibility": 'private',
     "cards": {},
     "card_order": [],
-    "subject": None,
+    "subject": "",
     "views": [],
 }
+SET_NOMODIFY = (
+    "id",
+    "author",
+    "crtime",
+    "mdtime",
+    "cards",
+    "card_order",  # This is only to be modified by the rearrange_set function  # TODO: Make rearrange_set function
+    "views",
+)
 
 CARD_TEMPLATE = {
     "id": None,
@@ -32,6 +41,9 @@ CARD_TEMPLATE = {
     "back": None,
     "image": None,
 }
+CARD_NOMODIFY = (
+    "id"
+)
 
 
 def create_set(
@@ -74,7 +86,12 @@ def modify_set(set_id, **kwargs) -> None:
     """
     set = Node(f'db/sets/{set_id}.pyn')
     for kwarg in kwargs:
-        set.set(kwarg, kwargs[kwarg])
+        if kwarg in SET_TEMPLATE and kwarg not in SET_NOMODIFY:
+            if kwarg == 'visibility' and kwargs[kwarg] not in ('private', 'public', 'group'):
+                continue
+            elif type(kwargs[kwarg]) not in (str, int) or len(kwargs[kwarg]) > 100000:  # Prevent spammers and whatnot
+                continue
+            set.set(kwarg, kwargs[kwarg])
     set.mdtime = datetime.now()
     set.save()
 
