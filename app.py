@@ -184,8 +184,11 @@ def unsubscribe():
 def login():
     data = request.form
     response = r_api.login(session, data['identifier'], data['password'], redirect='/')
-    if type(response) != Response and 400 <= response[1] < 500:
-        return error(*reversed(response))
+    if type(response) != Response:
+        if 400 <= response[1] < 500:
+            return error(*reversed(response))
+        else:
+            return response
     else:
         user_db = get_user_db(session['id'])
         session['pfp'] = user_db.pfp()
