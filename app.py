@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template, session, Response, redirect
 import hashcards
+import registrationAPI.sendmail
 from registrationAPI import registration_api, sendmail
 from pyntree import Node
 from tools import is_valid_email
@@ -43,7 +44,8 @@ def index():
     if session.get('id'):
         return render_template('dash.html', user=get_user_db(session['id']))
     else:
-        return render_template('landing.html')
+        print(Node('db/preregistered.pyn'))
+        return render_template('landing.html', num_preregistered=len(Node('db/preregistered.pyn')._values))
 
 
 # @app.route('/dash')
@@ -153,16 +155,29 @@ def set_manager(set_id):
 @app.route('/api/v1/preregister', methods=['POST'])
 def preregister():
     email = request.form['email']
-    if is_valid_email(email):
+    if session.get('pre-registered'):
+        return error(401, "You may only pre-register one email (to prevent spam).")
+    elif is_valid_email(email):
         preregister_list = Node('db/preregistered.pyn')
         if email in preregister_list._values:
             return error(400, "That email is already registered!")
         preregister_list.set(email, datetime.now())
         preregister_list.save()
+        session['pre-registered'] = True
         sendmail.send_template('email/preregister.html', "You pre-registered for HashCards!", email)
         return render_template("thank_you.html", message="We'll let you know as soon as you can start using HashCards!")
     else:
         return error(400, f"The email you entered, '{email}', seems to be invalid.")
+
+
+@app.route('/api/v1/unsubscribe/')
+def unsubscribe():
+    unsub_id = request.args.get('unsub_id')
+    response = sendmail.unsubscribe(unsub_id)
+    if response is tuple:
+        return error(*reversed(tuple))
+    else:
+        return response
 
 
 @app.route('/api/v1/auth/login', methods=['POST'])

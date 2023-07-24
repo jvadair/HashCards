@@ -36,11 +36,14 @@
         5. Flashcards set free
         #}
         <h1 class="cutout">Flashcards, sans flashy.</h1>
-        <form class="email-collector" action="/api/v1/preregister" method="post">
-            <label for="email" style="display: none;">Email</label>
-            <input id="email" type="email" name="email" placeholder="your@email.com">
-            <input type="submit" class="btn" value="Pre-register">
-        </form>
+        <div id="email-collector">
+            <form action="/api/v1/preregister" method="post">
+                <label for="email" style="display: none;">Email</label>
+                <input id="email" type="email" name="email" placeholder="your@email.com">
+                <input type="submit" class="btn" value="Pre-register">
+            </form>
+            <p>{{ num_preregistered }} users pre-registered</p>
+        </div>
     </div>
     <div class="info">
         <h2>What</h2>

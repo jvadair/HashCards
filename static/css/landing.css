@@ -20,8 +20,15 @@ h1 {
     padding: 5% 0;
 }
 
-/* Form */
-form.email-collector {
+/* Pre-register bit */
+#email-collector {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#email-collector form {
     /*display: flex;*/
     flex-direction: row;
     /*grid-gap: 10px;*/
@@ -30,7 +37,7 @@ form.email-collector {
     height: 3em;
 }
 
-form.email-collector input#user-email {
+#email-collector form input#user-email {
     /*border: 1px solid var(--text);*/
     /*outline: none;*/
     /*border-radius: 25px;*/
@@ -42,7 +49,7 @@ form.email-collector input#user-email {
     /*font-size: 1.25em;*/
 }
 
-form.email-collector input.btn {
+#email-collector form input.btn {
     height: inherit;
 }
 
