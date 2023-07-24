@@ -44,7 +44,6 @@ def index():
     if session.get('id'):
         return render_template('dash.html', user=get_user_db(session['id']))
     else:
-        print(Node('db/preregistered.pyn'))
         return render_template('landing.html', num_preregistered=len(Node('db/preregistered.pyn')._values))
 
 
