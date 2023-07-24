@@ -65,7 +65,7 @@ h1 {
     h2 {
         text-align: center;
     }
-    form.email-collector {
+    #email-collector form {
         flex-direction: column;
     }
 }
