@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     {% include "components/boilerplate.html" %}
-    <title>Edit {{ set.title._val }} | HashCards</title>
+    <title>Edit {{ set.title._val if set.title._val else "new set" }} | HashCards</title>
     <link rel="stylesheet" href="/static/css/set-manager.min.css">
 
 </head>
@@ -15,12 +15,12 @@
                 <p><span class="material-symbols-outlined">arrow_drop_down</span> Set details</p>
             </div>
             <form id="options" action="" method="post">
-                <label for="options-title">Title</label>
-                <input id="options-title" name="title" type="text" placeholder="Title" value="{{ set.title._val }}">
-                <label for="options-description">Description</label>
-                <textarea id="options-description" name="description">{{ set.description._val }}</textarea>
-                <label for="options-subject">Subject</label>
-                <select id="options-subject" name="subject">
+                <label for="title">Title</label>
+                <input id="title" name="title" type="text" placeholder="Title" value="{{ set.title._val }}">
+                <label for="description">Description</label>
+                <textarea id="description" name="description">{{ set.description._val }}</textarea>
+                <label for="subject">Subject</label>
+                <select id="subject" name="subject">
                     <option value="">None</option>
                     {% for subject in subjects %}
                         <option value="{{ subject }}">{{ subject }}</option>
@@ -29,18 +29,18 @@
                         $('#options-subject option[value="{{ set.subject._val }}"]').prop('selected', true);
                     </script>
                 </select>
-                <label for="options-org">Organization</label>
-                <select id="options-org" name="org">
+                <label for="org">Organization</label>
+                <select id="org" name="org">
                     <option value="">None</option>
                     {# TODO: Display the user's organizations #}
                 </select>
-                <label for="options-group">Group</label>
-                <select id="options-group" name="group">
+                <label for="group">Group</label>
+                <select id="group" name="group">
                     <option value="">None</option>
                     {# TODO: Display the user's groups #}
                 </select>
-                <label for="options-visibility">Visibility</label>
-                <select id="options-visibility" name="visibility">
+                <label for="visibility">Visibility</label>
+                <select id="visibility" name="visibility">
                     <option value="private">Private</option>
                     <option value="public">Public</option>
                     <option value="organization">Organization</option>
@@ -48,7 +48,7 @@
                         $('#options-visibility option[value="{{ set.visibility._val }}"]').prop('selected', true);
                     </script>
                 </select>
-                <btn class="btn danger">Delete set</btn>
+                <button class="btn danger">Delete set</button>
             </form>
             <script src="/static/scripts/dropdown.min.js"></script>
         </div>
@@ -82,5 +82,6 @@
 </main>
 {% include "components/footer.html" %}
 <script src="/static/scripts/card_dragging.min.js"></script>
+<script src="/static/scripts/autosave_set.min.js"></script>
 </body>
 </html>

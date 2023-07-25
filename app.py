@@ -1,4 +1,5 @@
 from flask import Flask, request, render_template, session, Response, redirect
+from flask_socketio import SocketIO
 import hashcards
 import registrationAPI.sendmail
 from registrationAPI import registration_api, sendmail
@@ -17,14 +18,15 @@ LOGIN_REQUIRED = (
     "/new",
 )
 
-
 # First-run or reset scenario
 if not os.path.exists('db/sets'):
     os.mkdir('db/sets')
 
-
 # Update jinja global variables
 app.jinja_env.globals.update(zip=zip, len=len, Node=Node)
+
+# Add socket support
+socketio = SocketIO(app)
 
 
 # Helper functions
@@ -147,7 +149,8 @@ def set_manager(set_id):
     if hashcards.is_author(set_id, session.get('id')):
         return render_template('set_manager.html', set=Node(f'db/sets/{set_id}.pyn'))
     else:
-        return error(401, "You are not the author of this set, so you can't edit it. If you do happen to be the owner, please try switching accounts.")
+        return error(401,
+                     "You are not the author of this set, so you can't edit it. If you do happen to be the owner, please try switching accounts.")
 
 
 # API
@@ -193,7 +196,8 @@ def login():
 
 @app.route('/api/v1/auth/register', methods=['POST'])
 def register():
-    return error(401, "Sorry, registration is not yet available. However, you can pre-register via the homepage.")  # TODO: Release this later
+    return error(401,
+                 "Sorry, registration is not yet available. However, you can pre-register via the homepage.")  # TODO: Release this later
     # noinspection PyUnreachableCode
     data = request.form
     response = r_api.register(data['username'], data['email'], data['password'])
@@ -232,7 +236,20 @@ def update_set():
     if hashcards.is_author(set_id, session['id']):
         hashcards.modify_set(set_id, **data)
     else:
-        return error(401, "You are not the author of this set, so you can't edit it. If you do happen to be the owner, please try switching accounts.")
+        return error(401,
+                     "You are not the author of this set, so you can't edit it. If you do happen to be the owner, please try switching accounts.")
+
+
+# Sockets
+
+@socketio.on("update_set")
+def perform_update(data):
+    set_id = data.pop('set_id')
+    if hashcards.is_author(set_id, session['id']):
+        hashcards.modify_set(set_id, **data)
+        return 'OK'
+    else:
+        return 401, "You are not the author of this set, so you can't edit it. If you do happen to be the owner, please try switching accounts."
 
 
 # Login-restricted pages
@@ -249,4 +266,10 @@ def handle_exception(e):
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=3453)
+    socketio.run(
+        app,
+        host="0.0.0.0",
+        port=3453,
+        # allow_unsafe_werkzeug=True,
+        # debug=True  # DISABLE IN PRODUCTION!!!
+    )
