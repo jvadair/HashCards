@@ -7,11 +7,8 @@
    viewBox="0 0 507.99998 285.75"
    version="1.1"
    id="svg5"
-   inkscape:version="1.3 (1:1.3+202307231459+0e150ed6c4)"
+   inkscape:version="1.2.2 (1:1.2.2+202305151914+b0a8486541)"
    sodipodi:docname="login-circles.svg"
-   inkscape:export-filename="login-circles.png"
-   inkscape:export-xdpi="96"
-   inkscape:export-ydpi="96"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -28,8 +25,8 @@
      inkscape:document-units="mm"
      showgrid="false"
      inkscape:zoom="0.33134222"
-     inkscape:cx="745.45284"
-     inkscape:cy="583.98836"
+     inkscape:cx="746.96185"
+     inkscape:cy="585.49737"
      inkscape:window-width="1366"
      inkscape:window-height="692"
      inkscape:window-x="0"
@@ -43,25 +40,25 @@
      inkscape:groupmode="layer"
      id="layer1">
     <circle
-       style="opacity:0.75974766;fill:#48d96c;fill-opacity:1;stroke-width:7.58269;paint-order:markers fill stroke"
+       style="opacity:0.916396;fill:#f69839;fill-opacity:1;stroke-width:7.58269;paint-order:markers fill stroke"
        id="path236"
        cx="44.561264"
        cy="235.35757"
        r="104.70676" />
     <circle
-       style="opacity:0.82506137;fill:#48d96c;fill-opacity:1;stroke-width:8.13623;paint-order:markers fill stroke"
+       style="opacity:0.916396;fill:#f69839;fill-opacity:1;stroke-width:8.13623;paint-order:markers fill stroke"
        id="path236-3"
        cx="460.80219"
        cy="64.944778"
        r="112.35045" />
     <circle
-       style="opacity:0.94673503;fill:#48d96c;fill-opacity:1;stroke-width:4.9606;paint-order:markers fill stroke"
+       style="opacity:0.916396;fill:#f69839;fill-opacity:1;stroke-width:4.9606;paint-order:markers fill stroke"
        id="path236-6"
        cx="204.15912"
        cy="74.375786"
        r="68.499214" />
     <circle
-       style="opacity:1;fill:#48d96c;fill-opacity:1;stroke-width:3.64934;paint-order:markers fill stroke"
+       style="opacity:0.916396;fill:#f69839;fill-opacity:1;stroke-width:3.64934;paint-order:markers fill stroke"
        id="path236-7"
        cx="323.05075"
        cy="235.35757"

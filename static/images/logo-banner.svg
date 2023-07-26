@@ -9,7 +9,10 @@
    id="svg4056"
    xml:space="preserve"
    sodipodi:docname="logo-banner.svg"
-   inkscape:version="1.2.2 (1:1.2.2+202305151914+b0a8486541)"
+   inkscape:version="1.3 (1:1.3+202307231459+0e150ed6c4)"
+   inkscape:export-filename="logo-banner.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -26,8 +29,8 @@
      inkscape:document-units="px"
      showgrid="false"
      inkscape:zoom="0.22130942"
-     inkscape:cx="1387.198"
-     inkscape:cy="244.00226"
+     inkscape:cx="899.19354"
+     inkscape:cy="241.74299"
      inkscape:window-width="1366"
      inkscape:window-height="692"
      inkscape:window-x="0"
@@ -37,10 +40,10 @@
      id="defs4053"><linearGradient
        inkscape:collect="always"
        id="linearGradient19120"><stop
-         style="stop-color:#f89f47;stop-opacity:1;"
+         style="stop-color:#2cff61;stop-opacity:1;"
          offset="0"
          id="stop19116" /><stop
-         style="stop-color:#d87109;stop-opacity:1;"
+         style="stop-color:#1e86c5;stop-opacity:1;"
          offset="1"
          id="stop19118" /></linearGradient><linearGradient
        inkscape:collect="always"
@@ -138,7 +141,7 @@
          x="0.6282056"
          y="196.7162"
          id="tspan680">#<tspan
-   style="fill:#f3e4d8;fill-opacity:1"
+   style="fill:#dbd8f3;fill-opacity:1"
    id="tspan1279">ashCards</tspan></tspan></text><text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
