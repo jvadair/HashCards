@@ -267,10 +267,17 @@ def handle_exception(e):
 
 if __name__ == '__main__':
     debug = True if os.getenv('DEBUG') == "1" else False
-    socketio.run(
-        app,
-        host="0.0.0.0",
-        port=3453,
-        allow_unsafe_werkzeug=debug,
-        debug=debug
-    )
+    if debug:
+        socketio.run(
+            app,
+            host="0.0.0.0",
+            port=3453,
+            allow_unsafe_werkzeug=True,
+            debug=True
+        )
+    else:
+        socketio.run(
+            app,
+            host="0.0.0.0",
+            port=3453,
+        )
