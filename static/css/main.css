@@ -15,8 +15,8 @@ font-family: 'Roboto', sans-serif;
     --overlay-variable-opacity: 40, 40, 40;
     --overlay: #282828;
     --text: #f3e4d8;
-    --accent: #48d96c;
-    --secondary: #339fe0;
+    --accent: #339fe0;
+    --secondary: #48d96c;
     --success: #43AA8B;
 
     /* Fixed height values */
