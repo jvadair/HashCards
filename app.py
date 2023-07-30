@@ -9,6 +9,7 @@ from datetime import datetime
 from werkzeug.exceptions import HTTPException
 import os
 import account_manager
+import time
 
 app = Flask(__name__)
 app.secret_key = os.urandom(32)
@@ -16,6 +17,7 @@ r_api = registration_api.API()
 config = Node('config.json')
 LOGIN_REQUIRED = (
     "/new",
+    "/sets"
 )
 
 # First-run or reset scenario
@@ -86,6 +88,11 @@ def account_settings():
 #         updated=True
 #     )
 #
+
+@app.route('/sets')
+def library():
+    return render_template("library.html", user=get_user_db(session.get('id')), time=time)
+
 #
 # @app.route('/org-manager')
 # def temp_org_manager_design():

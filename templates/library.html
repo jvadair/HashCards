@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include "components/boilerplate.html" %}
+    <title>My Sets | HashCards</title>
+    <link rel="stylesheet" href="/static/css/library.min.css">
+</head>
+<body>
+{% include "components/header.html" %}
+<main>
+<h1>My Sets</h1>
+<div id="library">
+    {% for set in user.sets._val %}
+        {% set set = Node("db/sets/" + set + ".pyn") %}
+        <a class="set-container" data-timestamp="{{ time.mktime(set.mdtime._val.timetuple()) }}" href="/set/{{ set.id._val }}">
+            <div class="set">
+                <h3>{{ set.title._val }}</h3>
+                <p>{{ set.description._val }}</p>
+            </div>
+        </a>
+    {% endfor %}
+    <script>
+        $('#library .set-container').sort(function(a, b) {
+            return $(b).data('timestamp') - $(a).data('timestamp');
+        }).appendTo('#library');
+    </script>
+</div>
+</main>
+{% include "components/footer.html" %}
+</body>
+</html>
