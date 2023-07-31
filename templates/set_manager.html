@@ -14,7 +14,7 @@
             <div id="dropdown-toggle">
                 <p><span class="material-symbols-outlined">arrow_drop_down</span> Set details</p>
             </div>
-            <form id="options" action="" method="post">
+            <form id="options">
                 <label for="title">Title</label>
                 <input id="title" name="title" type="text" placeholder="Title" value="{{ set.title._val }}">
                 <label for="description">Description</label>
@@ -48,8 +48,12 @@
                         $('#options-visibility option[value="{{ set.visibility._val }}"]').prop('selected', true);
                     </script>
                 </select>
-                <a href=".." class="btn">View set</a>
-                <button class="btn danger">Delete set</button>
+                <div id="safe-buttons">
+                    <a class="btn" onclick="save();">Save now</a>
+                    <a class="btn" onclick="save(); window.location.href = '..'">View set</a>
+                </div>
+                <a class="btn danger" id="delete-set">Delete set</a>
+                <input type="submit" style="display: none;">
             </form>
             <script src="/static/scripts/dropdown.min.js"></script>
         </div>
@@ -57,9 +61,10 @@
             {% for card in set.card_order._val %}
                 {% set card = set.cards.get(card) %}
                 <div class="card" data-card-id="{{ card.id._val }}">
+                    {# TODO: Autosave card order #}
                     <div class="card-header">
                         <p><span class="material-symbols-outlined drag-handle">drag_handle</span></p>
-                        <p><span class="material-symbols-outlined">delete</span></p>
+                        <p><span class="material-symbols-outlined delete-btn">delete</span></p>
                     </div>
                     <div class="card-body">
                         <div class="card-content">
@@ -75,14 +80,14 @@
                     </div>
                 </div>
             {% endfor %}
-            <div class="card new-card">
-                <p class="cutout">+ New card</p>
+            <div class="card new-card" id="new_card">
+                <p class="cutout" onclick="add_card()">+ New card</p>
             </div>
         </div>
     </div>
 </main>
 {% include "components/footer.html" %}
 <script src="/static/scripts/card_dragging.min.js"></script>
-<script src="/static/scripts/autosave_set.min.js"></script>
+<script src="/static/scripts/set_manager.min.js"></script>
 </body>
 </html>

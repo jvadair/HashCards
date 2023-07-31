@@ -17,7 +17,12 @@
     align-items: center;
 }
 
-#card-view h1, h3 {
+#card-view h1 {
+    text-align: center;
+    margin: 0 2%;
+}
+
+#card-view h3 {
     margin: 0;
 }
 

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     {% include "components/boilerplate.html" %}
-    <title>{{ set.title._val }} | HashCards</title>
+    <title>{{ set.title._val if set.title._val else 'New set' }} | HashCards</title>
     <link rel="stylesheet" href="/static/css/set-viewer.min.css">
 </head>
 <body>
@@ -10,23 +10,29 @@
 <main>
     <div id="set-viewer">
         <div id="card-view">
-            <h1>{{ set.title._val }}</h1>
-            <h3>by UsernameHere</h3>
+            <h1>{{ set.title._val if set.title._val else 'New set' }}</h1>
+            <h3>by {{ get_user_db(set.author._val).username._val }}</h3>
             <div id="card-viewer">
-                <p class="arrow desktop" id="arrow-back" onclick="card_back()"><span class="material-symbols-outlined">arrow_back_ios_new</span></p>
-                <div id="card">
-                    <div class="front">
-                        <h2>{{ set.cards.get(set.card_order._val[0]).front._val }}</h2>
+                {% if len(set.card_order._val) > 0 %}
+                    <p class="arrow desktop" id="arrow-back" onclick="card_back()"><span class="material-symbols-outlined">arrow_back_ios_new</span></p>
+                    <div id="card">
+                        <div class="front">
+                            <h2>{{ set.cards.get(set.card_order._val[0]).front._val }}</h2>
+                        </div>
+                        <div class="back">
+                            <h2>{{ set.cards.get(set.card_order._val[0]).back._val }}</h2>
+                        </div>
                     </div>
-                    <div class="back">
-                        <h2>{{ set.cards.get(set.card_order._val[0]).back._val }}</h2>
+                    <p class="arrow desktop{{ ' active' if len(set.card_order._val) > 1 else ''}}" id="arrow-forward" onclick="card_forward()"><span class="material-symbols-outlined">arrow_forward_ios</span></p>
+                    <div id="mobile-arrows">
+                        <p class="arrow mobile" id="arrow-back" onclick="card_back()"><span class="material-symbols-outlined">arrow_back_ios_new</span></p>
+                        <p class="arrow mobile{{ ' active' if len(set.card_order._val) > 1 else ''}}" id="arrow-forward" onclick="card_forward()"><span class="material-symbols-outlined">arrow_forward_ios</span></p>
                     </div>
-                </div>
-                <p class="arrow desktop{{ ' active' if len(set.card_order._val) > 1 else ''}}" id="arrow-forward" onclick="card_forward()"><span class="material-symbols-outlined">arrow_forward_ios</span></p>
-                <div id="mobile-arrows">
-                    <p class="arrow mobile" id="arrow-back" onclick="card_back()"><span class="material-symbols-outlined">arrow_back_ios_new</span></p>
-                    <p class="arrow mobile{{ ' active' if len(set.card_order._val) > 1 else ''}}" id="arrow-forward" onclick="card_forward()"><span class="material-symbols-outlined">arrow_forward_ios</span></p>
-                </div>
+                {% else %}
+                    <div id="card">
+                        <h3>There are no cards in this set yet.</h3>
+                    </div>
+                {% endif %}
             </div>
             <div id="widgets">
                 <a class="chip" href="./study">Study</a>
@@ -45,7 +51,7 @@
                 {% for card, num in zip(set.card_order._val, range(0,len(set.card_order._val))) %}
                     {% set card = set.cards.get(card) %}
                     <tr>
-                        <td>{{ num }}</td>
+                        <td>{{ num + 1 }}</td>
                         <td>{{ card.front._val }}</td>
                         <td>{{ card.back._val }}</td>
                     </tr>

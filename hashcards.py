@@ -6,6 +6,7 @@ It does not contain other essential high-level functions such as account managem
 """
 
 from pyntree import Node
+from encryption_assistant import get_group_db, get_set_db, get_org_db, get_user_db, DATAKEY2
 from datetime import datetime
 from copy import copy
 from uuid import uuid4
@@ -65,7 +66,7 @@ def create_set(
     """
     template = copy(SET_TEMPLATE)
     set = Node(template)
-    author = Node(f'db/users/{user_id}.pyn', password=os.getenv("RAPI_AUTHKEY"))
+    author = get_user_db(user_id)
     set.id = str(uuid4())
     set.title = title
     set.author = user_id
@@ -74,7 +75,7 @@ def create_set(
     set.group = group_id
     set.public = is_public
     set.subject = subject
-    set.save(f"db/sets/{set.id()}.pyn")
+    set.save(f"db/sets/{set.id()}.pyn", password=DATAKEY2)
     author.sets().append(set.id())
     author.save()
     return set.id()
@@ -84,7 +85,7 @@ def modify_set(set_id, **kwargs) -> None:
     """
     Modify an existing set and save it
     """
-    set = Node(f'db/sets/{set_id}.pyn')
+    set = get_set_db(set_id)
     for kwarg in kwargs:
         if kwarg in SET_TEMPLATE and kwarg not in SET_NOMODIFY:
             if kwarg == 'visibility' and kwargs[kwarg] not in ('private', 'public', 'group'):
@@ -102,6 +103,14 @@ def delete_set(set_id: str) -> None:
     :param set_id:
     :return:
     """
+    set = get_set_db(set_id)
+    author = get_user_db(set.author())
+    author.sets().remove(set_id)
+    author.save()
+    if set.group():
+        group = get_group_db(set.group())
+        group.sets().remove(set_id)
+        group.save()
     os.remove(f"db/sets/{set_id}.pyn")
 
 
@@ -121,7 +130,7 @@ def create_card(front: str, back: str, image: str) -> dict:
     return card
 
 
-def add_card(set_id: str, front: str, back: str, image: str = None):
+def add_card(set_id: str, front: str = '', back: str = '', image: str = None):
     """
     Add a new card to the specified set
     :param set_id:
@@ -131,12 +140,22 @@ def add_card(set_id: str, front: str, back: str, image: str = None):
     :return:
     """
     card = create_card(front, back, image=image)
-    set = Node(f'db/sets/{set_id}.pyn')
+    set = get_set_db(set_id)
     set.cards.set(card['id'], card)
     set.card_order().append(card['id'])
     set.mdtime = datetime.now()
     set.save()
     return card['id']
+
+
+def get_card(set_id, card_id):
+    """
+    Get a card from a set ID and card ID
+    :param set_id:
+    :param card_id:
+    :return: Card as Node
+    """
+    return get_set_db(set_id).cards.get(card_id)
 
 
 def modify_card(set_id, card_id, **kwargs) -> None:
@@ -147,10 +166,13 @@ def modify_card(set_id, card_id, **kwargs) -> None:
     :param kwargs:
     :return:
     """
-    set = Node(f'db/sets/{set_id}.pyn')
+    set = get_set_db(set_id)
     card = set.cards.get(card_id)
     for kwarg in kwargs:
-        card.set(kwarg, kwargs[kwarg])
+        if kwarg in CARD_TEMPLATE and kwarg not in CARD_NOMODIFY:
+            if type(kwargs[kwarg]) not in (str, int) or len(kwargs[kwarg]) > 100000:
+                continue
+            card.set(kwarg, kwargs[kwarg])
     set.mdtime = datetime.now()
     set.save()
 
@@ -162,7 +184,7 @@ def delete_card(set_id, card_id) -> None:
     :param card_id:
     :return:
     """
-    set = Node(f'db/sets/{set_id}.pyn')
+    set = get_set_db(set_id)
     set.cards.delete(card_id)
     set.card_order().remove(card_id)
     set.mdtime = datetime.now()
@@ -176,7 +198,9 @@ def is_author(set_id: str, author_id: str) -> bool:
     :param author_id:
     :return: True or False
     """
-    set = Node(f'db/sets/{set_id}.pyn')
+    if not os.path.exists(f'db/sets/{set_id}.pyn'):
+        return False
+    set = get_set_db(set_id)
     if set.author() == author_id:
         return True
     else:

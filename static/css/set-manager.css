@@ -48,6 +48,13 @@
     min-height: 100px;
 }
 
+#options #safe-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 50%);
+    grid-gap: 10px;
+    width: 100%;
+}
+
 
 /* Cards */
 

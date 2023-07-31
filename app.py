@@ -9,6 +9,7 @@ from datetime import datetime
 from werkzeug.exceptions import HTTPException
 import os
 import account_manager
+from encryption_assistant import get_user_db, get_set_db, get_org_db, get_group_db
 import time
 
 app = Flask(__name__)
@@ -24,16 +25,21 @@ LOGIN_REQUIRED = (
 if not os.path.exists('db/sets'):
     os.mkdir('db/sets')
 
-# Update jinja global variables
-app.jinja_env.globals.update(zip=zip, len=len, Node=Node)
 
 # Add socket support
 socketio = SocketIO(app)
 
 
-# Helper functions
-def get_user_db(user_id):
-    return Node(f'db/users/{user_id}.pyn', password=registration_api.ENCRYPTION_KEY)
+# Update jinja global variables
+app.jinja_env.globals.update(
+    zip=zip,
+    len=len,
+    Node=Node,
+    get_user_db=get_user_db,
+    get_set_db=get_set_db,
+    get_group_db=get_group_db,
+    get_org_db=get_org_db
+)
 
 
 # Specialized page functions
@@ -93,6 +99,7 @@ def account_settings():
 def library():
     return render_template("library.html", user=get_user_db(session.get('id')), time=time)
 
+
 #
 # @app.route('/org-manager')
 # def temp_org_manager_design():
@@ -148,17 +155,35 @@ def new_set():
 
 @app.route('/set/<set_id>/')
 def set_viewer(set_id):
-    return render_template('set_viewer.html', set=Node(f'db/sets/{set_id}.pyn'))
+    if os.path.exists(f'db/sets/{set_id}.pyn'):
+        set_obj = get_set_db(set_id)
+    else:
+        return error(401,
+                     "The set is either private or does not exist. If you own this set and bookmarked it, sign in and try again.")
+    if set_obj.visibility() == 'public' or set_obj.author() == session.get('id'):
+        return render_template('set_viewer.html', set=set_obj)
+    else:
+        return error(401,
+                     "The set is either private or does not exist. If you own this set and bookmarked it, sign in and try again.")
 
 
 @app.route('/set/<set_id>/edit/')
 def set_manager(set_id):
     if hashcards.is_author(set_id, session.get('id')):
-        return render_template('set_manager.html', set=Node(f'db/sets/{set_id}.pyn'))
+        return render_template('set_manager.html', set=get_set_db(set_id))
     else:
         return error(401,
                      "You are not the author of this set, so you can't edit it. If you do happen to be the owner, please try switching accounts.")
 
+
+@app.route('/set/<set_id>/delete')
+def delete_set(set_id):
+    if hashcards.is_author(set_id, session.get('id')):
+        hashcards.delete_set(set_id)
+        return redirect('/sets')
+    else:
+        return error(401,
+                     "You are not the author of this set, so you can't edit it. If you do happen to be the owner, please try switching accounts.")
 
 # API
 @app.route('/api/v1/preregister', methods=['POST'])
@@ -236,15 +261,15 @@ def logout():
         return error(400, "You are not logged in.")
 
 
-@app.route('/api/v1/set/update')
-def update_set():
-    data = dict(request.json)
-    set_id = data.pop('set_id')
-    if hashcards.is_author(set_id, session['id']):
-        hashcards.modify_set(set_id, **data)
-    else:
-        return error(401,
-                     "You are not the author of this set, so you can't edit it. If you do happen to be the owner, please try switching accounts.")
+# @app.route('/api/v1/set/update')
+# def update_set():
+#     data = dict(request.json)
+#     set_id = data.pop('set_id')
+#     if hashcards.is_author(set_id, session['id']):
+#         hashcards.modify_set(set_id, **data)
+#     else:
+#         return error(401,
+#                      "You are not the author of this set, so you can't edit it. If you do happen to be the owner, please try switching accounts.")
 
 
 # Sockets
@@ -255,6 +280,41 @@ def perform_update(data):
     if hashcards.is_author(set_id, session['id']):
         hashcards.modify_set(set_id, **data)
         return 'OK'
+    else:
+        return 401, "You are not the author of this set, so you can't edit it. If you do happen to be the owner, please try switching accounts."
+
+
+@socketio.on("update_card")
+def perform_card_update(data):
+    set_id = data.pop('set_id')
+    card_id = data.pop('card_id')
+    if hashcards.is_author(set_id, session['id']):
+        hashcards.modify_card(set_id, card_id, **data)
+        return 'OK'
+    else:
+        return 401, "You are not the author of this set, so you can't edit it. If you do happen to be the owner, please try switching accounts."
+
+
+@socketio.on("new_card")
+def add_new_card(data):
+    try:
+        set_id = data.pop('set_id')
+        if hashcards.is_author(set_id, session.get('id')):
+            card_id = hashcards.add_card(set_id)
+            return hashcards.get_card(set_id, card_id)()
+        else:
+            return 401, "You are not the author of this set, so you can't edit it. If you do happen to be the owner, please try switching accounts."
+    except KeyError:
+        return 400, "That card doesn't exist"
+
+
+@socketio.on("delete_card")
+def delete_card(data):
+    set_id = data.pop('set_id')
+    if hashcards.is_author(set_id, session.get('id')):
+        card_id = data['card_id']
+        hashcards.delete_card(set_id, card_id)
+        return 'success'
     else:
         return 401, "You are not the author of this set, so you can't edit it. If you do happen to be the owner, please try switching accounts."
 

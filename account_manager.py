@@ -30,6 +30,7 @@ REQUIRED_GROUPS = {
 
 import os
 from pyntree import Node
+from encryption_assistant import get_group_db, get_set_db, get_org_db, get_user_db
 
 
 def update(target: Node, requirement_set: dict):
@@ -54,16 +55,16 @@ def update_all(users=True, groups=True, orgs=True):
     :return:
     """
     all_users = [
-        Node(f'db/users/{user_filename}', autosave=True)
+        get_user_db(user_filename.rsplit('.', 1)[0], autosave=True)
         for user_filename in os.listdir("db/users")
         if not user_filename.startswith("_map")
     ]
     all_groups = [
-        Node(f'db/groups/{group_filename}', autosave=True)
+        get_group_db(group_filename.rsplit('.', 1)[0], autosave=True)
         for group_filename in os.listdir("db/groups")
     ]
     all_orgs = [
-        Node(f'db/orgs/{org_filename}', autosave=True)
+        get_org_db(org_filename.rsplit('.', 1)[0], autosave=True)
         for org_filename in os.listdir("db/orgs")
     ]
 

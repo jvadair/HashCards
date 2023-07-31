@@ -31,7 +31,7 @@
         </div>
         <div id="members-list">
             {% for user_id in db.members._val %}
-                {% set username = Node('db/users/' + user_id + '.pyn').username._val %}
+                {% set username = get_user_db(user_id).username._val %}
                 <div class="member">
                     <label for="{{ user_id }}"></label>
                     <input id="{{ user_id }}" type="checkbox" onclick="toggle_user('{{ user_id }}')">
