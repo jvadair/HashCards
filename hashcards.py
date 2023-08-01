@@ -191,6 +191,17 @@ def delete_card(set_id, card_id) -> None:
     set.save()
 
 
+def move_card(set_id, initial, final):
+    set = get_set_db(set_id)
+    print("Initial card order:", set.card_order())
+    card_id = set.card_order().pop(initial)
+    print("Card being moved:", card_id)
+    print(f"Moving index {initial} to index {final}")
+    set.card_order().insert(final, card_id)
+    print("Final card order:", set.card_order())
+    set.save()
+
+
 def is_author(set_id: str, author_id: str) -> bool:
     """
     Determine whether the specified user is the author of the specified set

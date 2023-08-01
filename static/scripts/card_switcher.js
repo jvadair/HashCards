@@ -1,5 +1,4 @@
 function get_card_from_table(n) {
-    let row = $(`table tr:nth-of-type(${n})`);
     let front = $(`table tr:nth-of-type(${n}) td:nth-of-type(2)`).text();
     let back = $(`table tr:nth-of-type(${n}) td:nth-of-type(3)`).text();
     return [front, back];

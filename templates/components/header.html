@@ -3,7 +3,10 @@
     <nav>
         <a href="/">Home</a>
         {% if not session['id'] %}
-            <a href="/login">Login</a>
+            <a href="/login" id="header-login-button">Login</a>
+            <script>
+                $('#header-login-button').attr('href', `/login?redirect=${window.location.pathname}`);
+            </script>
         {% else %}
             <a href="/account" id="account-pfp"><img alt="Account" src="/static/images/pfp/{{ session['pfp'] }}.jpg"></a>
         {% endif %}

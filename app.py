@@ -217,7 +217,7 @@ def unsubscribe():
 @app.route('/api/v1/auth/login', methods=['POST'])
 def login():
     data = request.form
-    response = r_api.login(session, data['identifier'], data['password'], redirect='/')
+    response = r_api.login(session, data['identifier'], data['password'], redirect=data['redirect'])
     if type(response) is tuple and 400 <= response[1] < 500:
         return error(*reversed(response))
     else:
@@ -277,9 +277,9 @@ def logout():
 @socketio.on("update_set")
 def perform_update(data):
     set_id = data.pop('set_id')
-    if hashcards.is_author(set_id, session['id']):
+    if hashcards.is_author(set_id, session.get('id')):
         hashcards.modify_set(set_id, **data)
-        return 'OK'
+        return 'success'
     else:
         return 401, "You are not the author of this set, so you can't edit it. If you do happen to be the owner, please try switching accounts."
 
@@ -288,9 +288,9 @@ def perform_update(data):
 def perform_card_update(data):
     set_id = data.pop('set_id')
     card_id = data.pop('card_id')
-    if hashcards.is_author(set_id, session['id']):
+    if hashcards.is_author(set_id, session.get('id')):
         hashcards.modify_card(set_id, card_id, **data)
-        return 'OK'
+        return 'success'
     else:
         return 401, "You are not the author of this set, so you can't edit it. If you do happen to be the owner, please try switching accounts."
 
@@ -314,6 +314,16 @@ def delete_card(data):
     if hashcards.is_author(set_id, session.get('id')):
         card_id = data['card_id']
         hashcards.delete_card(set_id, card_id)
+        return 'success'
+    else:
+        return 401, "You are not the author of this set, so you can't edit it. If you do happen to be the owner, please try switching accounts."
+
+
+@socketio.on("change_position")
+def change_card_position(data):
+    set_id = data.pop('set_id')
+    if hashcards.is_author(set_id, session.get('id')):
+        hashcards.move_card(set_id, data['initial'], data['final'])
         return 'success'
     else:
         return 401, "You are not the author of this set, so you can't edit it. If you do happen to be the owner, please try switching accounts."

@@ -12,10 +12,10 @@
         <div class="welcome">
             {% if auth_method == 'login' %}
             <h1>Welcome back!</h1>
-            <h3>Or <a href="/register">click here</a> to sign up</h3>
+            <h3>Or <a href="/register" id="change_auth_method">click here</a> to sign up</h3>
             {% elif auth_method == 'register' %}
             <h1>Howdy!</h1>
-            <h3>Already registered? <a href="/login">Click here</a> to sign in</h3>
+            <h3>Already registered? <a href="/login" id="change_auth_method">Click here</a> to sign in</h3>
             {% endif %}
         </div>
         {% if auth_method == 'login' %}
@@ -29,6 +29,7 @@
         {% endif %}
         <label for="password" style="display: none">Password</label>
         <input id="password" type="password" name="password" placeholder="Password" required>
+        <input type="hidden" name="redirect" id="input-redirect">
         <input type="submit" value="{{ 'Login' if auth_method == 'login' else 'Sign up'}}" class="btn">
         <div id="social_logins">
             <h2>Or, sign in with</h2>
@@ -39,6 +40,20 @@
         </div>
     </form>
 </main>
+<script>
+    path_args = new URLSearchParams(window.location.search);
+    redirect_to = path_args.get('redirect');
+    let add_to_url
+    if (redirect_to) {
+        add_to_url = `?redirect=${redirect_to}`;
+        $('#input-redirect').val(redirect_to);
+    }
+    else {
+        add_to_url = '';
+        $('#input-redirect'.val('/'));
+    }
+    $('#change_auth_method').attr('href', `/{{ 'register' if auth_method == 'login' else 'login' }}${add_to_url}`);
+</script>
 {% include "components/footer.html" %}
 </body>
 </html>
