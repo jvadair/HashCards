@@ -3,6 +3,7 @@ from flask_socketio import SocketIO
 import hashcards
 import registrationAPI.sendmail
 from registrationAPI import registration_api, sendmail
+from authlib.integrations.flask_client import OAuth
 from pyntree import Node
 from tools import is_valid_email
 from datetime import datetime
@@ -39,6 +40,20 @@ app.jinja_env.globals.update(
     get_set_db=get_set_db,
     get_group_db=get_group_db,
     get_org_db=get_org_db
+)
+
+# OAuth setup
+oauth = OAuth(app)
+oauth.register(
+    name='nexus',
+    client_id=os.getenv('OAUTH_CLIENT_ID'),
+    client_secret=os.getenv('OAUTH_CLIENT_SECRET'),
+    access_token_url='https://nexus.jvadair.com/index.php/apps/oauth2/api/v1/token',
+    access_token_params=None,
+    authorize_url='https://nexus.jvadair.com/index.php/apps/oauth2/authorize',
+    authorize_params=None,
+    # api_base_url='https://graph.facebook.com/',
+    client_kwargs=None,
 )
 
 
@@ -328,6 +343,27 @@ def change_card_position(data):
     else:
         return 401, "You are not the author of this set, so you can't edit it. If you do happen to be the owner, please try switching accounts."
 
+# OAuth routes
+@app.route('/oauth/nexus/')
+def nexus():
+    redirect_uri = url_for('nexus_auth', _external=True)
+    return oauth.nexus.authorize_redirect(redirect_uri)
+
+
+@app.route('/oauth/nexus/auth/')
+def nexus_auth():
+    token = oauth.nexus.authorize_access_token()
+    # resp = oauth.nexus.get('...')
+    # user = oauth.nexus.parse_id_token(token)
+    # userinfo = token['userinfo']
+    # profile = resp.json()
+    # log.debug("Nexus login:", token['user_id'])
+    # log.debug("Token:", token)
+    r_api.handle_social_login(token['user_id'], 'nexus', session)
+    user_db = get_user_db(session['id'])
+    session['pfp'] = user_db.pfp()
+    return response
+    return redirect('/')
 
 # Login-restricted pages
 @app.before_request
