@@ -412,6 +412,7 @@ def google_auth():
         account_manager.update(user_db, account_manager.REQUIRED_USERS)
     session['pfp'] = user_db.pfp()
     redirect_location = session.get("oauth_redirect")
+    del session['oauth_redirect']
     return redirect(redirect_location if redirect_location else '/')
 
 
