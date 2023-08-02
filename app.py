@@ -359,10 +359,11 @@ def nexus_auth():
     # profile = resp.json()
     # log.debug("Nexus login:", token['user_id'])
     # log.debug("Token:", token)
-    r_api.handle_social_login(token['user_id'], 'nexus', session)
+    was_created = r_api.handle_social_login(token['user_id'], 'nexus', session)
     user_db = get_user_db(session['id'])
+    if was_created:
+        account_manager.update(user_db, account_manager.REQUIRED_USERS)
     session['pfp'] = user_db.pfp()
-    return response
     return redirect('/')
 
 # Login-restricted pages
