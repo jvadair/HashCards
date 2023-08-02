@@ -12,6 +12,7 @@ import os
 import account_manager
 from encryption_assistant import get_user_db, get_set_db, get_org_db, get_group_db
 import time
+from sys import argv
 
 app = Flask(__name__)
 app.secret_key = os.urandom(32)
@@ -61,6 +62,10 @@ oauth.register(
 def error(code, message):
     return render_template("error.html", message=message, code=code), code
 
+
+# Update all account data with required keys, if requested
+if 'accupdate' in argv:
+    account_manager.update_all()
 
 # Front-end routes
 
@@ -365,6 +370,7 @@ def nexus_auth():
         account_manager.update(user_db, account_manager.REQUIRED_USERS)
     session['pfp'] = user_db.pfp()
     return redirect('/')
+
 
 # Login-restricted pages
 @app.before_request
