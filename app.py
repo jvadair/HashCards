@@ -22,6 +22,10 @@ LOGIN_REQUIRED = (
     "/new",
     "/sets"
 )
+HIDE_WHEN_LOGGED_IN = (
+    "/login",
+    "/register"
+)
 
 # First-run or reset scenario
 if not os.path.exists('db/sets'):
@@ -416,6 +420,8 @@ def google_auth():
 def check_permissions():
     if request.path in LOGIN_REQUIRED and not session.get('id'):
         return error(401, "You must be logged in to view this page.")
+    elif request.path in HIDE_WHEN_LOGGED_IN and session.get('id'):
+        return error(400, "You are already logged in!")
 
 
 # Error handling
