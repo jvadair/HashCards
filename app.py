@@ -56,6 +56,13 @@ oauth.register(
     # api_base_url='https://graph.facebook.com/',
     client_kwargs=None,
 )
+oauth.register(
+    name='google',
+    server_metadata_url="https://accounts.google.com/.well-known/openid-configuration",
+    client_kwargs={
+        'scope': 'openid email'
+    }
+)
 
 
 # Specialized page functions
@@ -348,6 +355,7 @@ def change_card_position(data):
     else:
         return 401, "You are not the author of this set, so you can't edit it. If you do happen to be the owner, please try switching accounts."
 
+
 # OAuth routes
 @app.route('/oauth/nexus/')
 def nexus():
@@ -370,6 +378,30 @@ def nexus_auth():
         account_manager.update(user_db, account_manager.REQUIRED_USERS)
     session['pfp'] = user_db.pfp()
     return redirect('/')
+
+
+@app.route('/oauth/google/')
+def google():
+    redirect_uri = url_for('google_auth', _external=True)
+    return oauth.nexus.authorize_redirect(redirect_uri)
+
+
+@app.route('/oauth/google/auth/')
+def google_auth():
+    token = oauth.google.authorize_access_token()
+    # resp = oauth.nexus.get('...')
+    # user = oauth.nexus.parse_id_token(token)
+    # userinfo = token['userinfo']
+    # profile = resp.json()
+    print("Google login:", token['user_id'])
+    print("Token:", token)
+
+    # was_created = r_api.handle_social_login(token['user_id'], 'google', session)
+    # user_db = get_user_db(session['id'])
+    # if was_created:
+    #     account_manager.update(user_db, account_manager.REQUIRED_USERS)
+    # session['pfp'] = user_db.pfp()
+    # return redirect('/')
 
 
 # Login-restricted pages
