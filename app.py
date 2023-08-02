@@ -401,7 +401,7 @@ def google_auth():
     # print("Google login:", token['user_id'])
     # print("Google token:", token)
     email = token['userinfo']['email']
-    username = email.split('@gmail.com')  # This will look weird for non-gmails, but oh well!
+    username = email.split('@gmail.com')[0]  # This will look weird for non-gmails, but oh well!
     was_created = r_api.handle_social_login(username, 'google', session)
     user_db = get_user_db(session['id'])
     if was_created:
