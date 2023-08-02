@@ -47,8 +47,8 @@ app.jinja_env.globals.update(
 oauth = OAuth(app)
 oauth.register(
     name='nexus',
-    client_id=os.getenv('OAUTH_CLIENT_ID'),
-    client_secret=os.getenv('OAUTH_CLIENT_SECRET'),
+    client_id=os.getenv('NEXUS_CLIENT_ID'),
+    client_secret=os.getenv('NEXUS_CLIENT_SECRET'),
     access_token_url='https://nexus.jvadair.com/index.php/apps/oauth2/api/v1/token',
     access_token_params=None,
     authorize_url='https://nexus.jvadair.com/index.php/apps/oauth2/authorize',
@@ -58,6 +58,8 @@ oauth.register(
 )
 oauth.register(
     name='google',
+    client_id=os.getenv('GOOGLE_CLIENT_ID'),
+    client_secret=os.getenv('GOOGLE_CLIENT_SECRET'),
     server_metadata_url="https://accounts.google.com/.well-known/openid-configuration",
     client_kwargs={
         'scope': 'openid email'
