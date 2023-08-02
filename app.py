@@ -396,14 +396,15 @@ def google_auth():
     # userinfo = token['userinfo']
     # profile = resp.json()
     # print("Google login:", token['user_id'])
-    print("Google token:", token)
-
-    # was_created = r_api.handle_social_login(token['user_id'], 'google', session)
-    # user_db = get_user_db(session['id'])
-    # if was_created:
-    #     account_manager.update(user_db, account_manager.REQUIRED_USERS)
-    # session['pfp'] = user_db.pfp()
-    # return redirect('/')
+    # print("Google token:", token)
+    email = token['email']
+    username = email.split('@gmail.com')  # This will look weird for non-gmails, but oh well!
+    was_created = r_api.handle_social_login(username, 'google', session)
+    user_db = get_user_db(session['id'])
+    if was_created:
+        account_manager.update(user_db, account_manager.REQUIRED_USERS)
+    session['pfp'] = user_db.pfp()
+    return redirect('/')
 
 
 # Login-restricted pages
