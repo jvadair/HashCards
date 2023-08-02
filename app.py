@@ -361,6 +361,7 @@ def change_card_position(data):
 # OAuth routes
 @app.route('/oauth/nexus/')
 def nexus():
+    session['oauth_redirect'] = request.args.get('redirect')
     redirect_uri = url_for('nexus_auth', _external=True)
     return oauth.nexus.authorize_redirect(redirect_uri)
 
@@ -379,11 +380,13 @@ def nexus_auth():
     if was_created:
         account_manager.update(user_db, account_manager.REQUIRED_USERS)
     session['pfp'] = user_db.pfp()
-    return redirect('/')
+    redirect_location = session.get("oauth_redirect")
+    return redirect(redirect_location if redirect_location else '/')
 
 
 @app.route('/oauth/google/')
 def google():
+    session['oauth_redirect'] = request.args.get('redirect')
     redirect_uri = url_for('google_auth', _external=True)
     return oauth.google.authorize_redirect(redirect_uri)
 
@@ -404,7 +407,8 @@ def google_auth():
     if was_created:
         account_manager.update(user_db, account_manager.REQUIRED_USERS)
     session['pfp'] = user_db.pfp()
-    return redirect('/')
+    redirect_location = session.get("oauth_redirect")
+    return redirect(redirect_location if redirect_location else '/')
 
 
 # Login-restricted pages

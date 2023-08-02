@@ -34,16 +34,16 @@
         <div id="social_logins">
             <h2>Or, sign in with</h2>
             <div id="social_buttons">
-                <img src="/static/images/social_logins/nexus.png" alt="Login with Nexus" onclick="window.location.href='/oauth/nexus';">
-                <img src="/static/images/social_logins/google.png" alt="Login with Google">
+                <img id="oauth-nexus" src="/static/images/social_logins/nexus.png" alt="Login with Nexus" onclick="window.location.href='/oauth/nexus';">
+                <img id="oauth-google" src="/static/images/social_logins/google.png" alt="Login with Google" onclick="window.location.href='/oauth/google';">
             </div>
         </div>
     </form>
 </main>
 <script>
-    path_args = new URLSearchParams(window.location.search);
-    redirect_to = path_args.get('redirect');
-    let add_to_url
+    let path_args = new URLSearchParams(window.location.search);
+    let redirect_to = path_args.get('redirect');
+    var add_to_url
     if (redirect_to) {
         add_to_url = `?redirect=${redirect_to}`;
         $('#input-redirect').val(redirect_to);
@@ -53,6 +53,8 @@
         $('#input-redirect'.val('/'));
     }
     $('#change_auth_method').attr('href', `/{{ 'register' if auth_method == 'login' else 'login' }}${add_to_url}`);
+    $("#oauth-nexus").attr('onclick', `window.location.href='/oauth/nexus${add_to_url}';`);
+    $("#oauth-google").attr('onclick', `window.location.href='/oauth/google${add_to_url}';`);
 </script>
 {% include "components/footer.html" %}
 </body>
