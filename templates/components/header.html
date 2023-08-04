@@ -5,7 +5,11 @@
         {% if not session['id'] %}
             <a href="/login" id="header-login-button">Login</a>
             <script>
-                $('#header-login-button').attr('href', `/login?redirect=${window.location.pathname}`);
+                let redirect_path = window.location.pathname;
+                if (redirect_path.startsWith('/api')) {
+                    redirect_path = '/';
+                }
+                $('#header-login-button').attr('href', `/login?redirect=${redirect_path}`);
             </script>
         {% else %}
             <a href="/account" id="account-pfp"><img alt="Account" src="/static/images/pfp/{{ session['pfp'] }}.jpg"></a>
