@@ -67,6 +67,17 @@ oauth.register(
     client_kwargs=None,
 )
 oauth.register(
+    name='nexus_link',
+    client_id=os.getenv('NEXUS_LINK_CLIENT_ID'),
+    client_secret=os.getenv('NEXUS_LINK_CLIENT_SECRET'),
+    access_token_url='https://nexus.jvadair.com/index.php/apps/oauth2/api/v1/token',
+    access_token_params=None,
+    authorize_url='https://nexus.jvadair.com/index.php/apps/oauth2/authorize',
+    authorize_params=None,
+    # api_base_url='https://graph.facebook.com/',
+    client_kwargs=None,
+)
+oauth.register(
     name='google',
     client_id=os.getenv('GOOGLE_CLIENT_ID'),
     client_secret=os.getenv('GOOGLE_CLIENT_SECRET'),
@@ -366,9 +377,10 @@ def nexus():
     session['oauth_redirect'] = request.args.get('redirect')
     if link and session.get('id'):
         redirect_uri = url_for('nexus_link', _external=True, _scheme=SCHEME)
+        return oauth.nexus_link.authorize_redirect(redirect_uri)
     else:
         redirect_uri = url_for('nexus_auth', _external=True, _scheme=SCHEME)
-    return oauth.nexus.authorize_redirect(redirect_uri)
+        return oauth.nexus.authorize_redirect(redirect_uri)
 
 
 @app.route('/oauth/google/')
@@ -423,7 +435,7 @@ def google_auth():
 
 @app.route('/oauth/nexus/link')
 def nexus_link():
-    token = oauth.nexus.authorize_access_token()
+    token = oauth.nexus_link.authorize_access_token()
     success = r_api.link_social_account(session['id'], token['user_id'], 'nexus')
     if success:
         return redirect('/account?updated=True')
