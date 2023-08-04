@@ -424,8 +424,10 @@ def google_auth():
 @app.route('/oauth/nexus/link')
 def nexus_link():
     token = oauth.nexus.authorize_access_token()
+    if registration_api.socials.nexus.has(token['user_id']):
+        return error(401, "You cannot link this account because it already has its own HashCards account! Unlink it from the corresponding HashCards account and try again.")
     r_api.link_social_account(session['id'], token['user_id'], 'nexus')
-    return redirect('/account')
+    return redirect('/account?updated=True')
 
 
 @app.route('/oauth/google/link')
@@ -433,6 +435,8 @@ def google_link():
     token = oauth.google.authorize_access_token()
     email = token['userinfo']['email']
     username = email.split('@gmail.com')[0]
+    if registration_api.socials.google.has(username):
+        return error(401, "You cannot link this account because it already has its own HashCards account! Unlink it from the corresponding HashCards account and try again.")
     r_api.link_social_account(session['id'], username, 'google')
     return redirect('/account?updated=True')
 
