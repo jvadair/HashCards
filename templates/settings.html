@@ -59,8 +59,20 @@
                         </form>
                     </div>
                     <div id="user-account-account-socials">
-                        <a href="/oauth/nexus?link=true"><img src="/static/images/social_logins/nexus.png" alt="Nexus logo">Connect your Nexus Account</a>
-                        <a href="/oauth/google?link=true"><img src="/static/images/social_logins/google.png" alt="Google logo">Connect your Google Account</a>
+                        <a href="/oauth/nexus?link=true"><img src="/static/images/social_logins/nexus.png" alt="Nexus logo">
+                            {% if db.socials.has('nexus') %}
+                                Disconnect account: {{ db.socials.nexus._val }}
+                            {% else %}
+                                Connect your Nexus Account
+                            {% endif %}
+                        </a>
+                        <a href="/oauth/google?link=true"><img src="/static/images/social_logins/google.png" alt="Google logo">
+                            {% if db.socials.has('google') %}
+                                Disconnect account: {{ db.socials.google._val }}
+                            {% else %}
+                                Connect your Google Account
+                            {% endif %}
+                        </a>
                     </div>
                 </section>
                 <section id="user-profile">

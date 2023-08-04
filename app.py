@@ -24,7 +24,9 @@ LOGIN_REQUIRED = (
     "/new",
     "/sets",
     "/oauth/google/link",
-    "/oauth/nexus/link"
+    "/oauth/nexus/link",
+    "/oauth/google/unlink",
+    "/oauth/nexus/unlink",
 )
 HIDE_WHEN_LOGGED_IN = (
     "/login",
@@ -116,7 +118,7 @@ def account_settings():
             'settings.html',
             db=get_user_db(session['id']),
             type='user',
-            updated=False
+            updated=request.args.get('updated')
         )
     else:
         return error(401, "You must be logged in to manage account settings")
@@ -432,7 +434,20 @@ def google_link():
     email = token['userinfo']['email']
     username = email.split('@gmail.com')[0]
     r_api.link_social_account(session['id'], username, 'google')
-    return redirect('/account')
+    return redirect('/account?updated=True')
+
+
+@app.route('/oauth/<platform>/unlink')
+def unlink_account(platform):
+    if platform in ('google', 'nexus'):
+        user_db = get_user_db(session['id'])
+        if user_db.socials.has(platform):
+            r_api.unlink_social_account(session['id'], platform)
+            return redirect('/account?updated=True')
+        else:
+            return error(400, f"You have not linked a {platform} account.")
+    else:
+        return 404
 
 
 # Login-restricted pages
