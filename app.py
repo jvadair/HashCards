@@ -424,10 +424,11 @@ def google_auth():
 @app.route('/oauth/nexus/link')
 def nexus_link():
     token = oauth.nexus.authorize_access_token()
-    if registration_api.socials.nexus.has(token['user_id']):
-        return error(401, "You cannot link this account because it already has its own HashCards account! Unlink it from the corresponding HashCards account and try again.")
-    r_api.link_social_account(session['id'], token['user_id'], 'nexus')
-    return redirect('/account?updated=True')
+    success = r_api.link_social_account(session['id'], token['user_id'], 'nexus')
+    if success:
+        return redirect('/account?updated=True')
+    else:
+        return error(400, "Before you can link this account, it must be unlinked from the HashCards account it is currently linked to.")
 
 
 @app.route('/oauth/google/link')
@@ -435,18 +436,19 @@ def google_link():
     token = oauth.google.authorize_access_token()
     email = token['userinfo']['email']
     username = email.split('@gmail.com')[0]
-    if registration_api.socials.google.has(username):
-        return error(401, "You cannot link this account because it already has its own HashCards account! Unlink it from the corresponding HashCards account and try again.")
-    r_api.link_social_account(session['id'], username, 'google')
-    return redirect('/account?updated=True')
+    success = r_api.link_social_account(session['id'], username, 'google')
+    if success:
+        return redirect('/account?updated=True')
+    else:
+        return error(400, "Before you can link this account, it must be unlinked from the HashCards account it is currently linked to.")
 
 
 @app.route('/oauth/<platform>/unlink/')
 def unlink_account(platform):
     if platform in ('google', 'nexus'):
         user_db = get_user_db(session['id'])
-        if user_db.socials.has(platform):
-            r_api.unlink_social_account(session['id'], platform)
+        success = r_api.unlink_social_account(session['id'], platform)
+        if success:
             return redirect('/account?updated=True')
         else:
             return error(400, f"You have not linked a {platform} account.")
