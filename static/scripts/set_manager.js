@@ -18,7 +18,7 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-var socket = io.connect(location.protocol + "//" + document.domain + ':' + location.port);
+var socket = io.connect("ws://" + document.domain + ':' + location.port);
 
 $(document).ready(function() {
     $('#options input, #options textarea').on("keyup", function (event) {
@@ -127,7 +127,6 @@ function add_card() {
     );
     $(`.card[data-card-id='${temporary_id}']`).insertBefore('#new_card');
     socket.emit("new_card", {"set_id": set_id}, (response) => {
-        console.log(response)
         if (response !== 401) {
             $(`.card[data-card-id=${temporary_id}] .card-text-front`).val(response['front']);
             $(`.card[data-card-id=${temporary_id}] .card-text-back`).val(response['back']);
