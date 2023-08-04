@@ -59,20 +59,16 @@
                         </form>
                     </div>
                     <div id="user-account-account-socials">
-                        <a href="/oauth/nexus?link=true"><img src="/static/images/social_logins/nexus.png" alt="Nexus logo">
-                            {% if db.socials.has('nexus') %}
-                                Disconnect account: {{ db.socials.nexus._val }}
-                            {% else %}
-                                Connect your Nexus Account
-                            {% endif %}
-                        </a>
-                        <a href="/oauth/google?link=true"><img src="/static/images/social_logins/google.png" alt="Google logo">
-                            {% if db.socials.has('google') %}
-                                Disconnect account: {{ db.socials.google._val }}
-                            {% else %}
-                                Connect your Google Account
-                            {% endif %}
-                        </a>
+                        {% if db.socials.has('nexus') %}
+                            <a href="/oauth/nexus/unlink"><img src="/static/images/social_logins/nexus.png" alt="Nexus logo">Disconnect account: {{ db.socials.nexus._val }}</a>
+                        {% else %}
+                            <a href="/oauth/nexus?link=true"><img src="/static/images/social_logins/nexus.png" alt="Nexus logo">Connect your nexus account</a>
+                        {% endif %}
+                        {% if db.socials.has('google') %}
+                            <a href="/oauth/google/unlink"><img src="/static/images/social_logins/google.png" alt="Google logo">Disconnect account: {{ db.socials.google._val }}</a>
+                        {% else %}
+                            <a href="/oauth/google?link=true"><img src="/static/images/social_logins/google.png" alt="Google logo">Connect your Google account</a>
+                        {% endif %}
                     </div>
                 </section>
                 <section id="user-profile">

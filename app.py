@@ -437,7 +437,7 @@ def google_link():
     return redirect('/account?updated=True')
 
 
-@app.route('/oauth/<platform>/unlink')
+@app.route('/oauth/<platform>/unlink/')
 def unlink_account(platform):
     if platform in ('google', 'nexus'):
         user_db = get_user_db(session['id'])
