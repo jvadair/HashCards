@@ -20,7 +20,9 @@ r_api = registration_api.API()
 config = Node('config.json')
 LOGIN_REQUIRED = (
     "/new",
-    "/sets"
+    "/sets",
+    "/oauth/google/link",
+    "/oauth/nexus/link"
 )
 HIDE_WHEN_LOGGED_IN = (
     "/login",
@@ -218,7 +220,9 @@ def delete_set(set_id):
         return error(401,
                      "You are not the author of this set, so you can't edit it. If you do happen to be the owner, please try switching accounts.")
 
+
 # API
+
 @app.route('/api/v1/preregister', methods=['POST'])
 def preregister():
     email = request.form['email']
@@ -294,17 +298,6 @@ def logout():
         return error(400, "You are not logged in.")
 
 
-# @app.route('/api/v1/set/update')
-# def update_set():
-#     data = dict(request.json)
-#     set_id = data.pop('set_id')
-#     if hashcards.is_author(set_id, session['id']):
-#         hashcards.modify_set(set_id, **data)
-#     else:
-#         return error(401,
-#                      "You are not the author of this set, so you can't edit it. If you do happen to be the owner, please try switching accounts.")
-
-
 # Sockets
 
 @socketio.on("update_set")
@@ -365,9 +358,24 @@ def change_card_position(data):
 # OAuth routes
 @app.route('/oauth/nexus/')
 def nexus():
+    link = request.args.get('link')  # Will either be None or 'true'
     session['oauth_redirect'] = request.args.get('redirect')
-    redirect_uri = url_for('nexus_auth', _external=True)
+    if link and session.get('id'):
+        redirect_uri = url_for('nexus_link', _external=True)
+    else:
+        redirect_uri = url_for('nexus_auth', _external=True)
     return oauth.nexus.authorize_redirect(redirect_uri)
+
+
+@app.route('/oauth/google/')
+def google():
+    link = request.args.get('link')  # Will either be None or 'true'
+    session['oauth_redirect'] = request.args.get('redirect')
+    if link and session.get('id'):
+        redirect_uri = url_for('google_link', _external=True)
+    else:
+        redirect_uri = url_for('google_auth', _external=True)
+    return oauth.google.authorize_redirect(redirect_uri)
 
 
 @app.route('/oauth/nexus/auth/')
@@ -388,13 +396,6 @@ def nexus_auth():
     return redirect(redirect_location if redirect_location else '/')
 
 
-@app.route('/oauth/google/')
-def google():
-    session['oauth_redirect'] = request.args.get('redirect')
-    redirect_uri = url_for('google_auth', _external=True)
-    return oauth.google.authorize_redirect(redirect_uri)
-
-
 @app.route('/oauth/google/auth/')
 def google_auth():
     token = oauth.google.authorize_access_token()
@@ -405,7 +406,7 @@ def google_auth():
     # print("Google login:", token['user_id'])
     # print("Google token:", token)
     email = token['userinfo']['email']
-    username = email.split('@gmail.com')[0]  # This will look weird for non-gmails, but oh well!
+    username = email.split('@gmail.com')[0]  # This will look weird for non-gmails, but solves potential conflicts
     was_created = r_api.handle_social_login(username, 'google', session)
     user_db = get_user_db(session['id'])
     if was_created:
@@ -414,6 +415,22 @@ def google_auth():
     redirect_location = session.get("oauth_redirect")
     del session['oauth_redirect']
     return redirect(redirect_location if redirect_location else '/')
+
+
+@app.route('/oauth/nexus/link')
+def nexus_link():
+    token = oauth.nexus.authorize_access_token()
+    r_api.link_social_account(session['id'], token['user_id'], 'nexus')
+    return redirect('/account')
+
+
+@app.route('/oauth/google/link')
+def google_link():
+    token = oauth.google.authorize_access_token()
+    email = token['userinfo']['email']
+    username = email.split('@gmail.com')[0]
+    r_api.link_social_account(session['id'], username, 'google')
+    return redirect('/account')
 
 
 # Login-restricted pages

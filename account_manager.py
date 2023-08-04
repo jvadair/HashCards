@@ -11,6 +11,7 @@ REQUIRED_USERS = {  # Required keys and their default values
     "groups": [],
     "orgs": [],
     "pfp": "_default",
+    "pinned": [],
 }
 
 REQUIRED_ORGS = {
