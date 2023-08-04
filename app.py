@@ -18,6 +18,8 @@ app = Flask(__name__)
 app.secret_key = os.urandom(32)
 r_api = registration_api.API()
 config = Node('config.json')
+DEBUG = True if os.getenv('DEBUG') == "1" else False
+SCHEME = 'http' if DEBUG else 'https'
 LOGIN_REQUIRED = (
     "/new",
     "/sets",
@@ -361,9 +363,9 @@ def nexus():
     link = request.args.get('link')  # Will either be None or 'true'
     session['oauth_redirect'] = request.args.get('redirect')
     if link and session.get('id'):
-        redirect_uri = url_for('nexus_link', _external=True)
+        redirect_uri = url_for('nexus_link', _external=True, _scheme=SCHEME)
     else:
-        redirect_uri = url_for('nexus_auth', _external=True)
+        redirect_uri = url_for('nexus_auth', _external=True, _scheme=SCHEME)
     return oauth.nexus.authorize_redirect(redirect_uri)
 
 
@@ -372,9 +374,9 @@ def google():
     link = request.args.get('link')  # Will either be None or 'true'
     session['oauth_redirect'] = request.args.get('redirect')
     if link and session.get('id'):
-        redirect_uri = url_for('google_link', _external=True)
+        redirect_uri = url_for('google_link', _external=True, _scheme=SCHEME)
     else:
-        redirect_uri = url_for('google_auth', _external=True)
+        redirect_uri = url_for('google_auth', _external=True, _scheme=SCHEME)
     return oauth.google.authorize_redirect(redirect_uri)
 
 
@@ -449,8 +451,7 @@ def handle_exception(e):
 
 
 if __name__ == '__main__':
-    debug = True if os.getenv('DEBUG') == "1" else False
-    if debug:
+    if DEBUG:
         socketio.run(
             app,
             host="0.0.0.0",
