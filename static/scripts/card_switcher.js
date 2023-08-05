@@ -20,10 +20,16 @@ function update_arrows() {
             if ($(`${location} #arrow-back`).hasClass('active')) {
                 $(`${location} #arrow-back`).removeClass('active')
             }
+            if (!$(`${location} #arrow-forward`).hasClass('active') && total_cards != 1) {
+                $(`${location} #arrow-forward`).addClass('active')
+            }
         }
         else if (current_card_number == total_cards) {
             if ($(`${location} #arrow-forward`).hasClass('active')) {
                 $(`${location} #arrow-forward`).removeClass('active')
+            }
+            if (!$(`${location} #arrow-back`).hasClass('active') && total_cards != 1) {
+                $(`${location} #arrow-back`).addClass('active')
             }
         }
         else {
@@ -62,3 +68,20 @@ function card_forward() {
         update_arrows();
     }
 }
+
+$(document).ready(function(){
+    $('body').on("keydown", function(e){
+        if (e.keyCode === 32) {
+            e.preventDefault();
+            $('#card').flip('toggle');
+        }
+        else if (e.keyCode === 37) {
+            card_back();
+            e.preventDefault();
+        }
+        else if (e.keyCode === 39) {
+            card_forward();
+            e.preventDefault();
+        }
+    });
+})
