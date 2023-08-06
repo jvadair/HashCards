@@ -144,11 +144,13 @@ function update_card(card_id, front, back) {
 }
 
 function change_position(cardpos_initial, cardpos_final) {
-    socket.emit("change_position", {
-        "set_id": set_id,
-        "initial": cardpos_initial,
-        "final": cardpos_final
-    });
+    if (cardpos_initial !== cardpos_final) {
+        socket.emit("change_position", {
+            "set_id": set_id,
+            "initial": cardpos_initial,
+            "final": cardpos_final
+        });
+    }
 }
 
 // ---x
