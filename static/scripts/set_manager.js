@@ -171,7 +171,7 @@ $(document).ready(function() {
     })
     // --x
     // -- Card inputs
-    $("#card-container").on("change", ".card input", function (event) {
+    $("#card-container").on("keyup", ".card input", function (event) {
         let card_id = $(event.target).parents().eq(4).data('card-id');
         let form = $(event.target).parents().eq(1);
         let front = form.find('input').eq(0).val();
