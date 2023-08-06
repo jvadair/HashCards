@@ -18,15 +18,15 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-var socket = io.connect(location.protocol + "//" + document.domain + ':' + location.port);
-
+let socket;
 $(document).ready(function() {
     $('#options input, #options textarea').on("keyup", function (event) {
         queue[event.target.id] = $(event.target).val();
     });
     $('#options select').on("change", function (event) {
         queue[event.target.id] = $(event.target).val();
-    })
+    });
+    socket = io.connect(location.protocol + "//" + document.domain + ':' + location.port);
 });
 
 function save(exit=false, manual=false) {
