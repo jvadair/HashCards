@@ -203,7 +203,7 @@ def new_set():
     return redirect(f'/set/{set_id}/edit')
 
 
-@app.route('/set/<set_id>/')
+@app.route('/set/<set_id>/', methods=("GET",))
 def set_viewer(set_id):
     if os.path.exists(f'db/sets/{set_id}.pyn'):
         set_obj = get_set_db(set_id)
@@ -217,7 +217,7 @@ def set_viewer(set_id):
                      "The set is either private or does not exist. If you own this set and bookmarked it, sign in and try again.")
 
 
-@app.route('/set/<set_id>/edit/')
+@app.route('/set/<set_id>/edit/', methods=("GET",))
 def set_manager(set_id):
     if hashcards.is_author(set_id, session.get('id')):
         return render_template('set_manager.html', set=get_set_db(set_id))
@@ -226,7 +226,7 @@ def set_manager(set_id):
                      "You are not the author of this set, so you can't edit it. If you do happen to be the owner, please try switching accounts.")
 
 
-@app.route('/set/<set_id>/delete')
+@app.route('/set/<set_id>/', methods=("DELETE",))
 def delete_set(set_id):
     if hashcards.is_author(set_id, session.get('id')):
         hashcards.delete_set(set_id)
@@ -280,8 +280,9 @@ def login():
 
 @app.route('/api/v1/auth/register', methods=['POST'])
 def register():
-    return error(401,
-                 "Sorry, registration is not yet available. However, you can pre-register via the homepage.")  # TODO: Release this later
+    if not DEBUG:
+        return error(401,
+                     "Sorry, registration is not yet available. However, you can pre-register via the homepage.")  # TODO: Release this later
     # noinspection PyUnreachableCode
     data = request.form
     response = r_api.register(data['username'], data['email'], data['password'])

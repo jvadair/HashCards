@@ -172,7 +172,11 @@ $(document).ready(function() {
     $('#delete-set').on("click", function (event) {
         const response = confirm("Do you want to delete this set? This action CANNOT BE UNDONE!")
         if (response) {
-            window.location.href = '../delete'
+            fetch('/set/' + set_id, {
+                method: 'DELETE'
+            }).then(r => {
+                window.location.href = '/sets';
+            });
         }
     });
     // $('#autosave-toggle').on("click", function (event) {
