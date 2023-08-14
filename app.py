@@ -230,7 +230,7 @@ def set_manager(set_id):
 def delete_set(set_id):
     if hashcards.is_author(set_id, session.get('id')):
         hashcards.delete_set(set_id)
-        return redirect('/sets')
+        return 'SUCCESS'
     else:
         return error(401,
                      "You are not the author of this set, so you can't edit it. If you do happen to be the owner, please try switching accounts.")
