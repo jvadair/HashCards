@@ -25,6 +25,7 @@ SET_TEMPLATE = {
     "card_order": [],
     "subject": "",
     "views": [],
+    "autosave": True,
 }
 SET_NOMODIFY = (
     "id",
@@ -32,7 +33,7 @@ SET_NOMODIFY = (
     "crtime",
     "mdtime",
     "cards",
-    "card_order",  # This is only to be modified by the rearrange_set function  # TODO: Make rearrange_set function
+    "card_order",  # This is only to be modified by the move_card function
     "views",
 )
 
@@ -90,6 +91,8 @@ def modify_set(set_id, **kwargs) -> None:
         if kwarg in SET_TEMPLATE and kwarg not in SET_NOMODIFY:
             if kwarg == 'visibility' and kwargs[kwarg] not in ('private', 'public', 'group'):
                 continue
+            if kwarg in ('autosave',):  # Bool type-forcer
+                set.set(kwarg, bool(kwargs[kwarg]))
             elif type(kwargs[kwarg]) not in (str, int) or len(kwargs[kwarg]) > 100000:  # Prevent spammers and whatnot
                 continue
             set.set(kwarg, kwargs[kwarg])
@@ -212,3 +215,19 @@ def is_author(set_id: str, author_id: str) -> bool:
         return True
     else:
         return False
+
+
+def patch_all_setfiles():  # TODO: patch_all_cards function
+    """
+    This command will ensure all set files are up-to-date with the latest template
+    :return:
+    """
+    setfiles = [
+        get_set_db(set_file.rsplit('.', 1)[0], autosave=True)
+        for set_file in os.listdir("db/users")
+    ]
+    for file in setfiles:
+        for field in SET_TEMPLATE:
+            if not file.has(field):
+                file.set(field, SET_TEMPLATE[field])
+        file.save()

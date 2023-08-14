@@ -48,6 +48,14 @@
                         $('#options-visibility option[value="{{ set.visibility._val }}"]').prop('selected', true);
                     </script>
                 </select>
+{#                <div id="autosave">#}
+{#                    <label for="autosave-toggle">Autosave</label>#}
+{#                    <input id="autosave-toggle" name="autosave" type="checkbox" {{ 'checked' if set.autosave._val else '' }}>#}
+                    <script>
+                        {#autosave = {{ 'true' if set.autosave._val else 'false'}};#}
+                        autosave = true;
+                    </script>
+{#                </div>#}
                 <div id="safe-buttons">
                     <a class="btn" onclick="save(false, true);">Save now</a>
                     <a class="btn" onclick="save(true, true);">View set</a>

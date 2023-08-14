@@ -5,7 +5,7 @@ function uuidv4() {
   );
 }
 
-// --- Autosave
+// --- Autosave  TODO: Make everything a single queue and socket listener, and then create multiple functions in app.py
 
 let queue = {};
 let card_queue = {};
@@ -13,6 +13,7 @@ let set_id = window.location.pathname.split('/')[2];
 let card_being_dragged = "";
 let cardpos_initial = 0;
 let cardpos_final = 0;
+let autosave;
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -21,11 +22,14 @@ function sleep(ms) {
 let socket;
 $(document).ready(function() {
     $('#options input, #options textarea').on("keyup", function (event) {
-        queue[event.target.id] = $(event.target).val();
+        queue[event.target.name] = $(event.target).val();
     });
     $('#options select').on("change", function (event) {
-        queue[event.target.id] = $(event.target).val();
+        queue[event.target.name] = $(event.target).val();
     });
+    $('#options input[type=checkbox]').on("change", function (event) {
+        queue[event.target.name] = $(event.target).is(":checked");
+    })
     socket = io.connect(location.protocol + "//" + document.domain + ':' + location.port);
 });
 
@@ -83,7 +87,9 @@ function save(exit=false, manual=false) {
 }
 
 setInterval(function() {
-    save();
+    if (autosave) {
+        save();
+    }
 }, 5000)
 
 // ---x
@@ -98,7 +104,7 @@ function delete_card(card_id) {
         }
         else {
            $(`.card[data-card-id="${card_id}"]`).show();
-           window.alert('Failed to delete card - try again or attempt to save and reload')
+           window.alert('Failed to delete card - try again or attempt to save and reload');
         }
     });
 }
@@ -168,7 +174,11 @@ $(document).ready(function() {
         if (response) {
             window.location.href = '../delete'
         }
-    })
+    });
+    // $('#autosave-toggle').on("click", function (event) {
+    //     autosave = $('#autosave-toggle').is(":checked");
+    //     save();
+    // });
     // --x
     // -- Card inputs
     $("#card-container").on("keyup", ".card input", function (event) {
@@ -177,13 +187,13 @@ $(document).ready(function() {
         let front = form.find('input').eq(0).val();
         let back = form.find('input').eq(1).val();
         update_card(card_id, front, back);
-    })
+    });
     // --
     // -- Dragging
     $("#card-container").on("mousedown", ".card .drag-handle", function (event) {
         card_being_dragged = $(event.target).parents().eq(2);
         cardpos_initial = $(event.target).parents().eq(2).index();
-    })
+    });
 })
 
 // ---x

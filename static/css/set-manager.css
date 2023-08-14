@@ -48,6 +48,18 @@
     min-height: 100px;
 }
 
+#options #autosave {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    grid-gap: 1em;
+}
+
+#options #autosave * {
+    width: max-content;
+}
+
 #options #safe-buttons {
     display: grid;
     grid-template-columns: repeat(2, 50%);
