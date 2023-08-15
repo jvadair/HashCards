@@ -175,7 +175,8 @@ $(document).ready(function() {
             fetch('/set/' + set_id, {
                 method: 'DELETE'
             }).then(r => {
-                window.location.href = '/sets';
+                // window.location.href = '/sets';
+                console.log(r);
             });
         }
     });

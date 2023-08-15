@@ -226,7 +226,7 @@ def set_manager(set_id):
                      "You are not the author of this set, so you can't edit it. If you do happen to be the owner, please try switching accounts.")
 
 
-@app.route('/set/<set_id>/', methods=("DELETE",))
+@app.route('/set/<set_id>/', methods=("DELETE",))  # TODO: Fix mixed content block issue (https is redirecting to http idk why check cf maybe)
 def delete_set(set_id):
     if hashcards.is_author(set_id, session.get('id')):
         hashcards.delete_set(set_id)
