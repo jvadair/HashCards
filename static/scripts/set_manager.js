@@ -173,10 +173,12 @@ $(document).ready(function() {
         const response = confirm("Do you want to delete this set? This action CANNOT BE UNDONE!")
         if (response) {
             fetch('/set/' + set_id, {
-                method: 'DELETE'
+                method: 'DELETE',
+                credentials: 'include'
             }).then(r => {
-                // window.location.href = '/sets';
-                console.log(r);
+                if (r.status !== 401) {
+                    window.location.href = '/sets';
+                }
             });
         }
     });
