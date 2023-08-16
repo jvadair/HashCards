@@ -67,6 +67,12 @@ form input.btn {
     scale: 110%;
 }
 
+#disclaimer {
+    font-size: 75%;
+    text-align: center;
+    width: 50%;
+}
+
 
 /* Fix header links looking bad */
 header, footer {

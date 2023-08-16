@@ -469,6 +469,17 @@ def unlink_account(platform):
         return 404
 
 
+# Legal stuff
+@app.route('/terms')
+def tos():
+    return render_template('terms.html')
+
+
+@app.route('/privacy-policy')
+def privacypolicy():
+    return render_template('privacy-policy.html')
+
+
 # Login-restricted pages
 @app.before_request
 def check_permissions():
