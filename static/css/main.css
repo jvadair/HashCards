@@ -238,9 +238,12 @@ footer #footer-links div {
 
 footer #footer-links h4 {
     color: var(--accent);
-    text-decoration: underline;
-    font-size: 110%;
+    font-size: 1.5em;
     margin-bottom: 1em;
+}
+
+footer #footer-links a {
+    text-decoration: underline;
 }
 
 footer #back-to-top {

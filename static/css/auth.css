@@ -2,6 +2,7 @@ body {
     background-image: url("/static/images/login-hash.png");
     background-repeat: no-repeat;
     background-size: cover;
+    background-position: center;
 }
 
 form {

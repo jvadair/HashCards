@@ -29,10 +29,10 @@
      inkscape:document-units="mm"
      showgrid="false"
      inkscape:zoom="0.12900356"
-     inkscape:cx="-151.15862"
+     inkscape:cx="-147.28276"
      inkscape:cy="1670.4965"
-     inkscape:window-width="1366"
-     inkscape:window-height="692"
+     inkscape:window-width="1600"
+     inkscape:window-height="824"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
@@ -60,7 +60,7 @@
        x2="-183.45741"
        y2="1050.0715"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.352366,0,0,1.352366,7.3316821,-141.28159)" />
+       gradientTransform="matrix(1.352366,0,0,1.352366,104.39652,-257.75688)" />
   </defs>
   <g
      inkscape:label="Layer 1"
@@ -71,8 +71,8 @@
        id="rect8362"
        width="401.73645"
        height="724.15344"
-       x="-431.60898"
-       y="524.47144"
+       x="-334.54419"
+       y="407.99533"
        ry="200.86823"
        transform="rotate(-45)" />
   </g>
