@@ -16,12 +16,12 @@ h1 {
     color: var(--accent)
 }
 
-#about h1 {
-    font-size: 4em;
+h1 {
+    font-size: 3.5em;
     font-weight: bolder;
     font-family: 'Roboto', sans-serif;
-    text-align: center;
     padding: 5% 0;
+    text-align: center;
 }
 
 h1, h2, h3, h4, h5, h6 {
