@@ -244,6 +244,7 @@ def delete_set(set_id):
 
 # API
 
+# Authentication/registration
 @app.route('/api/v1/preregister', methods=['POST'])
 def preregister():
     email = request.form['email']
@@ -318,6 +319,19 @@ def logout():
         return r_api.logout(session)
     else:
         return error(400, "You are not logged in.")
+
+
+# User management
+@app.route('/api/v1/account', methods=('DELETE',))
+def delete_account():
+    user_id = session.get('id')
+    print(user_id)
+    if user_id:
+        r_api.logout(session)
+        r_api.delete_account(user_id)
+        return 'OK'
+    else:
+        return error(401, "You cannot delete an account you aren't signed into.")
 
 
 # Sockets
