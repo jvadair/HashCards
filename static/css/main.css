@@ -215,11 +215,32 @@ footer {
     display: flex;
     flex-direction: column;
     grid-gap: 25px;
+    margin-top: 5%;
 }
 
 footer .branding {
     display: flex;
     flex-direction: column;
+}
+
+footer #footer-links {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    width: 100%;
+    max-width: 800px;
+}
+
+footer #footer-links div {
+    display: flex;
+    flex-direction: column;
+    grid-gap: 1em;
+}
+
+footer #footer-links h4 {
+    color: var(--accent);
+    text-decoration: underline;
+    font-size: 110%;
+    margin-bottom: 1em;
 }
 
 footer #back-to-top {
@@ -297,7 +318,13 @@ form input.btn {
 
 /* Mobile viewport */
 @media screen and (max-width: 450px) {
-
+    footer #footer-links {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        max-width: 100%;
+        scale: 110%;
+    }
 }
 
 /* Tablet viewport */

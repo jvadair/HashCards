@@ -16,4 +16,6 @@
 {# socket.io #}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.2/socket.io.js" integrity="sha512-jMNwWSmjje4fjYut9MBGKXw5FZA6D67NHAuC9szpjbbjg51KefquNfvn4DalCbGfkcv/jHsHnPo1o47+8u4biA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 {# Fix potential HTTP errors #}
-<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+{% if not DEBUG %}
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+{% endif %}

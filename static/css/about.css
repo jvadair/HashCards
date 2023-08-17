@@ -1,0 +1,29 @@
+h1 {
+    font-weight: bolder;
+    font-size: 300%;
+}
+
+#about {
+    padding: 0 10%;
+}
+
+#about p {
+    font-size: 125%;
+}
+
+#about h2 {
+    font-size: 2em;
+    color: var(--accent)
+}
+
+#about h1 {
+    font-size: 4em;
+    font-weight: bolder;
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+    padding: 5% 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Roboto', sans-serif;
+}

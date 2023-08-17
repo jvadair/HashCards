@@ -52,9 +52,72 @@ h1 {
     height: inherit;
 }
 
+/* Info area */
+#info {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    grid-gap: 5em;
+}
+
+#info section {
+    display: flex;
+    height: 30em;
+    flex-direction: row
+}
+
+#info section .info-text {
+    display: flex;
+    flex-direction: column;
+    width: 35%;
+    padding: 0 5em;
+}
+
+#info section .info-image {
+    width: 65%;
+    height: 100%;
+    overflow: hidden;
+}
+
+section .info-image:nth-of-type(even) {
+    mask: linear-gradient(to left, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 100%);
+}
+
+section .info-image:nth-of-type(odd) {
+    mask: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 100%);
+}
+
+#info section .info-image img {
+    /*object-fit: cover;*/
+    width: 100%;
+    min-height: 100%;
+    /*margin: -50% 0; !* This will somehow magically center the thing, I think *!*/
+}
+
 
 /* Viewports */
 
+
+/* Mobile and tablet viewports */
+@media screen and (max-width: 850px) {
+    #info section {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+    #info section .info-text {
+        width: 100%;
+        padding: 0 2em;
+        order: 1;
+    }
+    #info section .info-image {
+        width: 100%;
+    }
+    #info section .info-image {
+        order: 0;
+        mask: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 25%, rgba(0,0,0,1) 50%, rgba(0,0,0,1) 75%, rgba(0,0,0,0) 100%);
+    }
+}
 
 /* Mobile viewport */
 @media screen and (max-width: 450px) {

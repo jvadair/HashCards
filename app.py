@@ -47,6 +47,7 @@ app.jinja_env.globals.update(
     zip=zip,
     len=len,
     Node=Node,
+    DEBUG=DEBUG,
     get_user_db=get_user_db,
     get_set_db=get_set_db,
     get_group_db=get_group_db,
@@ -105,6 +106,11 @@ def index():
         return render_template('dash.html', user=get_user_db(session['id']))
     else:
         return render_template('landing.html', num_preregistered=len(Node('db/preregistered.pyn')._values))
+
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
 
 
 # @app.route('/dash')
