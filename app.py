@@ -553,7 +553,7 @@ def handle_exception(e):
 
 if __name__ == '__main__':
     # Configure background tasks
-    scheduler.add_job(func=lambda: registration_api.clear_unverified_accounts(age=24*60), trigger="interval", seconds=10)
+    scheduler.add_job(func=lambda: registration_api.clear_unverified_accounts(age=24*60), trigger="interval", hours=1)
     scheduler.start()
     # Run
     if DEBUG:
