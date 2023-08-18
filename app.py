@@ -326,7 +326,6 @@ def logout():
 @app.route('/api/v1/account', methods=('DELETE',))
 def delete_account():
     user_id = session.get('id')
-    print(user_id)
     if user_id:
         r_api.logout(session)
         r_api.delete_account(user_id)
