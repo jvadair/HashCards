@@ -296,7 +296,6 @@ def register():
     if type(response) != str and 400 <= response[1] < 500:
         return error(*reversed(response))
     else:
-        x = render_template("awaiting_verification.html")
         return render_template("awaiting_verification.html")
 
 
@@ -304,7 +303,9 @@ def register():
 def verify_user():
     token = request.args.get('token')
     user_id = r_api.verify(token)  # Returns user ID or error
-    if type(user_id) is tuple:
+    if type(user_id) is Response:
+        return user_id  # r_api.verify returns a redirect if verifying an email change
+    elif type(user_id) is tuple:
         return error(*reversed(user_id))
     else:
         user_db = get_user_db(user_id)
@@ -331,7 +332,25 @@ def delete_account():
         r_api.delete_account(user_id)
         return 'OK'
     else:
-        return error(401, "You cannot delete an account you aren't signed into.")
+        return error(401, "You cannot delete an account you aren't signed in with.")
+
+
+@app.route('/api/v1/account/email', methods=('POST',))
+def change_email():
+    if session.get('id'):
+        data = request.form
+        new_email = data.get('email')
+        if new_email:
+            if is_valid_email(new_email):
+                response = r_api.change_email(session['id'], new_email)
+                if type(response) is tuple:
+                    return error(*reversed(response))
+                return render_template("awaiting_verification.html")
+            return error(400, "Please provide a valid email!")
+        else:
+            return error(400, "A new email address was not provided.")
+    else:
+        return error(401, "You cannot change the email for an account you aren't signed in with.")
 
 
 # Sockets

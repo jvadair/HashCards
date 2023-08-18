@@ -52,7 +52,7 @@
                     <a class="btn danger" style="scale: 125%;" href="/api/v1/auth/logout">Sign out</a>
                     <br>
                     <div id="user-account-email">
-                        <form>
+                        <form action="/api/v1/account/email" method="post">
                             <label for="user-account-email-email">Email</label>
                             <input id="user-account-email-email" name="email" type="email" value="{{ db.email._val }}">
                             <input type="submit" class="btn" value="Update">
