@@ -5,7 +5,7 @@ from registrationAPI import registration_api, sendmail
 from authlib.integrations.flask_client import OAuth
 from pyntree import Node
 from tools import is_valid_email
-from datetime import datetime
+from datetime import datetime, timedelta
 from werkzeug.exceptions import HTTPException
 import os
 import account_manager
@@ -38,6 +38,8 @@ HIDE_WHEN_LOGGED_IN = (
 # First-run or reset scenario
 if not os.path.exists('db/sets'):
     os.mkdir('db/sets')
+if not os.path.exists('db/temp'):
+    os.mkdir('db/temp')
 
 
 # Add socket support
@@ -100,7 +102,20 @@ def error(code, message):
 if 'accupdate' in argv:
     account_manager.update_all()
 
+
+# Background workers
+def clear_temporary_files(age=0):
+    """
+    :param age: How long the data has existed, in minutes
+    :return:
+    """
+    for file in os.listdir('db/temp'):
+        if datetime.now() - timedelta(minutes=age) >= datetime.fromtimestamp(os.path.getmtime('db/temp/' + file)):
+            os.remove('db/temp/' + file)
+
+
 # Front-end routes
+
 
 @app.route('/')
 def index():
@@ -113,21 +128,6 @@ def index():
 @app.route('/about')
 def about():
     return render_template('about.html')
-
-
-# @app.route('/dash')
-# def temp_dash_design():
-#     return render_template('dash.html')
-#
-#
-# @app.route('/set-manager')
-# def temp_set_manager_design():
-#     return render_template('set_manager.html', set=Node('db/sets/473ad80e-e2a5-4158-a81e-9bddf4d0aa88.pyn'), subjects=config.subjects())
-#
-#
-# @app.route('/set-viewer')
-# def temp_set_viewer_design():
-#     return render_template('set_viewer.html', set=Node('db/sets/473ad80e-e2a5-4158-a81e-9bddf4d0aa88.pyn'))
 
 
 @app.route('/account')
@@ -554,6 +554,7 @@ def handle_exception(e):
 if __name__ == '__main__':
     # Configure background tasks
     scheduler.add_job(func=lambda: registration_api.clear_unverified_accounts(age=24*60), trigger="interval", hours=1)
+    scheduler.add_job(func=lambda: clear_temporary_files(age=7*24*60), trigger="interval", seconds=1)
     scheduler.start()
     # Run
     if DEBUG:
