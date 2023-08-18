@@ -1,7 +1,6 @@
 from flask import Flask, request, render_template, session, Response, redirect, url_for
 from flask_socketio import SocketIO
 import hashcards
-import registrationAPI.sendmail
 from registrationAPI import registration_api, sendmail
 from authlib.integrations.flask_client import OAuth
 from pyntree import Node
@@ -13,8 +12,11 @@ import account_manager
 from encryption_assistant import get_user_db, get_set_db, get_org_db, get_group_db
 import time
 from sys import argv
+import atexit
+from apscheduler.schedulers.background import BackgroundScheduler
 
 app = Flask(__name__)
+scheduler = BackgroundScheduler()
 app.secret_key = os.urandom(32)
 r_api = registration_api.API()
 config = Node('config.json')
@@ -550,13 +552,18 @@ def handle_exception(e):
 
 
 if __name__ == '__main__':
+    # Configure background tasks
+    scheduler.add_job(func=lambda: registration_api.clear_unverified_accounts(age=24*60), trigger="interval", seconds=10)
+    scheduler.start()
+    # Run
     if DEBUG:
         socketio.run(
             app,
             host="0.0.0.0",
             port=3453,
             allow_unsafe_werkzeug=True,
-            debug=True
+            debug=True,
+            use_reloader=False  # Ensure app isn't run twice when loaded
         )
     else:
         socketio.run(
@@ -564,3 +571,6 @@ if __name__ == '__main__':
             host="0.0.0.0",
             port=3453,
         )
+
+    # Shut down the scheduler when exiting the app
+    atexit.register(lambda: scheduler.shutdown())
