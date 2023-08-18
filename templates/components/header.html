@@ -6,7 +6,7 @@
             <a href="/login" id="header-login-button">Login</a>
             <script>
                 let redirect_path = window.location.pathname;
-                if (redirect_path.startsWith('/api')) {
+                if (redirect_path.startsWith('/api') || ['/register', '/login'].includes(redirect_path)) {
                     redirect_path = '/';
                 }
                 $('#header-login-button').attr('href', `/login?redirect=${redirect_path}`);
