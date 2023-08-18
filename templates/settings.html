@@ -73,7 +73,7 @@
                 </section>
                 <section id="user-profile">
                      <h1><span class="material-symbols-outlined">face</span> Profile</h1>
-                    <form>
+                    <form action="/api/v1/account/username" method="post">
                         <label for="user-profile-social-username">Username</label>
                         <input id="user-profile-social-username" name="username" type="text" value="{{ db.username._val }}">
                         <input type="submit" class="btn" value="Update">

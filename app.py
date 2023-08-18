@@ -349,7 +349,23 @@ def change_email():
         else:
             return error(400, "A new email address was not provided.")
     else:
-        return error(401, "You cannot change the email for an account you aren't signed in with.")
+        return error(401, "You cannot change the email of an account you aren't signed in with.")
+
+
+@app.route('/api/v1/account/username', methods=('POST',))
+def change_username():
+    if session.get('id'):
+        data = request.form
+        new_username = data.get('username')
+        if new_username:
+            response = r_api.change_username(session['id'], new_username)
+            if type(response) is tuple:
+                return error(*reversed(response))
+            return redirect("/account?updated=True")
+        else:
+            return error(400, "A new username was not provided.")
+    else:
+        return error(401, "You cannot change the username of an account you aren't signed in with.")
 
 
 # Sockets
