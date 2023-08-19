@@ -97,7 +97,9 @@
                 </section>
                 <section id="user-privacy">
                     <h1><span class="material-symbols-outlined">visibility_lock</span> Privacy</h1>
-                    <button class="btn danger" id="user-privacy-request-data">Request data</button>
+                    <form action="/api/v1/account/request_data" method="post">
+                        <button type="submit" class="btn danger" id="user-privacy-request-data">Request data</button>
+                    </form>
                     <button class="btn danger" id="user-privacy-delete">Delete account</button>
                 </section>
             {% endif %}

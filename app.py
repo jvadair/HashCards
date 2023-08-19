@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, session, Response, redirect, url_for
+from flask import Flask, request, render_template, session, Response, redirect, url_for, send_from_directory
 from flask_socketio import SocketIO
 import hashcards
 from registrationAPI import registration_api, sendmail
@@ -6,7 +6,7 @@ from authlib.integrations.flask_client import OAuth
 from pyntree import Node
 from tools import is_valid_email
 from datetime import datetime, timedelta
-from werkzeug.exceptions import HTTPException
+from werkzeug.exceptions import HTTPException, NotFound
 import os
 import account_manager
 from encryption_assistant import get_user_db, get_set_db, get_org_db, get_group_db
@@ -14,9 +14,10 @@ import time
 from sys import argv
 import atexit
 from apscheduler.schedulers.background import BackgroundScheduler
+from zipfile import ZipFile
+from uuid import uuid4
 
 app = Flask(__name__)
-scheduler = BackgroundScheduler()
 app.secret_key = os.urandom(32)
 r_api = registration_api.API()
 config = Node('config.json')
@@ -40,6 +41,8 @@ if not os.path.exists('db/sets'):
     os.mkdir('db/sets')
 if not os.path.exists('db/temp'):
     os.mkdir('db/temp')
+if not os.path.exists('db/takeout'):
+    os.mkdir('db/takeout')
 
 
 # Add socket support
@@ -98,20 +101,59 @@ def error(code, message):
     return render_template("error.html", message=message, code=code), code
 
 
+# Additional helper functions
+def zip_user_data(user_id, create_link=True, send_email=True):
+    user_db = get_user_db(user_id)
+    user_db.file.password = None
+    user_db.delete('password')
+    user_db.crtime = time.mktime(user_db.crtime().timetuple())
+    user_db.save(f"db/temp/_account_{user_id}.json")
+    filenames = [f"db/temp/_account_{user_id}.json"]
+    for set in user_db.sets():
+        set_db = get_set_db(set)
+        set_db.file.password = None
+        set_db.crtime = time.mktime(set_db.crtime().timetuple())
+        set_db.mdtime = time.mktime(set_db.mdtime().timetuple())
+        set_db.save(f"db/temp/set_{set}.json")
+        filenames.append(f"db/temp/set_{set}.json")
+    with ZipFile(f"db/temp/dataexport_{user_id}.zip", mode="w") as archive:
+        for filename in filenames:
+            archive.write(filename, filename.replace('db/temp/', ''))
+            os.remove(filename)
+    if create_link:
+        takeout_id = str(uuid4())
+        os.rename(f"db/temp/dataexport_{user_id}.zip", f"db/takeout/{takeout_id}.zip")
+        if send_email:
+            sendmail.send_template('email/datarequest.html',
+                                   "Here's your HashCards data!",
+                                   user_db.email(),
+                                   date_and_time=datetime.now().strftime("%A %B %-m at %X"),
+                                   takeout_id=takeout_id,
+                                   )
+        return takeout_id
+
+
 # Update all account data with required keys, if requested
 if 'accupdate' in argv:
     account_manager.update_all()
 
 
 # Background workers
-def clear_temporary_files(age=0):
+def clear_files(age=0, temporary=True, takeout=True):
     """
+    :param takeout: Delete takeout data
+    :param temporary: Delete temporary data
     :param age: How long the data has existed, in minutes
     :return:
     """
-    for file in os.listdir('db/temp'):
-        if datetime.now() - timedelta(minutes=age) >= datetime.fromtimestamp(os.path.getmtime('db/temp/' + file)):
-            os.remove('db/temp/' + file)
+    if temporary:
+        for file in os.listdir('db/temp'):
+            if datetime.now() - timedelta(minutes=age) >= datetime.fromtimestamp(os.path.getmtime('db/temp/' + file)):
+                os.remove('db/temp/' + file)
+    if takeout:
+        for file in os.listdir('db/takeout'):
+            if datetime.now() - timedelta(minutes=age) >= datetime.fromtimestamp(os.path.getmtime('db/takeout/' + file)):
+                os.remove('db/takeout/' + file)
 
 
 # Front-end routes
@@ -203,6 +245,14 @@ def login_page():
 @app.route('/register')
 def register_page():
     return render_template('auth.html', auth_method='register')
+
+
+@app.route('/takeout/<takeout_id>')
+def takeout(takeout_id):
+    try:
+        return send_from_directory('db/takeout', f'{takeout_id}.zip', download_name="hashcards_data.zip")
+    except NotFound:
+        return error(400, "This data takeout link has expired or was never created.")
 
 
 @app.route('/new')
@@ -366,6 +416,15 @@ def change_username():
             return redirect("/account?updated=True")
         else:
             return error(400, "A new username was not provided.")
+    else:
+        return error(401, "You cannot change the username of an account you aren't signed in with.")
+
+
+@app.route('/api/v1/account/request_data', methods=('POST',))
+def request_data():
+    if session.get('id'):
+        scheduler.add_job(zip_user_data, args=(session['id'],))
+        return render_template('success.html', message='You should see an email shortly. You will have approximately 1 week to download the data before it is deleted from our servers.')
     else:
         return error(401, "You cannot change the username of an account you aren't signed in with.")
 
@@ -553,8 +612,9 @@ def handle_exception(e):
 
 if __name__ == '__main__':
     # Configure background tasks
+    scheduler = BackgroundScheduler()
     scheduler.add_job(func=lambda: registration_api.clear_unverified_accounts(age=24*60), trigger="interval", hours=1)
-    scheduler.add_job(func=lambda: clear_temporary_files(age=7*24*60), trigger="interval", seconds=1)
+    scheduler.add_job(func=lambda: clear_files(age=7 * 24 * 60), trigger="interval", seconds=1)
     scheduler.start()
     # Run
     if DEBUG:
