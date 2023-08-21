@@ -26,7 +26,7 @@
                         <option value="{{ subject }}">{{ subject }}</option>
                     {% endfor %}
                     <script>
-                        $('#options-subject option[value="{{ set.subject._val }}"]').prop('selected', true);
+                        $('#options #subject option[value="{{ set.subject._val }}"]').prop('selected', true);
                     </script>
                 </select>
                 <label for="org">Organization</label>
@@ -45,7 +45,7 @@
                     <option value="public">Public</option>
                     <option value="organization">Organization</option>
                     <script>
-                        $('#options-visibility option[value="{{ set.visibility._val }}"]').prop('selected', true);
+                        $('#options #visibility option[value="{{ set.visibility._val }}"]').prop('selected', true);
                     </script>
                 </select>
 {#                <div id="autosave">#}
