@@ -432,6 +432,26 @@ def change_username():
         return error(401, "You cannot change the username of an account you aren't signed in with.")
 
 
+@app.route('/api/v1/account/password', methods=('POST',))
+def change_password():
+    if session.get('id'):
+        data = request.form
+        old_password = data.get('old_password')
+        new_password = data.get('new_password')
+        user_db = get_user_db(session['id'])
+        if old_password != user_db.password():
+            return error(401, "Incorrect password, please try again.")
+        if new_password:
+            response = r_api.change_password(session['id'], new_password)
+            if type(response) is tuple:
+                return error(*reversed(response))
+            return redirect("/account?updated=True")
+        else:
+            return error(400, "A new password was not provided.")
+    else:
+        return error(401, "You cannot change the password for an account you aren't signed in with.")
+
+
 @app.route('/api/v1/account/request_data', methods=('POST',))
 def request_data():
     if session.get('id'):

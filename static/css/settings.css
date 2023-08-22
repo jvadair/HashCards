@@ -88,6 +88,19 @@ section form {
     border-radius: 5px;
 }
 
+#user-account-password form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+#user-account-password form div {
+    display: flex;
+    flex-direction: row;
+    grid-gap: 1em;
+    align-items: center;
+}
+
 #user-email form {
     flex-direction: column;
     align-items: flex-start;
@@ -137,17 +150,16 @@ section form {
     }
     #settings {
         width: 100%;
-
     }
     section {
-        align-items: center;
+        align-items: flex-start;
     }
     section h1 {
         align-self: flex-start;
     }
     section form {
         flex-direction: column;
-        /*align-items: flex-start;*/
+        align-items: flex-start;
         min-width: 75%;
     }
     #shared-privacy #shared-privacy-visibility {
