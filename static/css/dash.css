@@ -92,10 +92,11 @@
   background-color: var(--accent);
 }
 
-#pinned {
+#pinned-sets {  /* Set collection */
   display: flex;
   flex-direction: column;
   grid-gap: 1em;
+  width: 100%
 }
 
 #pinned .set {

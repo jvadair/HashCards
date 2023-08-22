@@ -58,17 +58,19 @@
                 {% if len(user.pinned._val) == 0 %}
                     <p>To pin a set, just click the 'pin' button.</p>
                 {% else %}
-                    {% for set in user.pinned._val %}
-                        {% set set = get_set_db(set) %}
-                        <div id="{{ set.id._val }}" class="set" onclick="window.location.href = '/set/{{ set.id._val }}'">
-                            <h3>{{ set.title._val }}</h3>
-                            {% if set.description._val %}
-                                <p>{{ set.description._val[:97] }}{{ "..." if len(set.description._val) >= 97 else '' }}</p>
-                            {% else %}
-                                <p><i>No description</i></p>
-                            {% endif %}
-                        </div>
-                    {% endfor %}
+                    <div id="pinned-sets">
+                        {% for set in user.pinned._val %}
+                            {% set set = get_set_db(set) %}
+                            <div id="{{ set.id._val }}" class="set" onclick="window.location.href = '/set/{{ set.id._val }}'">
+                                <h3>{{ set.title._val }}</h3>
+                                {% if set.description._val %}
+                                    <p>{{ set.description._val[:97] }}{{ "..." if len(set.description._val) >= 97 else '' }}</p>
+                                {% else %}
+                                    <p><i>No description</i></p>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
                 {% endif %}
             </div>
             <div id="groups" class="content-card">
