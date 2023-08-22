@@ -8,9 +8,17 @@
 <body>
 {% include "components/header.html" %}
 <main>
-<h1>My Sets</h1>
+    <div id="library-header">
+        <a href=".."><span class="material-symbols-outlined">arrow_back</span></a>
+        <h1>My Sets</h1>
+    </div>
 {% if len(user.sets._val) > 0 %}
     <div id="library">
+        <a class="set-container" href="/new">
+            <div class="set new-set" id="new_set">
+                <p class="cutout">+ New set</p>
+            </div>
+        </a>
         {% for set in user.sets._val %}
             {% set set = get_set_db(set) %}
             <a class="set-container" data-timestamp="{{ time.mktime(set.mdtime._val.timetuple()) }}" href="/set/{{ set.id._val }}">
