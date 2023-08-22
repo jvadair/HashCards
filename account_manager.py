@@ -17,6 +17,7 @@ REQUIRED_USERS = {  # Required keys and their default values
     "recent_sets": [],
     "streak": 0,
     "streak_latest_day": datetime.datetime(1,1,1).date(),
+    "email_preferences": {}
 }
 
 REQUIRED_ORGS = {
@@ -31,6 +32,11 @@ REQUIRED_GROUPS = {
     "sets": [],
     "description": "",
     "public": False,
+}
+
+REQUIRED_EMAIL_PREFERENCES = {
+    "updates": True,
+    "requests": True
 }
 
 
@@ -52,7 +58,7 @@ def update(target: Node, requirement_set: dict):
     target.save()
 
 
-def update_all(users=True, groups=True, orgs=True):
+def update_all(users=True, groups=True, orgs=True, email_preferences=True):
     """
     Update all data files - individual sets of files can be toggled (user/group/org)
     :param users:
@@ -77,6 +83,9 @@ def update_all(users=True, groups=True, orgs=True):
     if users:
         for user in all_users:
             update(user, REQUIRED_USERS)
+        if email_preferences:
+            for user in all_users:
+                update(user.email_preferences, REQUIRED_EMAIL_PREFERENCES)
 
     if groups:
         for group in all_groups:

@@ -81,14 +81,14 @@
                 </section>
                 <section id="user-email">
                      <h1><span class="material-symbols-outlined">email</span> Email</h1>
-                    <form>
+                    <form action="/api/v1/account/email_preferences" method="post">
                         <div class="options">
                             <div class="option">
-                                <input id="user-email-preferences-updates" type="checkbox" name="updates" value="true">
+                                <input id="user-email-preferences-updates" type="checkbox" name="updates"{{ " checked" if db.email_preferences.updates._val else "" }}>
                                 <label for="user-email-preferences-updates">Updates, improvements, and news</label>
                             </div>
                             <div class="option">
-                                <input id="user-email-preferences-requests" type="checkbox" name="requests" value="true">
+                                <input id="user-email-preferences-requests" type="checkbox" name="requests"{{ " checked" if db.email_preferences.requests._val else "" }}>
                                 <label for="user-email-preferences-requests">Invites and requests</label>
                             </div>
                         </div>

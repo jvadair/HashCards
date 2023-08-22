@@ -441,6 +441,22 @@ def request_data():
         return error(401, "You cannot change the username of an account you aren't signed in with.")
 
 
+@app.route('/api/v1/account/email_preferences', methods=('POST',))
+def change_email_preferences():
+    if session.get('id'):
+        data = dict(request.form)
+        user_db = get_user_db(session['id'])
+        for option in ('updates', 'requests'):
+            if data.get(option):
+                user_db.email_preferences.set(option, True)
+            else:
+                user_db.email_preferences.set(option, False)
+        user_db.save()
+        return redirect("/account?updated=True")
+    else:
+        return error(401, "You cannot change email preferences for an account you aren't signed in with.")
+
+
 @app.route('/api/v1/account/pin/', methods=['POST'])
 def pin_set():
     data = request.json
