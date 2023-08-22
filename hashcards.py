@@ -7,7 +7,7 @@ It does not contain other essential high-level functions such as account managem
 
 from pyntree import Node
 from encryption_assistant import get_group_db, get_set_db, get_org_db, get_user_db, DATAKEY2
-from datetime import datetime
+from datetime import datetime, timedelta
 from copy import copy
 from uuid import uuid4
 import os
@@ -88,6 +88,8 @@ def modify_set(set_id, **kwargs) -> None:
     """
     set = get_set_db(set_id)
     for kwarg in kwargs:
+        print(set.visibility())
+        print(kwarg + ':', kwargs[kwarg])
         if kwarg in SET_TEMPLATE and kwarg not in SET_NOMODIFY:
             if kwarg == 'visibility' and kwargs[kwarg] not in ('private', 'public', 'group'):
                 continue
@@ -96,6 +98,7 @@ def modify_set(set_id, **kwargs) -> None:
             elif type(kwargs[kwarg]) not in (str, int) or len(kwargs[kwarg]) > 100000:  # Prevent spammers and whatnot
                 continue
             set.set(kwarg, kwargs[kwarg])
+            print(set.visibility())
     set.mdtime = datetime.now()
     set.save()
 
@@ -215,6 +218,47 @@ def is_author(set_id: str, author_id: str) -> bool:
         return True
     else:
         return False
+
+
+def update_recent_sets(user_id, set_id):
+    user_db = get_user_db(user_id)
+    try:  # Don-t re-add sets, just change their place
+        user_db.recent_sets().remove(set_id)
+    except ValueError:
+        pass
+    user_db.recent_sets().insert(0, set_id)
+    user_db.save()
+
+
+def calculate_exp_gain(user_id, set_id, action='view'):
+    """
+    :param user_id: The user to (potentially) award exp to
+    :param set_id: The set that triggered this
+    :param action: The action the user took. Options are 'view', 'study'
+    :return:
+    """
+    user_db = get_user_db(user_id)
+    if action == 'view':
+        if set_id not in user_db.recent_sets() and not is_author(set_id, user_id):
+            user_db.experience += 10
+
+    if user_db.experience() >= 1000:
+        user_db.level += 1
+        user_db.experience -= 1000
+
+    if datetime.now().date() - timedelta(days=1) > user_db.streak_latest_day():
+        user_db.streak = 1  # Now that the user has viewed a set, the streak increases to 1 from 0
+    elif datetime.now().date() > user_db.streak_latest_day():
+        user_db.streak += 1
+    user_db.streak_latest_day = datetime.now().date()
+    user_db.save()
+
+
+def check_user_streak(user_id):
+    user_db = get_user_db(user_id)
+    if datetime.now().date() - timedelta(days=1) > user_db.streak_latest_day():
+        user_db.streak = 0
+    user_db.save()
 
 
 def patch_all_setfiles():  # TODO: patch_all_cards function

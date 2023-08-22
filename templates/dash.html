@@ -20,37 +20,61 @@
             </a>
             <div id="recent">
                 <h2>Recent</h2>
-                <p>No recent sets yet, go explore!</p>
+                {% if len(user.recent_sets._val) == 0 %}
+                    <p>No recent sets yet, go explore!</p>
+                {% else %}
+                    {% for set in user.recent_sets._val[:3] %}
+                        {% set set = get_set_db(set) %}
+                        <div id="{{ set.id._val }}" class="set" onclick="window.location.href = '/set/{{ set.id._val }}'">
+                            <h3>{{ set.title._val }}</h3>
+                            {% if set.description._val %}
+                                <p>{{ set.description._val[:97] }}{{ "..." if len(set.description._val) >= 97 else '' }}</p>
+                            {% else %}
+                                <p><i>No description</i></p>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                {% endif %}
             </div>
         </div>
         <div id="feed">
             <div id="progress" class="content-card">
                 <h2>Your Progress</h2>
-                <h3>Level 1</h3>
+                <h3>Level {{ user.level._val }}</h3>
                 <div id="indicator">
-                    <p id="current">25</p>
+                    <p id="current">{{ user.experience._val }}</p>
                     <div id="bar">
                         <div id="percentage"></div>
                     </div>
-                    <p id="goal">100</p>
+                    <p id="goal">1000</p>
                 </div>
-                <h3>Daily streak: <span style="color: var(--accent); font-size: 1.5em">3</span> days</h3>
+                <script>
+                    $("#indicator #bar #percentage").css("width", "{{ max((user.experience._val / 1000)*100, 1) }}%")
+                </script>
+                <h3>Daily streak: <span style="color: var(--accent); font-size: 1.5em">{{ user.streak._val }}</span> {{ 'days' if user.streak._val != 1 else 'day' }}</h3>
             </div>
             <div id="pinned" class="content-card">
                 <h2>Pinned</h2>
-                <p>To pin a set, just click the 'pin' button.</p>
+                {% if len(user.pinned._val) == 0 %}
+                    <p>To pin a set, just click the 'pin' button.</p>
+                {% else %}
+                    {% for set in user.pinned._val %}
+                        {% set set = get_set_db(set) %}
+                        <div id="{{ set.id._val }}" class="set" onclick="window.location.href = '/set/{{ set.id._val }}'">
+                            <h3>{{ set.title._val }}</h3>
+                            {% if set.description._val %}
+                                <p>{{ set.description._val[:97] }}{{ "..." if len(set.description._val) >= 97 else '' }}</p>
+                            {% else %}
+                                <p><i>No description</i></p>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                {% endif %}
             </div>
             <div id="groups" class="content-card">
                 <h2>New in your groups</h2>
                 <p>Nothing to see here. Try joining a group or making a set for your group.</p>
             </div>
-            <div class="content-card"></div>
-            <div class="content-card"></div>
-            <div class="content-card"></div>
-            <div class="content-card"></div>
-            <div class="content-card"></div>
-            <div class="content-card"></div>
-            <div class="content-card"></div>
         </div>
     </div>
 </main>

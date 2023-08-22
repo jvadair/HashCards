@@ -58,7 +58,8 @@ app.jinja_env.globals.update(
     get_user_db=get_user_db,
     get_set_db=get_set_db,
     get_group_db=get_group_db,
-    get_org_db=get_org_db
+    get_org_db=get_org_db,
+    max=max
 )
 
 # OAuth setup
@@ -107,6 +108,7 @@ def zip_user_data(user_id, create_link=True, send_email=True):
     user_db.file.password = None
     user_db.delete('password')
     user_db.crtime = time.mktime(user_db.crtime().timetuple())
+    user_db.streak_latest_day = time.mktime(user_db.streak_latest_day().timetuple())
     user_db.save(f"db/temp/_account_{user_id}.json")
     filenames = [f"db/temp/_account_{user_id}.json"]
     for set in user_db.sets():
@@ -162,6 +164,7 @@ def clear_files(age=0, temporary=True, takeout=True):
 @app.route('/')
 def index():
     if session.get('id'):
+        hashcards.check_user_streak(session['id'])
         return render_template('dash.html', user=get_user_db(session['id']))
     else:
         return render_template('landing.html', num_preregistered=len(Node('db/preregistered.pyn')._values))
@@ -211,10 +214,16 @@ def library():
 #     )
 #
 #
-# @app.route('/profile')
-# def temp_profile_design():
-#     # r_api.login(session, 'jvadair', 'password')
-#     return render_template('profile.html', db=Node('db/users/911fa739-6ebb-467a-af1a-0d4138135413.pyn'), type='user')
+@app.route('/<target_id>/profile/')
+def profile(target_id):
+    if os.path.exists(f'db/users/{target_id}.pyn'):
+        return render_template('profile.html', db=get_user_db(target_id), type='user')
+    elif os.path.exists(f'db/groups/{target_id}'):
+        return render_template('profile.html', db=get_group_db(target_id), type='group')
+    if os.path.exists(f'db/orgs/{target_id}'):
+        return render_template('profile.html', db=get_org_db(target_id), type='org')
+    else:
+        return error(404, "There are no users, groups, or organizations with that ID.")
 #
 #
 # @app.route('/profile-g')
@@ -264,12 +273,15 @@ def new_set():
 @app.route('/set/<set_id>/', methods=("GET",))
 def set_viewer(set_id):
     if os.path.exists(f'db/sets/{set_id}.pyn'):
-        set_obj = get_set_db(set_id)
+        set_db = get_set_db(set_id)
     else:
         return error(401,
                      "The set is either private or does not exist. If you own this set and bookmarked it, sign in and try again.")
-    if set_obj.visibility() == 'public' or set_obj.author() == session.get('id'):
-        return render_template('set_viewer.html', set=set_obj)
+    if set_db.visibility() == 'public' or set_db.author() == session.get('id'):
+        if session.get('id'):
+            hashcards.calculate_exp_gain(session['id'], set_id, action='view')
+            hashcards.update_recent_sets(session['id'], set_id)
+        return render_template('set_viewer.html', set=set_db)
     else:
         return error(401,
                      "The set is either private or does not exist. If you own this set and bookmarked it, sign in and try again.")
@@ -428,6 +440,21 @@ def request_data():
     else:
         return error(401, "You cannot change the username of an account you aren't signed in with.")
 
+
+@app.route('/api/v1/account/pin/', methods=['POST'])
+def pin_set():
+    data = request.json
+    if session.get('id'):
+        user_db = get_user_db(session['id'])
+        set_id = data['set_id']
+        if set_id in user_db.pinned():
+            user_db.pinned().remove(set_id)
+        else:
+            user_db.pinned().append(data['set_id'])
+        user_db.save()
+        return 'OK'
+    else:
+        return error(401, "You must be logged in to pin a set.")
 
 # Sockets
 

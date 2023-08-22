@@ -39,11 +39,11 @@
             {# Profile management buttons #}
             {% if type == 'user' %}
                 {% if session.get('id') == db.id._val %}
-                    <a id="edit-button" class="btn-circle" onclick="window.location.href='/account-manager'"><span class="material-symbols-outlined">edit</span></a>
+                    <a id="edit-button" class="btn-circle" onclick="window.location.href='/account'"><span class="material-symbols-outlined">settings</span></a>
                 {% endif %}
             {% else %}
                 {% if session.get('id') == db.owner._val %}
-                    <a id="edit-button" class="btn-circle" onclick="window.location.href='./manage'"><span class="material-symbols-outlined">edit</span></a>
+                    <a id="edit-button" class="btn-circle" onclick="window.location.href='./manage'"><span class="material-symbols-outlined">settings</span></a>
                 {% else %}
                     {% if session.get('id') in db.members._val %}
                         <a id="leave-button" class="btn-circle"><span class="material-symbols-outlined">person_remove</span></a>
@@ -55,12 +55,12 @@
 
         </div>
         <div id="info">
-            {% if type == 'user' and session.get('id') != db.id._val %} {# Don't show the user groups they're in from here #}
+            {% if type == 'user' and session.get('id') != db.id._val and session.get('id') %} {# Don't show the user groups they're in from here #}
                 <section id="shared-orgs">
                     <h2>Shared groups and organizations</h2>
                     <p>You aren't in any of the same groups or organizations as {{ name }}.</p>
                 </section>
-            {% else %}
+            {% elif type == 'group' %}
                 <section id="members">
                     <h2>Members</h2>
                     <div id="member-box">
@@ -77,19 +77,19 @@
             {% if type in ('user', 'group') %}
                 <section id="sets"> {# TODO: Make this work with real user-owned sets & test - then do the same for groups #}
                     <h2>Public sets</h2>
-                    {% set set = Node("db/sets/473ad80e-e2a5-4158-a81e-9bddf4d0aa88.pyn") %}
-                    <div id="{{ set.id._val }}" class="set" onclick="window.location.href = '/set/{{ set.id._val }}'">
-                        <h3>{{ set.title._val }}</h3>
-                        {% if set.description._val %}
-                            <p>{{ set.description._val }}</p>
-                        {% else %}
-                            <p><i>No description</i></p>
+                    {% for set in db.sets._val %}
+                        {% set set = get_set_db(set) %}
+                        {% if set.visibility._val == 'public' %}
+                            <div id="{{ set.id._val }}" class="set" onclick="window.location.href = '/set/{{ set.id._val }}'">
+                                <h3>{{ set.title._val }}</h3>
+                                {% if set.description._val %}
+                                    <p>{{ set.description._val }}</p>
+                                {% else %}
+                                    <p><i>No description</i></p>
+                                {% endif %}
+                            </div>
                         {% endif %}
-                    </div>
-                    <div class="set">
-                        <h3>The water cycle</h3>
-                        <p>This set covers the processes involved in the water cycle.</p>
-                    </div>
+                    {% endfor %}
                 </section>
             {% else %}
                 <section id="groups">

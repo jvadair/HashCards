@@ -12,7 +12,7 @@
                 $('#header-login-button').attr('href', `/login?redirect=${redirect_path}`);
             </script>
         {% else %}
-            <a href="/account" id="account-pfp"><img alt="Account" src="/static/images/pfp/{{ session['pfp'] }}.jpg"></a>
+            <a href="/{{ session['id'] }}/profile" id="account-pfp"><img alt="Account" src="/static/images/pfp/{{ session['pfp'] }}.jpg"></a>
         {% endif %}
     </nav>
 </header>

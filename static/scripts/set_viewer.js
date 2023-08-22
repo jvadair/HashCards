@@ -1,3 +1,5 @@
+let set_id = window.location.pathname.split('/')[2];
+
 function get_card_from_table(n) {
     let front = $(`table tr:nth-of-type(${n}) td:nth-of-type(2)`).text();
     let back = $(`table tr:nth-of-type(${n}) td:nth-of-type(3)`).text();
@@ -84,4 +86,27 @@ $(document).ready(function(){
             e.preventDefault();
         }
     });
+    $("#pin-set").on("click", function(e) {
+        fetch('/api/v1/account/pin', {
+                method: 'POST',
+                headers: {
+                          'Accept': 'application/json',
+                          'Content-Type': 'application/json'
+                        },
+                credentials: 'include',
+                body: JSON.stringify({set_id: set_id})
+            }).then(r => {
+                if (r.status === 401) {
+                    window.alert("Could not pin set - you are not signed in.");
+                }
+                else {
+                    if ($("#pin-set").text() == "Pin") {
+                        $("#pin-set").text("Unpin");
+                    }
+                    else {
+                        $("#pin-set").text("Pin");
+                    }
+                }
+            });
+    })
 })

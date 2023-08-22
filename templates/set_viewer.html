@@ -11,7 +11,8 @@
     <div id="set-viewer">
         <div id="card-view">
             <h1>{{ set.title._val if set.title._val else 'New set' }}</h1>
-            <h3>by {{ get_user_db(set.author._val).username._val }}</h3>
+            {% set author = get_user_db(set.author._val) %}
+            <h3>by <a href="/{{ author.id._val }}/profile">{{ author.username._val }}</a></h3>
             <div id="card-viewer">
                 {% if len(set.card_order._val) > 0 %}
                     <p class="arrow desktop" id="arrow-back" onclick="card_back()"><span class="material-symbols-outlined">arrow_back_ios_new</span></p>
@@ -36,8 +37,12 @@
             </div>
             <div id="widgets">
                 <a class="chip" href="./study">Study</a>
-                <a class="chip" href="./edit">Edit</a> {# TODO: Show/hide depending on ownership #}
-                <p class="chip">Pin</p>
+                {% if session.get('id') %}
+                    {% if author.id._val == session['id'] %}
+                        <a class="chip" href="./edit">Edit</a>
+                    {% endif %}
+                    <p class="chip" id="pin-set">{{ "Unpin" if set.id._val in get_user_db(session['id']).pinned._val else 'Pin' }}</p>
+                {% endif %}
                 <p class="chip">Share</p>
                 <p class="chip"><span class="material-symbols-outlined">more_horiz</span></p> {# TODO: Pop-up menu #}
                 {# IDEAS:
@@ -62,6 +67,6 @@
 </main>
 {% include "components/footer.html" %}
 <script src="https://cdn.jsdelivr.net/gh/nnattawat/flip@master/dist/jquery.flip.min.js"></script>
-<script src="/static/scripts/card_switcher.min.js"></script>
+<script src="/static/scripts/set_viewer.min.js"></script>
 </body>
 </html>

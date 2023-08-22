@@ -3,6 +3,7 @@ This file ensures that all user, group, and org data files have all the necessar
 update should be called when a new user/group/org is added
 update_all should be called when a new field is added
 """
+import datetime
 
 REQUIRED_USERS = {  # Required keys and their default values
     "level": 0,
@@ -13,6 +14,9 @@ REQUIRED_USERS = {  # Required keys and their default values
     "pfp": "_default",
     "pinned": [],
     "socials": {},
+    "recent_sets": [],
+    "streak": 0,
+    "streak_latest_day": datetime.datetime(1,1,1).date(),
 }
 
 REQUIRED_ORGS = {
