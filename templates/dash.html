@@ -25,14 +25,16 @@
                 {% else %}
                     {% for set in user.recent_sets._val[:3] %}
                         {% set set = get_set_db(set) %}
-                        <div id="{{ set.id._val }}" class="set" onclick="window.location.href = '/set/{{ set.id._val }}'">
-                            <h3>{{ set.title._val }}</h3>
-                            {% if set.description._val %}
-                                <p>{{ set.description._val[:97] }}{{ "..." if len(set.description._val) >= 97 else '' }}</p>
-                            {% else %}
-                                <p><i>No description</i></p>
-                            {% endif %}
-                        </div>
+                        {% if set %} {# The set could have been deleted #}
+                            <div id="{{ set.id._val }}" class="set" onclick="window.location.href = '/set/{{ set.id._val }}'">
+                                <h3>{{ set.title._val if set.title._val else 'New set' }}</h3>
+                                {% if set.description._val %}
+                                    <p>{{ set.description._val[:97] }}{{ "..." if len(set.description._val) >= 97 else '' }}</p>
+                                {% else %}
+                                    <p><i>No description</i></p>
+                                {% endif %}
+                            </div>
+                        {% endif %}
                     {% endfor %}
                 {% endif %}
             </div>
@@ -61,14 +63,16 @@
                     <div id="pinned-sets">
                         {% for set in user.pinned._val %}
                             {% set set = get_set_db(set) %}
-                            <div id="{{ set.id._val }}" class="set" onclick="window.location.href = '/set/{{ set.id._val }}'">
-                                <h3>{{ set.title._val }}</h3>
-                                {% if set.description._val %}
-                                    <p>{{ set.description._val[:97] }}{{ "..." if len(set.description._val) >= 97 else '' }}</p>
-                                {% else %}
-                                    <p><i>No description</i></p>
-                                {% endif %}
-                            </div>
+                            {% if set %} {# The set could have been deleted #}
+                                <div id="{{ set.id._val }}" class="set" onclick="window.location.href = '/set/{{ set.id._val }}'">
+                                    <h3>{{ set.title._val if set.title._val else 'New set' }}</h3>
+                                    {% if set.description._val %}
+                                        <p>{{ set.description._val[:97] }}{{ "..." if len(set.description._val) >= 97 else '' }}</p>
+                                    {% else %}
+                                        <p><i>No description</i></p>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
                         {% endfor %}
                     </div>
                 {% endif %}
