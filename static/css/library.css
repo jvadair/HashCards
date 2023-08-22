@@ -4,6 +4,7 @@
     align-items: center;
     width: 100%;
     padding: 0 5em;
+    grid-gap: 1em;
 }
 
 #library-header h1 {
@@ -96,6 +97,9 @@
 
 /* Mobile and tablet viewports */
 @media screen and (max-width: 850px) {
+    #library-header {
+        padding: 0 2em;
+    }
     #library {
         grid-template-columns: repeat(1, 100%);
     }
