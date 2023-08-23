@@ -215,7 +215,7 @@
     grid-gap: 1em;
     justify-content: center;
     align-items: center;
-    top: 0;
+    top: calc(var(--header-height) - 3em);
     right: -15em;
     z-index: 1;
     background-color: var(--success);
