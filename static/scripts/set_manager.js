@@ -201,10 +201,12 @@ $(document).ready(function() {
     // -- Card inputs
     $("#card-container").on("keyup", ".card input", function (event) {
         let card_id = $(event.target).parents().eq(4).data('card-id');
-        let form = $(event.target).parents().eq(1);
-        let front = form.find('input').eq(0).val();
-        let back = form.find('input').eq(1).val();
-        update_card(card_id, front, back);
+        if (!card_id.startsWith('temp')) {
+            let form = $(event.target).parents().eq(1);
+            let front = form.find('input').eq(0).val();
+            let back = form.find('input').eq(1).val();
+            update_card(card_id, front, back);
+        }
     });
     // --
     // -- Dragging
