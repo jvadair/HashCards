@@ -90,7 +90,7 @@ function save(exit=false, manual=false) {
                 window.location.href = '..';
             }
             clearInterval(interval);
-            if (sent_data) {
+            if (sent_data || manual) {
                 showSaveDialog();
             }
         }
