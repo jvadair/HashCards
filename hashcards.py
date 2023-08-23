@@ -88,8 +88,6 @@ def modify_set(set_id, **kwargs) -> None:
     """
     set = get_set_db(set_id)
     for kwarg in kwargs:
-        print(set.visibility())
-        print(kwarg + ':', kwargs[kwarg])
         if kwarg in SET_TEMPLATE and kwarg not in SET_NOMODIFY:
             if kwarg == 'visibility' and kwargs[kwarg] not in ('private', 'public', 'group'):
                 continue
@@ -98,7 +96,6 @@ def modify_set(set_id, **kwargs) -> None:
             elif type(kwargs[kwarg]) not in (str, int) or len(kwargs[kwarg]) > 100000:  # Prevent spammers and whatnot
                 continue
             set.set(kwarg, kwargs[kwarg])
-            print(set.visibility())
     set.mdtime = datetime.now()
     set.save()
 
