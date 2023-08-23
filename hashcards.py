@@ -248,10 +248,10 @@ def calculate_exp_gain(user_id, set_id, action='view'):
 
     if datetime.now().date() - timedelta(days=1) > user_db.streak_latest_day():
         user_db.streak = 1  # Now that the user has viewed a set, the streak increases to 1 from 0
-        user_db.exp += 10  # Daily streak bonus
+        user_db.experience += 10  # Daily streak bonus
     elif datetime.now().date() > user_db.streak_latest_day():
         user_db.streak += 1
-        user_db.exp += min(user_db.streak()*10, 100)  # Daily streak bonus
+        user_db.experience += min(user_db.streak()*10, 100)  # Daily streak bonus
     user_db.streak_latest_day = datetime.now().date()
     user_db.save()
 
