@@ -1,4 +1,4 @@
-<!DOCTYPE html> {# TODO: Left, right, and space keypresses #}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     {% include "components/boilerplate.html" %}
@@ -52,6 +52,7 @@
             <p id="scroll-notice"><span class="material-symbols-outlined">expand_more</span>&nbsp;&nbsp;&nbsp;&nbsp;Scroll for list view...&nbsp;&nbsp;&nbsp;&nbsp;<span class="material-symbols-outlined">expand_more</span></p>
         </div>
         <div id="list-view">
+            <h3>{{ len(set.card_order._val) }} cards</h3>
             <table>
                 {% for card, num in zip(set.card_order._val, range(0,len(set.card_order._val))) %}
                     {% set card = set.cards.get(card) %}

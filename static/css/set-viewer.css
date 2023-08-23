@@ -144,14 +144,17 @@
 
 #list-view table td {
     padding: 1em;
+    word-break: break-word;
 }
 
 #list-view table td:nth-of-type(1) {
-    width: 5%;
+    width: 8%;
+    min-width: 3.75em;
+    text-align: center;
 }
 
 #list-view table td:nth-of-type(2) {
-    width: 35%;
+    width: 32%;
 }
 
 #list-view table td:nth-of-type(3) {

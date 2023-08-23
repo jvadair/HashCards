@@ -13,11 +13,18 @@ let set_id = window.location.pathname.split('/')[2];
 let card_being_dragged = "";
 let cardpos_initial = 0;
 let cardpos_final = 0;
-let autosave;
+let autosave = true;
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+const delay = ms => new Promise(res => setTimeout(res, ms));
+const showSaveDialog = async () => {
+    $("#save-indicator").addClass("animate");
+    await delay(3000);
+    $("#save-indicator").removeClass("animate");
+};
 
 let socket;
 $(document).ready(function() {
@@ -37,6 +44,7 @@ function save(exit=false, manual=false) {
     // Allows for waiting until the save succeeds
     let finished_set = false;
     let finished_cards = false;
+    let sent_data = false;
     let errors = false;
     if (!$.isEmptyObject(queue)) {
         let data = {...queue}  // Copy the queue
@@ -44,6 +52,7 @@ function save(exit=false, manual=false) {
         socket.emit("update_set", data, (response) => {
             if (response === 'success') {
                 finished_set = true;
+                sent_data = true;
                 queue = {};
             }
             else {
@@ -60,6 +69,7 @@ function save(exit=false, manual=false) {
             socket.emit("update_card", data, (response) => {
                 if (response === 'success') {
                     finished_cards = true;
+                    sent_data = true;
                     card_queue = {};
                 }
                 else {
@@ -69,28 +79,29 @@ function save(exit=false, manual=false) {
         }
     }
     else { finished_cards = true; }
-    if (manual) {
-        let interval
-        interval = setInterval(function () {
-            if (errors) {
-                window.alert('There was an issue saving this set. Try again, or make a copy of your work and reload the page.')
-                clearInterval(interval);
+    let interval
+    interval = setInterval(function () {
+        if (errors) {
+            window.alert('There was an issue saving this set. Try again, or make a copy of your work and reload the page.')
+            clearInterval(interval);
+        }
+        else if (finished_set && finished_cards) {
+            if (exit) {
+                window.location.href = '..';
             }
-            else if (finished_set && finished_cards) {
-                if (exit) {
-                    window.location.href = '..';
-                }
-                clearInterval(interval);
+            clearInterval(interval);
+            if (sent_data) {
+                showSaveDialog();
             }
-        }, 200)
-    }
+        }
+    }, 200)
 }
 
 setInterval(function() {
     if (autosave) {
         save();
     }
-}, 5000)
+}, 10000)
 
 // ---x
 

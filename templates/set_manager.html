@@ -53,7 +53,6 @@
 {#                    <input id="autosave-toggle" name="autosave" type="checkbox" {{ 'checked' if set.autosave._val else '' }}>#}
                     <script>
                         {#autosave = {{ 'true' if set.autosave._val else 'false'}};#}
-                        autosave = true;
                     </script>
 {#                </div>#}
                 <div id="safe-buttons">
@@ -93,6 +92,7 @@
         </div>
     </div>
 </main>
+<p id="save-indicator"><span class="material-symbols-outlined">check_circle</span> Your set was saved.</p>
 {% include "components/footer.html" %}
 <script src="/static/scripts/set_manager.min.js"></script>
 </body>

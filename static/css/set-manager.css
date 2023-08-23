@@ -206,6 +206,29 @@
 }
 
 
+/* Success indicator */
+#save-indicator {
+    position: fixed;
+    display: flex;
+    width: 15em;
+    flex-direction: row;
+    grid-gap: 1em;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    right: -15em;
+    z-index: 1;
+    background-color: var(--success);
+    opacity: .85;
+    padding: 1em;
+    transition-duration: .1s;
+}
+
+#save-indicator.animate {
+    right: 0
+}
+
+
 /* Mobile and tablet viewports */
 @media screen and (max-width: 850px) {
     .card .card-image p.mobile {
