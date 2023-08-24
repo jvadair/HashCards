@@ -66,9 +66,23 @@ function card_forward() {
     if (current_card_number != total_cards) {
         current_card_number += 1;
         current_card = get_card_from_table(current_card_number);
-        update_card()
+        update_card();
         update_arrows();
     }
+}
+
+function showDialog(dialog_name) {
+    $("#popup-modal").show();
+    $(`#popup #${dialog_name}`).show();
+    $("#popup-modal").addClass("active");
+}
+
+function hideDialog() {
+    $("#popup-modal").removeClass("active");
+    setTimeout(function(){
+        $("#popup-modal").hide();
+        $("#popup-modal #popup > div").hide();
+    }, 300)
 }
 
 $(document).ready(function(){
@@ -108,5 +122,5 @@ $(document).ready(function(){
                     }
                 }
             });
-    })
+    });
 })

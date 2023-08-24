@@ -43,7 +43,7 @@
                     {% endif %}
                     <p class="chip" id="pin-set">{{ "Unpin" if set.id._val in get_user_db(session['id']).pinned._val else 'Pin' }}</p>
                 {% endif %}
-                <p class="chip">Share</p>
+                <p class="chip" onclick="showDialog('share');">Share</p>
                 <p class="chip"><span class="material-symbols-outlined">more_horiz</span></p> {# TODO: Pop-up menu #}
                 {# IDEAS:
                     - Add to group
@@ -66,6 +66,25 @@
         </div>
     </div>
 </main>
+<div id="popup-modal">
+    <div id="popup">
+        <div id="share">
+            <h2>Share</h2>
+            <div id="share-link-container">
+                <label for="share-link" style="display: none;">Shareable link</label>
+                <input type="text" id="share-link" disabled>
+                <script>
+                    $("#share-link").val("https://hashcards.net" + window.location.pathname);
+                </script>
+                <button class="btn-circle" onclick="navigator.clipboard.writeText($('#share-link').val());"><span class="material-symbols-outlined">content_copy</span></button>
+            </div>
+        </div>
+        <button class="btn" id="done-button" onclick="hideDialog();">Done!</button>
+    </div>
+</div>
+<script>
+    $("#popup-modal").hide();
+</script>
 {% include "components/footer.html" %}
 <script src="https://cdn.jsdelivr.net/gh/nnattawat/flip@master/dist/jquery.flip.min.js"></script>
 <script src="/static/scripts/set_viewer.min.js"></script>
