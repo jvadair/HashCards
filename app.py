@@ -16,6 +16,10 @@ import atexit
 from apscheduler.schedulers.background import BackgroundScheduler
 from zipfile import ZipFile
 from uuid import uuid4
+from thefuzz import fuzz
+from thefuzz import process as fuzz_process
+from random import shuffle
+from copy import copy
 
 app = Flask(__name__)
 app.secret_key = os.urandom(32)
@@ -100,6 +104,21 @@ oauth.register(
 # Specialized page functions
 def error(code, message):
     return render_template("error.html", message=message, code=code), code
+
+
+# Study mode functions
+def find_similar_results(set_id, looking_for, card_id):
+    set_db = get_set_db(set_id)
+    answer = set_db.cards.get(card_id).get(looking_for)()
+    search_through = {card: set_db.cards.get(card).get(looking_for)() for card in set_db.cards()}
+    del search_through[card_id]
+    results = fuzz_process.extract(answer, search_through, limit=3)
+    results = {r[2]: r[0] for r in results}
+    results[card_id] = answer
+    results = list(results.items())
+    shuffle(results)
+    results = dict(results)
+    return results
 
 
 # Additional helper functions
@@ -306,6 +325,33 @@ def delete_set(set_id):
                      "You are not the author of this set, so you can't edit it. If you do happen to be the owner, please try switching accounts.")
 
 
+@app.route('/set/<set_id>/study/')
+def study_mode(set_id):
+    if os.path.exists(f'db/sets/{set_id}.pyn'):
+        set_db = get_set_db(set_id)
+    else:
+        return error(401,
+                     "The set is either private or does not exist. If you own this set and bookmarked it, sign in and try again.")
+    if not session.get('id'):
+        return redirect(f'/login?redirect={request.path}')
+    if set_db.visibility() == 'public' or set_db.author() == session.get('id'):
+        # if session.get('id'):
+        #     hashcards.calculate_exp_gain(session['id'], set_id, action='view')
+        #     hashcards.update_recent_sets(session['id'], set_id)
+        user_db = get_user_db(session['id'])
+        try:
+            study_db = user_db.studied_sets.get(set_id)
+        except AttributeError:
+            user_db.studied_sets.set(set_id, {"rounds": 0, "progress": {}})
+            study_db = user_db.studied_sets.get(set_id)
+            user_db.save()
+        current_round = study_db.rounds() + 1
+        return render_template('study.html', set=set_db, round=current_round)
+    else:
+        return error(401,
+                     "The set is either private or does not exist. If you own this set and bookmarked it, sign in and try again.")
+
+
 # API
 
 # Authentication/registration
@@ -494,6 +540,8 @@ def pin_set():
 
 # Sockets
 
+
+# Set saving
 @socketio.on("update_set")
 def perform_update(data):
     set_id = data.pop('set_id')
@@ -509,6 +557,7 @@ def perform_card_update(data):
     set_id = data.pop('set_id')
     card_id = data.pop('card_id')
     if hashcards.is_author(set_id, session.get('id')):
+        print(session['id'])
         hashcards.modify_card(set_id, card_id, **data)
         return 'success'
     else:
@@ -547,6 +596,84 @@ def change_card_position(data):
         return 'success'
     else:
         return 401, "You are not the author of this set, so you can't edit it. If you do happen to be the owner, please try switching accounts."
+
+
+# Study mode
+@socketio.on("study_next")
+def generate_next_prompt(data):
+    if session.get('id'):
+        set_id = data.pop('set_id')
+        set_db = get_set_db(set_id)
+        if set_db.visibility() == 'public' or set_db.author() == session.get('id'):
+            user_db = get_user_db(session['id'])
+            study_db = user_db.studied_sets.get(set_id)
+            card_list = copy(set_db.card_order())
+            shuffle(card_list)
+            found = False
+            for card_id in card_list:  # Loop until card found
+                try:
+                    card_progress = study_db.progress.get(card_id)()
+                    if card_progress < 3:
+                        found = True
+                        break
+                except AttributeError:
+                    study_db.progress.set(card_id, 0)
+                    card_progress = 0
+                    found = True
+                    break
+            if not found:
+                study_db.rounds += 1
+                study_db.set("progress", {})
+                card_id = card_list[0]
+                card_progress = 0
+            user_db.save()
+            looking_for = 'front' if card_progress < 2 else 'back'
+            session['currently_studying'] = card_id
+            session['current_card_side'] = looking_for
+            if card_progress in (0, 2):
+                options = find_similar_results(set_id, 'front' if looking_for == 'back' else 'back', card_id)
+                return {"type": "mc", "side": looking_for, "question": set_db.cards.get(card_id).get(looking_for)(), "options": options, "round": study_db.rounds() + 1}
+            else:
+                return {"type": "sr", "side": looking_for, "question": set_db.cards.get(card_id).get(looking_for)(), "round": study_db.rounds() + 1}
+    else:
+        return error(401, "You must be signed in to use study mode.")
+
+
+@socketio.on("check_answer")
+def check_answer(data):
+    if session.get('id') and session.get("currently_studying"):
+        set_id = data.pop('set_id')
+        set_db = get_set_db(set_id)
+        card_id = data.get('card_id')
+        prompt_response = data.get('answer')
+        correct_card_id = session.get('currently_studying')
+        del session['currently_studying']
+        if card_id:
+            if correct_card_id == card_id:
+                user_db = get_user_db(session.get('id'))
+                study_db = user_db.studied_sets.get(set_id)
+                card_progress = study_db.progress.get(card_id)
+                card_progress += 1
+                user_db.save()
+                return {"success": True}
+            else:
+                return {"success": False, "correct": correct_card_id}
+        elif prompt_response is not None:  # Could be empty string
+            correct_answer = set_db.cards.get(correct_card_id).get('back' if session['current_card_side'] == 'front' else 'front')()
+            accuracy = fuzz.partial_ratio(correct_answer, prompt_response)
+            if accuracy >= 95:
+                user_db = get_user_db(session.get('id'))
+                study_db = user_db.studied_sets.get(set_id)
+                card_progress = study_db.progress.get(correct_card_id)
+                card_progress += 1
+                user_db.save()
+                return {"success": True, "correct": correct_answer, "accuracy": accuracy}
+            else:
+                return {"success": False, "correct": correct_answer}
+    elif not session.get("id"):
+        return error(401, "You must be signed in to use study mode.")
+    else:
+        return error(400, "No card is currently being studied.")
 
 
 # OAuth routes

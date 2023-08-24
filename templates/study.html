@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include "components/boilerplate.html" %}
+    <title>Study {{ set.title._val if set.title._val else 'New set' }} | HashCards</title>
+    <link rel="stylesheet" href="/static/css/study.min.css">
+</head>
+<body>
+{% include "components/header.html" %}
+<main>
+<div id="study-header">
+    <a href=".."><span class="material-symbols-outlined">arrow_back</span></a>
+    <h1>Study {{ set.title._val if set.title._val else 'New set' }}</h1>
+</div>
+<div id="loading">
+    <h2>Loading, please wait...</h2>
+    <br>
+</div>
+<div id="study">
+    <div id="question">
+        <p id="question-side" class="card-part cp-definition"></p>
+        <h3></h3>
+    </div>
+    <div id="answer">
+        <p id="answer-side" class="card-part"></p>
+        <div id="answer-buttons">
+            <p class="btn"><span class="material-symbols-outlined">counter_1</span> Option 1</p>
+            <p class="btn"><span class="material-symbols-outlined">counter_2</span> Option 2</p>
+            <p class="btn"><span class="material-symbols-outlined">counter_3</span> Option 3</p>
+            <p class="btn"><span class="material-symbols-outlined">counter_4</span> jhdfgjkdfhgkjdfgkjsdfgjkgdgkjdfjkghdkjfhgjksdfgnsdfjgnjghjksgnreghjrghsdfkjgnsdjkfgnsdjkfgnjksdfngsdjfgjksdfngkjdfngkdfjsgnsdg</p>
+        </div>
+        <div id="answer-prompt">
+            <div id="answer-prompt-input">
+                <label for="prompt-response" style="display: none;">Answer</label>
+                <input id="prompt-response" placeholder="Type your answer here">
+                <button class="btn" id="prompt-submit">Submit</button>
+            </div>
+            <h3 id="correct-answer">Correct!</h3>
+        </div>
+    </div>
+    <div id="advance">
+        <h2 id="current-round">Round <span>{{ round }}</span></h2>
+        <p class="btn" id="btn-skip" onclick="getNextQuestion()"><span class="material-symbols-outlined">cancel</span>&nbsp;Skip</p>
+        <p class="btn" id="btn-next" onclick="getNextQuestion()"><span class="material-symbols-outlined">arrow_forward</span>&nbsp;Next</p>
+        <script>
+            $("#btn-next").hide();
+            $("#study").hide();
+        </script>
+    </div>
+</div>
+</main>
+{% include "components/footer.html" %}
+<script src="/static/scripts/study.min.js"></script>
+</body>
+</html>

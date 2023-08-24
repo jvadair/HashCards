@@ -17,7 +17,8 @@ REQUIRED_USERS = {  # Required keys and their default values
     "recent_sets": [],
     "streak": 0,
     "streak_latest_day": datetime.datetime(1,1,1).date(),
-    "email_preferences": {}
+    "email_preferences": {},
+    "studied_sets": {}
 }
 
 REQUIRED_ORGS = {

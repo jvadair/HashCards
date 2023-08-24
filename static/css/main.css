@@ -18,6 +18,9 @@ font-family: 'Roboto', sans-serif;
     --accent: #339fe0;
     --secondary: #48d96c;
     --success: #43AA8B;
+    --failure: #aa434d;
+    --success-variable-opacity: 67, 170, 139;
+    --failure-variable-opacity: 170, 67, 77;
 
     /* Fixed height values */
     --header-height: 75px;
