@@ -20,6 +20,7 @@ from thefuzz import fuzz
 from thefuzz import process as fuzz_process
 from random import shuffle
 from copy import copy
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 app = Flask(__name__)
 app.secret_key = os.urandom(32)
@@ -65,6 +66,12 @@ app.jinja_env.globals.update(
     get_org_db=get_org_db,
     max=max
 )
+
+# Tell Flask it is behind a proxy
+if not DEBUG:
+    app.wsgi_app = ProxyFix(
+        app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1
+    )
 
 # OAuth setup
 oauth = OAuth(app)
