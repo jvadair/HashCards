@@ -337,7 +337,7 @@ def study_mode(set_id):
     if set_db.visibility() == 'public' or set_db.author() == session.get('id'):
         # if session.get('id'):
         #     hashcards.calculate_exp_gain(session['id'], set_id, action='view')
-        #     hashcards.update_recent_sets(session['id'], set_id)
+        #     hashcards.uupdate_recent_sets(session['id'], set_id)
         user_db = get_user_db(session['id'])
         try:
             study_db = user_db.studied_sets.get(set_id)
@@ -420,6 +420,7 @@ def verify_user():
     else:
         user_db = get_user_db(user_id)
         account_manager.update(user_db, account_manager.REQUIRED_USERS)
+        account_manager.update(user_db.email_preferences, account_manager.REQUIRED_EMAIL_PREFERENCES)
         session['pfp'] = user_db.pfp()
         return r_api.login(session, user_db.username(), user_db.password())
 
@@ -713,6 +714,7 @@ def nexus_auth():
     user_db = get_user_db(session['id'])
     if was_created:
         account_manager.update(user_db, account_manager.REQUIRED_USERS)
+        account_manager.update(user_db.email_preferences, account_manager.REQUIRED_EMAIL_PREFERENCES)
     session['pfp'] = user_db.pfp()
     redirect_location = session.get("oauth_redirect")
     return redirect(redirect_location if redirect_location else '/')
@@ -733,6 +735,7 @@ def google_auth():
     user_db = get_user_db(session['id'])
     if was_created:
         account_manager.update(user_db, account_manager.REQUIRED_USERS)
+        account_manager.update(user_db.email_preferences, account_manager.REQUIRED_EMAIL_PREFERENCES)
     session['pfp'] = user_db.pfp()
     redirect_location = session.get("oauth_redirect")
     del session['oauth_redirect']
