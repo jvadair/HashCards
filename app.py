@@ -635,7 +635,7 @@ def generate_next_prompt(data):
                 card_id = card_list[0]
                 card_progress = 0
             user_db.save()
-            looking_for = 'front' if card_progress < 2 else 'back'
+            looking_for = 'front' if card_progress < 1 else 'back'
             session['currently_studying'] = card_id
             session['current_card_side'] = looking_for
             if card_progress in (0, 2):
