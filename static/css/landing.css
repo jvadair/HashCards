@@ -88,7 +88,7 @@ section .info-image:nth-of-type(odd) {
 }
 
 #info section .info-image img {
-    /*object-fit: cover;*/
+    object-fit: contain;
     width: 100%;
     min-height: 100%;
     /*margin: -50% 0; !* This will somehow magically center the thing, I think *!*/
