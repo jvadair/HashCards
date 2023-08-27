@@ -21,6 +21,7 @@ from thefuzz import process as fuzz_process
 from random import shuffle
 from copy import copy
 from werkzeug.middleware.proxy_fix import ProxyFix
+import shutil
 
 app = Flask(__name__)
 app.secret_key = os.urandom(32)
@@ -177,11 +178,17 @@ def clear_files(age=0, temporary=True, takeout=True):
     if temporary:
         for file in os.listdir('db/temp'):
             if datetime.now() - timedelta(minutes=age) >= datetime.fromtimestamp(os.path.getmtime('db/temp/' + file)):
-                os.remove('db/temp/' + file)
+                try:
+                    os.remove('db/temp/' + file)
+                except IsADirectoryError:
+                    shutil.rmtree('db/temp/' + file)
     if takeout:
         for file in os.listdir('db/takeout'):
             if datetime.now() - timedelta(minutes=age) >= datetime.fromtimestamp(os.path.getmtime('db/takeout/' + file)):
-                os.remove('db/takeout/' + file)
+                try:
+                    os.remove('db/takeout/' + file)
+                except IsADirectoryError:
+                    shutil.rmtree('db/takeout/' + file, )
 
 
 # Front-end routes
@@ -668,7 +675,7 @@ def check_answer(data):
                 return {"success": False, "correct": correct_card_id}
         elif prompt_response is not None:  # Could be empty string
             correct_answer = set_db.cards.get(correct_card_id).get('back' if session['current_card_side'] == 'front' else 'front')()
-            accuracy = fuzz.partial_ratio(correct_answer, prompt_response)
+            accuracy = fuzz.partial_ratio(correct_answer.lower(), prompt_response.lower())
             if accuracy >= 95:
                 user_db = get_user_db(session.get('id'))
                 study_db = user_db.studied_sets.get(set_id)
