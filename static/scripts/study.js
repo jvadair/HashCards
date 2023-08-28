@@ -28,6 +28,7 @@ $(document).ready(function() {
 });
 
 function getNextQuestion() {
+    window.location.href = '#top';
     let data;
     socket.emit("study_next", {"set_id": set_id}, (response) => {
         data = response;
