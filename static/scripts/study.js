@@ -2,21 +2,28 @@ let set_id = window.location.pathname.split('/')[2];
 let options
 let socket;
 let type;
+let answered = false;
 
 $(document).ready(function() {
     socket = io.connect(location.protocol + "//" + document.domain + ':' + location.port);
     getNextQuestion();
     $("#answer-buttons p").on("click", function (event) {
-        let id = $(event.target).attr('id');
-        submit_answer_mcq(id);
+        if (!answered) {
+            let id = $(event.target).attr('id');
+            submit_answer_mcq(id);
+        }
     });
     $("#prompt-response").on('keypress',function(event) {
-        if(event.which == 13) {
-            submit_answer_prompt($("#prompt-response").val());
+        if (!answered) {
+            if (event.which == 13) {
+                submit_answer_prompt($("#prompt-response").val());
+            }
         }
     });
     $("#prompt-submit").on('click',function(event) {
-        submit_answer_prompt($("#prompt-response").val());
+        if (!answered) {
+            submit_answer_prompt($("#prompt-response").val());
+        }
     });
 });
 
@@ -74,6 +81,7 @@ function getNextQuestion() {
             $("#correct-answer").hide();
         }
         $("#study").show();
+        answered = false;
     });
 }
 
@@ -97,6 +105,7 @@ function submit_answer_mcq(answer) {
         $("#btn-skip").hide();
         $("#btn-next").show();
     });
+    answered = true;
 }
 
 function submit_answer_prompt(answer) {
@@ -122,4 +131,5 @@ function submit_answer_prompt(answer) {
         $("#btn-skip").hide();
         $("#btn-next").show();
     });
+    answered = true;
 }
