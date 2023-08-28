@@ -17,8 +17,9 @@
     width: 25%;
     display: flex;
     flex-direction: column;
-    /*min-height: calc(100vh - var(--header-height));*/
-    height: min-content;
+    min-height: calc(100vh - var(--header-height));
+    grid-gap: 2em;
+    /*justify-content: space-between;*/
 }
 
 #options-container #options {
@@ -26,7 +27,7 @@
     flex-direction: column;
     justify-content: center;
     width: 100%;
-    min-height: 100%;
+    min-height: min-content;
     background-color: var(--overlay);
     border-radius: 25px;
     padding: 5%;
@@ -61,10 +62,25 @@
 }
 
 #options #safe-buttons {
-    display: grid;
-    grid-template-columns: repeat(2, 50%);
+    display: flex;
     grid-gap: 10px;
+}
+
+#options #safe-buttons .btn {
     width: 100%;
+}
+
+#options-container #setmanager-top-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: flex-end;
+}
+
+#options-container #setmanager-top {
+    padding: 1em;
+    position: sticky;
+    bottom: 1em;
 }
 
 
@@ -89,6 +105,7 @@
     border-radius: 25px;
     justify-content: flex-start;
     align-items: center;
+    scroll-margin-top: 50vh;
 }
 
 .card .card-header {
@@ -228,6 +245,10 @@
     right: 0
 }
 
+#mobile_save_btn {
+    display: none;
+}
+
 
 /* Mobile and tablet viewports */
 @media screen and (max-width: 850px) {
@@ -251,6 +272,8 @@
     }
     #set-manager #options-container {
         border-radius: 0;
+        min-height: min-content;
+        grid-gap: 0;
     }
     #options-container #dropdown-toggle {
         display: flex;
@@ -279,6 +302,9 @@
         display: flex;
         border-radius: 0 0 25px 25px;
     }
+    /*#options-container #options #safe-buttons {*/
+    /*    display: none;*/
+    /*}*/
     #card-container .card {
         height: 20vh;
         min-height: 180px;
@@ -295,5 +321,13 @@
     .card .card-image p {
         font-size: 1.5em;
         height: min-content;
+    }
+    #options-container #setmanager-top-container {
+        display: none;
+    }
+    #mobile_save_btn {
+        display: flex;
+        height: 10vh;
+        width: 95%;
     }
 }

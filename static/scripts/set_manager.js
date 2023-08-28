@@ -143,6 +143,10 @@ function add_card() {
         </div>`
     );
     $(`.card[data-card-id='${temporary_id}']`).insertBefore('#new_card');
+    $(`.card[data-card-id='${temporary_id}']`)[0].scrollIntoView({
+        behavior: 'smooth'
+    });
+    $(`.card[data-card-id='${temporary_id}'] input`)[0].focus();
     socket.emit("new_card", {"set_id": set_id}, (response) => {
         if (response !== 401) {
             $(`.card[data-card-id=${temporary_id}] .card-text-front`).val(response['front']);

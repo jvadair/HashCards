@@ -56,13 +56,16 @@
                     </script>
 {#                </div>#}
                 <div id="safe-buttons">
-                    <a class="btn" onclick="save(false, true);">Save now</a>
-                    <a class="btn" onclick="save(true, true);">View set</a>
+{#                    <a class="btn" onclick="save(false, true);">Save now</a>#}
+                    <a class="btn" onclick="save(true, true);">Save & View</a>
                 </div>
                 <a class="btn danger" id="delete-set">Delete set</a>
                 <input type="submit" style="display: none;">
             </form>
             <script src="/static/scripts/dropdown.min.js"></script>
+            <div id="setmanager-top-container">
+                <a class="chip" id="setmanager-top" href="#top"><span class="material-symbols-outlined">move_up</span> Back to top</a>
+            </div>
         </div>
         <div id="card-container">
             {% for card in set.card_order._val %}
@@ -89,6 +92,7 @@
             <div class="card new-card" id="new_card" onclick="add_card()">
                 <p class="cutout">+ New card</p>
             </div>
+            <a class="btn" id="mobile_save_btn" onclick="save(true, true);">Save & View</a>
         </div>
     </div>
 </main>
