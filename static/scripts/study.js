@@ -40,7 +40,6 @@ function getNextQuestion() {
         $("#btn-next").hide();
         $("#question h3").text(data["question"]);
         $("#current-round span").text(response["round"]);
-        console.log(data['side']);
         if (data["side"] === "back") {
             $("#answer-side").removeClass("cp-definition");
             $("#answer-side").addClass("cp-term");

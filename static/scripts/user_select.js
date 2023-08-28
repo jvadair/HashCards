@@ -5,7 +5,6 @@ let management_buttons_shown = false;
 function toggle_user(user_id) {
     // Toggle status
     if (currently_enabled.includes(user_id)) {
-        console.log('OK');
         currently_enabled.splice(currently_enabled.indexOf(user_id), 1);  // Why doesn't js just have a .remove method?!
     }
     else {

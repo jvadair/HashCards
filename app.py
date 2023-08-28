@@ -572,7 +572,6 @@ def perform_card_update(data):
     set_id = data.pop('set_id')
     card_id = data.pop('card_id')
     if hashcards.is_author(set_id, session.get('id')):
-        print(session['id'])
         hashcards.modify_card(set_id, card_id, **data)
         return 'success'
     else:
