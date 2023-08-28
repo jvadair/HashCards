@@ -201,6 +201,22 @@ def move_card(set_id, initial, final):
     set.save()
 
 
+def import_set(user_id, text):
+    # Splitting by \t first allows us to use rsplit with a max of 1 to preserve intentional newlines
+    text_split = text.split('\t')
+    text_split = [x.rsplit('\n', maxsplit=1) for x in text_split]
+    cards = []
+    for i in range(0,len(text_split)-1):
+        cards.append((text_split[i][-1], text_split[i+1][0]))  # The -1 ensures that the first item works too
+    set_id = create_set(user_id)
+    for card in cards:
+        try:
+            add_card(set_id, card[0], card[1])
+        except KeyError:
+            pass
+    return set_id
+
+
 def is_author(set_id: str, author_id: str) -> bool:
     """
     Determine whether the specified user is the author of the specified set

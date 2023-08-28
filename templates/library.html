@@ -19,6 +19,11 @@
                 <p class="cutout">+ New set</p>
             </div>
         </a>
+        <a class="set-container" href="/import">
+            <div class="set new-set" id="new_set">
+                <p class="cutout"><span class="material-symbols-outlined cutout">upload</span> Import</p>
+            </div>
+        </a>
         {% for set in user.sets._val %}
             {% set set = get_set_db(set) %}
             <a class="set-container" data-timestamp="{{ time.mktime(set.mdtime._val.timetuple()) }}" href="/set/{{ set.id._val }}">

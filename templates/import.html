@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include "components/boilerplate.html" %}
+    <title>Import set | HashCards</title>
+    <link rel="stylesheet" href="/static/css/import.min.css">
+</head>
+<body>
+{% include "components/header.html" %}
+<main>
+<div id="import">
+    <form id="import-settings" method="post" action="/api/v1/set/import">
+        <div id="info">
+            <div class="button-header">
+                <a href=".."><span class="material-symbols-outlined">arrow_back</span></a>
+                <h1>Import set</h1>
+            </div>
+            <h3><a href="/learn/import">Click here to learn how to import sets.</a></h3>
+        </div>
+        <label for="set-title">Set title</label>
+        <input id="set-title" name="title" placeholder="Set title">
+        <label for="set-text">Set text</label>
+        <textarea id="set-text" placeholder="Paste your set here" name="text"></textarea>
+        <button type="submit" class="btn">Import</button>
+    </form>
+</div>
+</main>
+{% include "components/footer.html" %}
+</body>
+</html>

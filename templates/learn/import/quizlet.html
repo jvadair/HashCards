@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include "components/boilerplate.html" %}
+    <title>Learn: Import | HashCards</title>
+    <link rel="stylesheet" href="/static/css/learn.css">
+</head>
+<body>
+{% include "components/header.html" %}
+<main>
+<div id="learn">
+    <h1>Importing from Quizlet</h1>
+    <section>
+        <h4 style="color: var(--success);">Importing from Quizlet is quick and easy!</h4>
+        <p>Tl;dr: Copy the set from the quizlet export menu, then paste it into the HashCards import menu.</p>
+    </section>
+    <section>
+        <h2>1. Open a set you own</h2>
+        <figure>
+            <img src="/static/images/learn/import/quizlet/ksnip_20230828-183958.png" alt="Quizlet set">
+            <figcaption>An example of a Quizlet set (Credit: Screenshot: Quizlet)</figcaption>
+        </figure>
+        <p>Make sure that you are on this screen, not the set editor.</p>
+    </section>
+    <section>
+        <h2>2. Click the 3 dots to open the "more options" menu</h2>
+        <figure>
+            <img src="/static/images/learn/import/quizlet/ksnip_20230828-185353.png" alt="More options button location">
+            <figcaption>(Credit: Screenshot: Quizlet)</figcaption>
+        </figure>
+        <p>The button is located to the bottom right of the flashcard currently being displayed, just next to the share button.</p>
+    </section>
+    <section>
+        <h2>3. Click export</h2>
+        <figure>
+            <img src="/static/images/learn/import/quizlet/ksnip_20230828-185705.png" alt="Export button">
+            <figcaption>(Credit: Screenshot: Quizlet)</figcaption>
+        </figure>
+        <p>Note: Quizlet only allows you to export sets you created (Exporting someone else's set as your own could violate copyright laws where you live. HashCards takes no responsibility for user-generated content.)</p>
+    </section>
+    <section>
+        <h2>4. Make sure the settings are set to their defaults, then click "Copy text."</h2>
+        <figure>
+            <img src="/static/images/learn/import/quizlet/ksnip_20230828-190321.png" alt="Export set screen">
+            <figcaption>(Credit: Screenshot: Quizlet)</figcaption>
+        </figure>
+        <p>Note: HashCards will only be able to copy the set if the separator values are set to their defaults.</p>
+    </section>
+    <section>
+        <h2>5. From HashCards, click "Import."</h2>
+        <figure>
+            <img src="/static/images/learn/import/quizlet/ksnip_20230828-190806.png" alt="HashCards dashboard">
+            <figcaption>HashCards dashboard</figcaption>
+        </figure>
+        <p>You can also click "My sets", and then choose "Import."</p>
+    </section>
+    <section>
+        <h2>6. Title your set and paste the content, then click "Import."</h2>
+        <figure>
+            <img src="/static/images/learn/import/quizlet/import_set.png" alt="HashCards import screen">
+            <figcaption>HashCards import screen</figcaption>
+        </figure>
+        <p>Unfortunately, Quizlet doesn't provide images or titles/descriptions when exporting a set.</p>
+    </section>
+    <section>
+        <h2 style="font-size: 200%">Voila!</h2>
+        <figure>
+            <img src="/static/images/learn/import/quizlet/voila.png" alt="The imported HashCards set">
+            <figcaption>The final product!</figcaption>
+        </figure>
+        <b>That's it! Now go enjoy all the features that HashCards has to offer!</b>
+    </section>
+</div>
+</main>
+{% include "components/footer.html" %}
+</body>
+</html>

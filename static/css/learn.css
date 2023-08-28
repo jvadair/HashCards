@@ -1,0 +1,32 @@
+#learn {
+    font-size: 125%;
+    width: 100%;
+    text-align: left;
+    padding: 0 5em;
+}
+
+#learn h1 {
+    text-align: center;
+    margin-bottom: 1em;
+}
+
+#learn section {
+    margin: 2em 0;
+}
+
+#learn img {
+    max-width: 100%;
+    max-height: 40vh;
+}
+
+#learn figcaption {
+    font-style: italic;
+    font-size: 60%;
+}
+
+/* Tablet and mobile viewports */
+@media screen and (max-width: 850px) {
+    #learn {
+        padding: 0 1em;
+    }
+}

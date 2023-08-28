@@ -22,6 +22,7 @@ from random import shuffle
 from copy import copy
 from werkzeug.middleware.proxy_fix import ProxyFix
 import shutil
+from jinja2.exceptions import TemplateNotFound
 
 app = Flask(__name__)
 app.secret_key = os.urandom(32)
@@ -208,6 +209,14 @@ def about():
     return render_template('about.html')
 
 
+@app.route('/learn/<path:path>')
+def teach_features(path):
+    try:
+        return render_template("learn/" + path + '.html')
+    except TemplateNotFound:
+        return error(404, "There are no help articles with that name. Check the URL and try again.")
+
+
 @app.route('/account')
 def account_settings():
     if session.get('id'):
@@ -234,6 +243,11 @@ def account_settings():
 @app.route('/sets')
 def library():
     return render_template("library.html", user=get_user_db(session.get('id')), time=time)
+
+
+@app.route('/import')
+def import_page():
+    return render_template("import.html")
 
 
 #
@@ -431,12 +445,14 @@ def verify_user():
         return user_id  # r_api.verify returns a redirect if verifying an email change
     elif type(user_id) is tuple:
         return error(*reversed(user_id))
-    else:
+    elif type(user_id) is str:
         user_db = get_user_db(user_id)
         account_manager.update(user_db, account_manager.REQUIRED_USERS)
         account_manager.update(user_db.email_preferences, account_manager.REQUIRED_EMAIL_PREFERENCES)
         session['pfp'] = user_db.pfp()
         return r_api.login(session, user_db.username(), user_db.password())
+    else:
+        return redirect('/account?updated=true')
 
 
 @app.route('/api/v1/auth/logout')
@@ -552,6 +568,18 @@ def pin_set():
         return 'OK'
     else:
         return error(401, "You must be logged in to pin a set.")
+
+
+@app.route('/api/v1/set/import/', methods=['POST'])
+def import_set():
+    data = request.form
+    if session.get('id'):
+        print(repr(data['text']))
+        set_id = hashcards.import_set(session['id'], data['text'])
+        hashcards.modify_set(set_id, title=data['title'])
+        return redirect(f'/set/{set_id}')
+    else:
+        return error(401, "You must be logged in to import a set.")
 
 # Sockets
 
