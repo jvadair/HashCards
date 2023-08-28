@@ -231,13 +231,19 @@ def calculate_exp_gain(user_id, set_id, action='view'):
     """
     :param user_id: The user to (potentially) award exp to
     :param set_id: The set that triggered this
-    :param action: The action the user took. Options are 'view', 'study'
+    :param action: The action the user took. Options are 'view', 'study_card'
     :return:
     """
     user_db = get_user_db(user_id)
     if action == 'view':
         if set_id not in user_db.recent_sets() and not is_author(set_id, user_id):
             user_db.experience += 10
+
+    if action == 'study_card':
+        if is_author(set_id, user_id):
+            user_db.experience += 1
+        else:
+            user_db.experience += 2
 
     if user_db.experience() >= 1000:
         user_db.level += 1

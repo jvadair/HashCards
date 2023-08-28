@@ -637,8 +637,8 @@ def generate_next_prompt(data):
                     break
             if not found:
                 study_db.rounds += 1
-                study_db.set("progress", {})
                 card_id = card_list[0]
+                study_db.set("progress", {card_id: 0})
                 card_progress = 0
             user_db.save()
             looking_for = 'front' if card_progress < 1 else 'back'
@@ -669,6 +669,7 @@ def check_answer(data):
                 card_progress = study_db.progress.get(card_id)
                 card_progress += 1
                 user_db.save()
+                hashcards.calculate_exp_gain(session['id'], set_id, "study_card")
                 return {"success": True}
             else:
                 return {"success": False, "correct": correct_card_id}
@@ -681,6 +682,7 @@ def check_answer(data):
                 card_progress = study_db.progress.get(correct_card_id)
                 card_progress += 1
                 user_db.save()
+                hashcards.calculate_exp_gain(session['id'], set_id, "study_card")
                 return {"success": True, "correct": correct_answer, "accuracy": accuracy}
             else:
                 return {"success": False, "correct": correct_answer}
