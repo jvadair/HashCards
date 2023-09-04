@@ -59,6 +59,7 @@ function card_back() {
         current_card = get_card_from_table(current_card_number);
         update_card();
         update_arrows();
+        $("#card h2").boxfit({multiline: true, maximum_font_size: 25});
     }
 }
 
@@ -68,6 +69,7 @@ function card_forward() {
         current_card = get_card_from_table(current_card_number);
         update_card();
         update_arrows();
+        $("#card h2").boxfit({multiline: true, maximum_font_size: 25});
     }
 }
 
