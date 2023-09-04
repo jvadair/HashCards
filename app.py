@@ -54,6 +54,10 @@ if not os.path.exists('db/temp'):
     os.mkdir('db/temp')
 if not os.path.exists('db/takeout'):
     os.mkdir('db/takeout')
+if not os.path.exists('static/images/pfp'):
+    os.mkdir('static/images/pfp')
+if not os.path.exists('static/images/card_images'):
+    os.mkdir('static/images/card_images')
 
 
 # Add socket support
