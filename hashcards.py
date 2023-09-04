@@ -115,6 +115,10 @@ def delete_set(set_id: str) -> None:
         group.sets().remove(set_id)
         group.save()
     os.remove(f"db/sets/{set_id}.pyn")
+    for card in set.cards._values:
+        image_id = set.cards.get(card).image()
+        if image_id:
+            os.remove(f'static/images/card_images/{image_id}.png')
 
 
 def create_card(front: str, back: str, image: str) -> dict:
@@ -173,7 +177,9 @@ def modify_card(set_id, card_id, **kwargs) -> None:
     card = set.cards.get(card_id)
     for kwarg in kwargs:
         if kwarg in CARD_TEMPLATE and kwarg not in CARD_NOMODIFY:
-            if type(kwargs[kwarg]) not in (str, int) or len(kwargs[kwarg]) > 100000:
+            if type(kwargs[kwarg]) not in (str, int, type(None)):
+                continue
+            if type(kwargs[kwarg]) in (str, int) and len(kwargs[kwarg]) > 100000:
                 continue
             card.set(kwarg, kwargs[kwarg])
     set.mdtime = datetime.now()
@@ -188,6 +194,9 @@ def delete_card(set_id, card_id) -> None:
     :return:
     """
     set = get_set_db(set_id)
+    image_id = set.cards.get(card_id).image()
+    if image_id:
+        os.remove(f'static/images/card_images/{image_id}.png')
     set.cards.delete(card_id)
     set.card_order().remove(card_id)
     set.mdtime = datetime.now()

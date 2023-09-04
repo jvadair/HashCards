@@ -1,14 +1,14 @@
 let set_id = window.location.pathname.split('/')[2];
 
 function get_card_from_table(n) {
-    let front = $(`table tr:nth-of-type(${n}) td:nth-of-type(2)`).text();
+    let front = $(`table tr:nth-of-type(${n}) td:nth-of-type(2)`).html();
     let back = $(`table tr:nth-of-type(${n}) td:nth-of-type(3)`).text();
     return [front, back];
 }
 
 function update_card() {
     $('#card').replaceWith("<div id='card'></div>")  // Replacing the card is the only way to avoid the animation
-    $('#card').append(`<div class='front'><h2>${current_card[0]}</h2></div>`)
+    $('#card').append(`<div class='front'>${current_card[0]}</h2>`.replace("<p>", "<h2>").replace("</p>", "</h2>"))
     $('#card').append(`<div class='back'><h2>${current_card[1]}</h2></div>`)
     $('#card').flip({
         trigger: 'click'

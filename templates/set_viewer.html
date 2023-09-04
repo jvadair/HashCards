@@ -4,6 +4,7 @@
     {% include "components/boilerplate.html" %}
     <title>{{ set.title._val if set.title._val else 'New set' }} | HashCards</title>
     <link rel="stylesheet" href="/static/css/set-viewer.min.css">
+    <script src="/static/scripts/boxfit.min.js"></script>
 </head>
 <body>
 {% include "components/header.html" %}
@@ -16,9 +17,14 @@
             <div id="card-viewer">
                 {% if len(set.card_order._val) > 0 %}
                     <p class="arrow desktop" id="arrow-back" onclick="card_back()"><span class="material-symbols-outlined">arrow_back_ios_new</span></p>
-                    <div id="card">
+                    <div id="card" class="roboto">
                         <div class="front">
-                            <h2>{{ set.cards.get(set.card_order._val[0]).front._val }}</h2>
+                            {% if set.cards.get(set.card_order._val[0]).image._val %}
+                                <img src="/static/images/card_images/{{ set.cards.get(set.card_order._val[0]).image._val }}.png" alt="Card image">
+                            {% endif %}
+                            {% if set.cards.get(set.card_order._val[0]).front._val  %}
+                                <h2>{{ set.cards.get(set.card_order._val[0]).front._val }}</h2>
+                            {% endif %}
                         </div>
                         <div class="back">
                             <h2>{{ set.cards.get(set.card_order._val[0]).back._val }}</h2>
@@ -35,6 +41,9 @@
                     </div>
                 {% endif %}
             </div>
+            <script>
+                $("#card h2").boxfit({multiline: true});
+            </script>
             <div id="widgets">
                 <a class="chip" href="./study">Study</a>
                 {% if session.get('id') %}
@@ -58,8 +67,8 @@
                     {% set card = set.cards.get(card) %}
                     <tr>
                         <td>{{ num + 1 }}</td>
-                        <td>{{ card.front._val }}</td>
-                        <td>{{ card.back._val }}</td>
+                        <td>{% if card.image._val %}<img src="/static/images/card_images/{{ card.image._val }}.png" alt="Card image">{% endif %}{% if card.front._val %}<p>{{ card.front._val }}</p>{% endif %}</td>
+                        <td><p>{{ card.back._val }}</p></td>
                     </tr>
                 {% endfor %}
             </table>

@@ -107,6 +107,20 @@ setInterval(function() {
 
 // --- Card operations
 
+function delete_image(e) {
+    let card_id = $(e).parents().eq(2).data('card-id');
+    socket.emit("remove_image", {"set_id": set_id, "card_id": card_id}, (response) => {
+        if (response !== 401) {
+            $(e).removeClass('active');
+            $(e).parents().eq(0).css("background-image", "none");
+            $(e).parents().eq(1).find("label").removeClass('hidden');
+        }
+        else {
+            window.alert("Couldn't delete image - please sign in and try again.")
+        }
+    });
+}
+
 function delete_card(card_id) {
     $(`.card[data-card-id="${card_id}"]`).hide();
     socket.emit("delete_card", {"set_id": set_id, "card_id": card_id}, (response) => {
@@ -135,10 +149,19 @@ function add_card() {
                         <label>Back&nbsp;<input type="text" class="card-text card-text-back" value=""></label>
                     </form>
                 </div>
-                <div class="card-image">
-                    <p class="cutout desktop">+</p>
-                    <p class="cutout mobile">+ Image</p>
-                </div>
+                <form class="card-image">
+                    <label class="cutout desktop">
+                        <input type="file" class="image-upload" name="image" style="display: none" accept="image/jpeg, image/png, image/bmp, image/gif"></input>
+                        +
+                    </label>
+                    <label class="cutout mobile">
+                        <input type="file" class="image-upload" name="image" style="display: none" accept="image/jpeg, image/png, image/bmp, image/gif"></input>
+                        + Image
+                    </label>
+                    <div class="image_added_overlay" onclick="delete_image(this);">
+                        <span class="material-symbols-outlined">delete</span>
+                    </div>
+                </form>
             </div>
         </div>`
     );
@@ -218,6 +241,21 @@ $(document).ready(function() {
         card_being_dragged = $(event.target).parents().eq(2);
         cardpos_initial = $(event.target).parents().eq(2).index();
     });
+    // -- Image uploading
+    $("#card-container").on("change", "input.image-upload", function(event) {
+        let file = $(event.target).prop('files')[0];
+        let card_id = $(event.target).parents().eq(3).data('card-id');
+        socket.emit("add_image", {"set_id": set_id, "card_id": card_id, "file": file, "filename": $(event.target).val()}, (response) => {
+        if (response !== 401) {
+            $(event.target).parents().eq(0).addClass('hidden');
+            $(event.target).parents().eq(1).css("background-image", `url('/static/images/card_images/${response}.png')`);
+            $(event.target).parents().eq(1).find(".image_added_overlay").eq(0).addClass('active');
+        }
+        else {
+            window.alert("Couldn't add image - please sign in and try again.")
+        }
+        });
+    })
 })
 
 // ---x

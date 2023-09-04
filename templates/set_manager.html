@@ -82,10 +82,25 @@
                                 <label>Back&nbsp;<input type="text" class="card-text card-text-back" value="{{ card.back._val }}"></label>
                             </form>
                         </div>
-                        <div class="card-image">
-                            <p class="cutout desktop">+</p>
-                            <p class="cutout mobile">+ Image</p>
-                        </div>
+                        <form class="card-image" {% if card.image._val %}style='background-image: url("/static/images/card_images/{{ card.image._val }}.png");'{% endif %}>
+                            <label class="cutout desktop">
+                                <input type="file" class="image-upload" name="image" style="display: none" accept="image/jpeg, image/png, image/bmp, image/gif"></input>
+                                +
+                            </label>
+                            <label class="cutout mobile">
+                                <input type="file" class="image-upload" name="image" style="display: none" accept="image/jpeg, image/png, image/bmp, image/gif"></input>
+                                + Image
+                            </label>
+                            <div class="image_added_overlay" onclick="delete_image(this);">
+                                <span class="material-symbols-outlined">delete</span>
+                            </div>
+                            {% if card.image._val %}
+                                <script>
+                                    $(`.card[data-card-id="{{ card.id._val }}"] .card-image label`).addClass("hidden");
+                                    $(`.card[data-card-id="{{ card.id._val }}"] .card-image .image_added_overlay`).addClass('active');
+                                </script>
+                            {% endif %}
+                        </form>
                     </div>
                 </div>
             {% endfor %}

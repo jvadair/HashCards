@@ -6,6 +6,7 @@ secrets.json
 /*.pyn
 /*.xopp
 /static/images/pfp
+/static/images/card_images
 LOG.md
 setenv.sh
 config.json

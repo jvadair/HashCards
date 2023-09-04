@@ -23,12 +23,16 @@ from copy import copy
 from werkzeug.middleware.proxy_fix import ProxyFix
 import shutil
 from jinja2.exceptions import TemplateNotFound
+from process_photo import process_filename, process_photo
 
 app = Flask(__name__)
-app.secret_key = os.urandom(32)
 r_api = registration_api.API()
 config = Node('config.json')
 DEBUG = True if os.getenv('DEBUG') == "1" else False
+if DEBUG:
+    app.secret_key = b'hashcards is the best'
+else:
+    app.secret_key = os.urandom(32)
 SCHEME = 'http' if DEBUG else 'https'
 LOGIN_REQUIRED = (
     "/new",
@@ -53,7 +57,7 @@ if not os.path.exists('db/takeout'):
 
 
 # Add socket support
-socketio = SocketIO(app)
+socketio = SocketIO(app, max_http_buffer_size=15000000)  # 15mb max
 
 
 # Update jinja global variables
@@ -66,7 +70,9 @@ app.jinja_env.globals.update(
     get_set_db=get_set_db,
     get_group_db=get_group_db,
     get_org_db=get_org_db,
-    max=max
+    max=max,
+    bool=bool,
+    str=str
 )
 
 # Tell Flask it is behind a proxy
@@ -638,6 +644,39 @@ def change_card_position(data):
         return 'success'
     else:
         return 401, "You are not the author of this set, so you can't edit it. If you do happen to be the owner, please try switching accounts."
+
+
+@socketio.on("add_image")
+def add_image(data):
+    set_id = data['set_id']
+    card_id = data['card_id']
+    filename = data['filename']
+    if session.get('id'):
+        if hashcards.is_author(set_id, session['id']):
+            image_id = str(uuid4())
+            filename = process_filename(filename)
+            if filename:
+                extension = filename.rsplit('.', maxsplit=1)[1]
+                with open(f'db/temp/{image_id}.{extension}', 'wb') as file:
+                    file.write(data['file'])
+                new_filename = process_photo(f'db/temp/{image_id}.{extension}')
+                os.rename(new_filename, f'static/images/card_images/{image_id}.png')
+                hashcards.modify_card(set_id, card_id, image=image_id)
+                return image_id
+    return 401, "You are not signed in."
+
+@socketio.on("remove_image")
+def add_image(data):
+    set_id = data['set_id']
+    card_id = data['card_id']
+    if session.get('id'):
+        if hashcards.is_author(set_id, session['id']):
+            set_db = get_set_db(set_id)
+            image_id = set_db.cards.get(card_id).image()
+            os.remove(f'static/images/card_images/{image_id}.png')
+            hashcards.modify_card(set_id, card_id, image=None)
+            return 200, 'OK'
+    return 401, "You are not signed in."
 
 
 # Study mode
