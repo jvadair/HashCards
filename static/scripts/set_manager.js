@@ -151,11 +151,11 @@ function add_card() {
                 </div>
                 <form class="card-image">
                     <label class="cutout desktop">
-                        <input type="file" class="image-upload" name="image" style="display: none" accept="image/jpeg, image/png, image/bmp, image/gif"></input>
+                        <input type="file" class="image-upload" name="image" style="display: none" accept="image/jpeg, image/png, image/bmp, image/gif, image/webp"></input>
                         +
                     </label>
                     <label class="cutout mobile">
-                        <input type="file" class="image-upload" name="image" style="display: none" accept="image/jpeg, image/png, image/bmp, image/gif"></input>
+                        <input type="file" class="image-upload" name="image" style="display: none" accept="image/jpeg, image/png, image/bmp, image/gif, image/webp"></input>
                         + Image
                     </label>
                     <div class="image_added_overlay" onclick="delete_image(this);">
