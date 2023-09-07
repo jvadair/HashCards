@@ -8,7 +8,7 @@
 <body>
 {% include "components/header.html" %}
 <main>
-    <form action="/api/v1/auth/{{ auth_method }}" method="post">
+    <form id="auth-form" action="/api/v1/auth/{{ auth_method }}" method="post">
         <div class="welcome">
             {% if auth_method == 'login' %}
             <h1>Welcome back!</h1>

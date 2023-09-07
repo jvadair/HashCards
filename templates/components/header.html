@@ -2,29 +2,27 @@
     <img alt="HashCards logo" id="logo" src="/static/images/logo-nobg.png" onclick="window.location.href='/'">
     <nav>
         <a href="/">Home</a>
-        {% if session.get('id') %}
-            <div class="search_bar mobile" onclick="window.location.href = '/search'">
-                <span class="material-symbols-outlined">search</span>
-            </div>
-            <form class="search_bar desktop" method="get" action="/search">
-                <span class="material-symbols-outlined">search</span>
-                <label for="header-search-query" style="display: none;">Search</label>
-                <input id="header-search-query" class="query" name="q" type="text" placeholder="Search">
-                <button type="submit"><span class="material-symbols-outlined">explore</span></button>
-            </form>
-            <script>
-            $(document).ready(function() {
-                $("form.search_bar input").on("keyup keydown", function () {
-                    if (!$("header form.search_bar input").val()) {
-                        $("header form.search_bar button span").text("explore");
-                    }
-                    else {
-                        $("header form.search_bar button span").text("arrow_forward");
-                    }
-                })
-            });
-            </script>
-        {% endif %}
+        <div class="search_bar mobile" onclick="window.location.href = '/search'">
+            <span class="material-symbols-outlined">search</span>
+        </div>
+        <form class="search_bar desktop" method="get" action="/search">
+            <span class="material-symbols-outlined">search</span>
+            <label for="header-search-query" style="display: none;">Search</label>
+            <input id="header-search-query" class="query" name="q" type="text" placeholder="Search">
+            <button type="submit"><span class="material-symbols-outlined">explore</span></button>
+        </form>
+        <script>
+        $(document).ready(function() {
+            $("form.search_bar input").on("keyup keydown", function () {
+                if (!$("header form.search_bar input").val()) {
+                    $("header form.search_bar button span").text("explore");
+                }
+                else {
+                    $("header form.search_bar button span").text("arrow_forward");
+                }
+            })
+        });
+        </script>
         {% if not session['id'] %}
             <a href="/login" id="header-login-button">Login</a>
             <script>

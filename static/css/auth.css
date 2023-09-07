@@ -5,7 +5,7 @@ body {
     background-position: center;
 }
 
-form {
+form#auth-form {
     background-color: rgba(var(--overlay-variable-opacity), .7);
     padding: 5% 2%;
     border-radius: 25px;
@@ -16,23 +16,23 @@ form {
     grid-gap: 15px;
 }
 
-form .welcome {
+form#auth-form .welcome {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-form .welcome * {
+form#auth-form .welcome * {
     margin: 10px 0;
 }
 
-form input:not(.btn) {
+form#auth-form input:not(.btn) {
     width: 50%;
     min-width: 200px;
 }
 
-form input.btn {
+form#auth-form input.btn {
     font-size: 1em;
     width: 25%;
 }
