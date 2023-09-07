@@ -31,7 +31,7 @@ form.search_bar {
 }
 
 .explore-container .set-container {
-    width: 100%;
+    width: 33.33%;
     padding: 2% 1%;
 }
 
@@ -54,5 +54,8 @@ h1, h2 {
     }
     .explore-container {
         flex-direction: column;
+    }
+    .explore-container .set-container {
+        width: 100%;
     }
 }
