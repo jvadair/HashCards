@@ -14,3 +14,7 @@ def is_valid_email(email: str) -> bool:
 
     # Else
     return True
+
+
+def sort_by_value(d, reverse=False):  # Thanks to Devin Jeanpierre on StackOverflow
+    return {k: v for k, v in sorted(d.items(), key=lambda item: item[1], reverse=reverse)}

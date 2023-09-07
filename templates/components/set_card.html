@@ -1,0 +1,10 @@
+<a class="set-container" data-timestamp="{{ time.mktime(set.mdtime._val.timetuple()) }}" href="/set/{{ set.id._val }}">
+    <div class="set">
+        <h3>{{ set.title._val if set.title._val else 'New set' }}</h3>
+        {% if set.description._val %}
+            <p>{{ set.description._val }}</p>
+        {% else %}
+            <p><i>No description</i></p>
+        {% endif %}
+    </div>
+</a>

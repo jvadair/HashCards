@@ -3,7 +3,7 @@
 <head>
     {% include "components/boilerplate.html" %}
     <title>My Sets | HashCards</title>
-    <link rel="stylesheet" href="/static/css/library.min.css">
+    <link rel="stylesheet" href="/static/css/multi-set.min.css">
 </head>
 <body>
 {% include "components/header.html" %}
@@ -13,7 +13,7 @@
         <h1>My Sets</h1>
     </div>
 {% if len(user.sets._val) > 0 %}
-    <div id="library">
+    <div class="multi-set">
         <a class="set-container" href="/new">
             <div class="set new-set" id="new_set">
                 <p class="cutout">+ New set</p>
@@ -26,16 +26,7 @@
         </a>
         {% for set in user.sets._val %}
             {% set set = get_set_db(set) %}
-            <a class="set-container" data-timestamp="{{ time.mktime(set.mdtime._val.timetuple()) }}" href="/set/{{ set.id._val }}">
-                <div class="set">
-                    <h3>{{ set.title._val if set.title._val else 'New set' }}</h3>
-                    {% if set.description._val %}
-                        <p>{{ set.description._val }}</p>
-                    {% else %}
-                        <p><i>No description</i></p>
-                    {% endif %}
-                </div>
-            </a>
+            {% include "components/set_card.html" %}
         {% endfor %}
         <script>
             $('#library .set-container').sort(function(a, b) {

@@ -18,20 +18,20 @@
     padding: 2em 0;
 }
 
-form label {
+#import form label {
     display: none;
 }
 
-form input {
+#import form input {
     width: 65%;
 }
 
-form textarea {
+#import form textarea {
     width: 80%;
     flex-grow: 1
 }
 
-form button {
+#import form button {
     width: 35%;
     min-height: 4em;
 }

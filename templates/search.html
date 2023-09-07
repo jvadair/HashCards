@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include "components/boilerplate.html" %}
+    <title>Search | HashCards</title>
+    <link rel="stylesheet" href="/static/css/search.min.css">
+    <link rel="stylesheet" href="/static/css/multi-set.min.css">
+</head>
+<body>
+{% include "components/header.html" %}
+<main>
+<div id="search">
+    <form class="search_bar" method="get" action="/search">
+        <span class="material-symbols-outlined">search</span>
+        <label for="search-query" style="display: none;">Search</label>
+        <input id="search-query" name="q" class="query" type="text" placeholder="Search" value="{{ query }}">
+        <button type="submit"><span class="material-symbols-outlined">arrow_forward</span></button>
+    </form>
+    {% if query %}
+        <div class="multi-set">
+            {% for set in results %}
+                {% set set = get_set_db(set) %}
+                {% include "components/set_card.html" %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <h1><span class="material-symbols-outlined">explore</span> Explore</h1>
+        <div id="explore">
+            <h2><span class="material-symbols-outlined">casino</span> Random</h2>
+            <div class="explore-container">
+                {% for set in explore['random'] %}
+                    {% set set = get_set_db(set) %}
+                    {% include "components/set_card.html" %}
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+</div>
+</main>
+{% include "components/footer.html" %}
+<script>
+    $("header .search_bar").hide();
+</script>
+</body>
+</html>

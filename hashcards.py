@@ -10,6 +10,9 @@ from encryption_assistant import get_group_db, get_set_db, get_org_db, get_user_
 from datetime import datetime, timedelta
 from copy import copy
 from uuid import uuid4
+from thefuzz import process as fuzz_process
+from tools import sort_by_value
+from random import shuffle
 import os
 
 SET_TEMPLATE = {
@@ -46,6 +49,14 @@ CARD_TEMPLATE = {
 CARD_NOMODIFY = (
     "id"
 )
+
+
+# First-run scenario
+if not os.path.exists('db/sets/_map.pyn'):
+    Node({"title": {}, "description": {}}).save("db/sets/_map.pyn")
+
+
+set_map = Node("db/sets/_map.pyn", autosave=True)
 
 
 def create_set(
@@ -96,6 +107,22 @@ def modify_set(set_id, **kwargs) -> None:
             elif type(kwargs[kwarg]) not in (str, int) or len(kwargs[kwarg]) > 100000:  # Prevent spammers and whatnot
                 continue
             set.set(kwarg, kwargs[kwarg])
+            if kwarg in ('title', 'description'):
+                if set.visibility() == 'public':
+                    if kwargs[kwarg]:
+                        set_map.get(kwarg).set(set.id(), kwargs[kwarg])
+                    elif kwarg == 'title' and set_map.titles.has(set.id()):  # Make sure public sets have a title in order to be listed
+                        set_map.title.delete(set.id())
+                        set_map.description.delete(set.id())
+            elif kwarg == 'visibility':
+                if kwargs[kwarg] == 'public':
+                    set_map.title.set(set.id(), set.title())
+                    set_map.description.set(set.id(), set.description())
+                else:
+                    if set_map.title.has(set.id()):
+                        set_map.title.delete(set.id())
+                    if set_map.description.has(set.id()):
+                        set_map.description.delete(set.id())
     set.mdtime = datetime.now()
     set.save()
 
@@ -114,6 +141,10 @@ def delete_set(set_id: str) -> None:
         group = get_group_db(set.group())
         group.sets().remove(set_id)
         group.save()
+    if set_map.title.has(set.id()):
+        set_map.title.delete(set.id())
+    if set_map.description.has(set.id()):
+        set_map.description.delete(set.id())
     os.remove(f"db/sets/{set_id}.pyn")
     for card in set.cards._values:
         image_id = set.cards.get(card).image()
@@ -233,7 +264,7 @@ def is_author(set_id: str, author_id: str) -> bool:
     :param author_id:
     :return: True or False
     """
-    if not os.path.exists(f'db/sets/{set_id}.pyn'):
+    if not os.path.exists(f'db/sets/{set_id}.pyn') or '_' in set_id:
         return False
     set = get_set_db(set_id)
     if set.author() == author_id:
@@ -291,6 +322,30 @@ def check_user_streak(user_id):
     user_db.save()
 
 
+def search(query, results=50):
+    titles = fuzz_process.extract(query, set_map.title(), limit=results)
+    descriptions = fuzz_process.extract(query, set_map.description(), limit=results)
+    scores = {}
+    for t, d in zip(titles, descriptions):
+        if scores.get(t[2]):
+            scores[t[2]] += t[1]
+        else:
+            scores[t[2]] = t[1]
+        if scores.get(d[2]):
+            scores[d[2]] += d[1]*.5
+        else:
+            scores[d[2]] = d[1]*.5
+    return sort_by_value(scores, reverse=True)
+
+
+def explore():
+    random_sets = list(set_map.title().keys())
+    shuffle(random_sets)
+    return {
+        "random": random_sets[0:3]
+    }
+
+
 def patch_all_setfiles():  # TODO: patch_all_cards function
     """
     This command will ensure all set files are up-to-date with the latest template
@@ -305,3 +360,16 @@ def patch_all_setfiles():  # TODO: patch_all_cards function
             if not file.has(field):
                 file.set(field, SET_TEMPLATE[field])
         file.save()
+
+
+def populate_setmap():
+    for set_id in os.listdir('db/sets'):
+        set_id = set_id.replace('.pyn', '')
+        if '_' in set_id:
+            continue
+
+        set_db = get_set_db(set_id)
+        if set_db.visibility() == 'public':
+            if set_db.title():
+                set_map.title.set(set_db.id(), set_db.title())
+                set_map.description.set(set_db.id(), set_db.description())

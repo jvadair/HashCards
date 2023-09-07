@@ -235,6 +235,56 @@ header #account-pfp img {
     border-radius: 50%;
 }
 
+form.search_bar {
+    display: flex;
+    flex-direction: row;
+    grid-gap: 0;
+}
+
+form.search_bar * {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+header form.search_bar * {
+    height: calc(.5 * var(--header-height));
+}
+
+form.search_bar span {
+    border-right: none;
+    border-radius: 25px 0 0 25px;
+}
+
+form.search_bar input.query {
+    border-left: none;
+    border-right: none;
+    border-radius: 0;
+}
+
+header form.search_bar input.query {
+    width: 10vw;
+    height: calc(.5 * var(--header-height));  /* Specificity issues requires copying this here */
+}
+
+form.search_bar button {
+    border-left: none;
+    border-radius: 0 25px 25px 0;
+    transition-duration: .1s;
+    padding: .5em;
+}
+
+form.search_bar button:hover {
+    cursor: pointer;
+    background-color: var(--accent);
+}
+
+header div.search_bar.mobile {
+    display: none;
+}
+
 /* Footer */
 footer {
     width: 100%;
@@ -365,5 +415,20 @@ form input.btn {
 
 /* Tablet and mobile viewports */
 @media screen and (max-width: 850px) {
-
+    header form.search_bar.desktop {
+        display: none;
+    }
+    header div.search_bar.mobile {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 25px;
+        background-color: var(--text);
+        height: 2em;
+        width: 2em;
+        padding: 1em;
+    }
+    header div.search_bar.mobile span {
+        color: var(--background);
+    }
 }

@@ -76,7 +76,7 @@ app.jinja_env.globals.update(
     get_org_db=get_org_db,
     max=max,
     bool=bool,
-    str=str
+    time=time,
 )
 
 # Tell Flask it is behind a proxy
@@ -129,8 +129,7 @@ def error(code, message):
 def find_similar_results(set_id, looking_for, card_id):
     set_db = get_set_db(set_id)
     answer = set_db.cards.get(card_id).get(looking_for)()
-    search_through = {card: set_db.cards.get(card).get(looking_for)() for card in set_db.cards()}
-    del search_through[card_id]
+    search_through = {card: set_db.cards.get(card).get(looking_for)() for card in set_db.cards() if set_db.cards.get(card).get(looking_for)() != answer}
     results = fuzz_process.extract(answer, search_through, limit=3)
     results = {r[2]: r[0] for r in results}
     results[card_id] = answer
@@ -252,7 +251,7 @@ def account_settings():
 
 @app.route('/sets')
 def library():
-    return render_template("library.html", user=get_user_db(session.get('id')), time=time)
+    return render_template("library.html", user=get_user_db(session.get('id')))
 
 
 @app.route('/import')
@@ -271,16 +270,28 @@ def import_page():
 #     )
 #
 #
+
+
+@app.route('/search')
+def search():
+    query = request.args.get('q')
+    if query:
+        return render_template('search.html', query=query, results=tuple(hashcards.search(query).keys()))
+    else:
+        return render_template('search.html', query='', explore=hashcards.explore())
+
+
 @app.route('/<target_id>/profile/')
 def profile(target_id):
-    if os.path.exists(f'db/users/{target_id}.pyn'):
+    if '_' in target_id:
+        pass  # Protects map files
+    elif os.path.exists(f'db/users/{target_id}.pyn'):
         return render_template('profile.html', db=get_user_db(target_id), type='user')
     elif os.path.exists(f'db/groups/{target_id}'):
         return render_template('profile.html', db=get_group_db(target_id), type='group')
-    if os.path.exists(f'db/orgs/{target_id}'):
+    elif os.path.exists(f'db/orgs/{target_id}'):
         return render_template('profile.html', db=get_org_db(target_id), type='org')
-    else:
-        return error(404, "There are no users, groups, or organizations with that ID.")
+    return error(404, "There are no users, groups, or organizations with that ID.")
 #
 #
 # @app.route('/profile-g')
@@ -329,7 +340,7 @@ def new_set():
 
 @app.route('/set/<set_id>/', methods=("GET",))
 def set_viewer(set_id):
-    if os.path.exists(f'db/sets/{set_id}.pyn'):
+    if '_' not in set_id and os.path.exists(f'db/sets/{set_id}.pyn'):
         set_db = get_set_db(set_id)
     else:
         return error(401,
@@ -746,7 +757,7 @@ def check_answer(data):
                 return {"success": False, "correct": correct_card_id}
         elif prompt_response is not None:  # Could be empty string
             correct_answer = set_db.cards.get(correct_card_id).get('back' if session['current_card_side'] == 'front' else 'front')()
-            accuracy = fuzz.partial_ratio(correct_answer.lower(), prompt_response.lower())
+            accuracy = fuzz.ratio(correct_answer.lower(), prompt_response.lower())
             if accuracy >= 95:
                 user_db = get_user_db(session.get('id'))
                 study_db = user_db.studied_sets.get(set_id)
