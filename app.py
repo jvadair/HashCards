@@ -276,7 +276,8 @@ def import_page():
 def search():
     query = request.args.get('q')
     if query:
-        return render_template('search.html', query=query, results=tuple(hashcards.search(query).keys()))
+        results = tuple(hashcards.search(query).keys())
+        return render_template('search.html', query=query, results=results)
     else:
         return render_template('search.html', query='', explore=hashcards.explore())
 

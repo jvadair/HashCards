@@ -17,12 +17,16 @@
         <button type="submit"><span class="material-symbols-outlined">arrow_forward</span></button>
     </form>
     {% if query %}
+        {% if results %}
         <div class="multi-set">
             {% for set in results %}
                 {% set set = get_set_db(set) %}
                 {% include "components/set_card.html" %}
             {% endfor %}
         </div>
+        {% else %}
+            <h3 style="text-align: center; width: 100%">No results found :(</h3>
+        {% endif %}
     {% else %}
         <h1><span class="material-symbols-outlined">explore</span> Explore</h1>
         <div id="explore">

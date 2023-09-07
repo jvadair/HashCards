@@ -326,6 +326,7 @@ def search(query, results=50):
     titles = fuzz_process.extract(query, set_map.title(), limit=results)
     descriptions = fuzz_process.extract(query, set_map.description(), limit=results)
     scores = {}
+    results = {}
     for t, d in zip(titles, descriptions):
         if scores.get(t[2]):
             scores[t[2]] += t[1]
@@ -335,7 +336,10 @@ def search(query, results=50):
             scores[d[2]] += d[1]*.5
         else:
             scores[d[2]] = d[1]*.5
-    return sort_by_value(scores, reverse=True)
+    for item in scores:
+        if scores[item] >= 65:
+            results[item] = scores[item]
+    return sort_by_value(results, reverse=True)
 
 
 def explore():
