@@ -447,9 +447,9 @@ def login():
 
 @app.route('/api/v1/auth/register', methods=['POST'])
 def register():
-    if not DEBUG:
-        return error(401,
-                     "Sorry, registration is not yet available. However, you can pre-register via the homepage.")  # TODO: Release this later
+    # if not DEBUG:
+    #     return error(401,
+    #                  "Sorry, registration is not yet available. However, you can pre-register via the homepage.")
     # noinspection PyUnreachableCode
     data = request.form
     response = r_api.register(data['username'], data['email'], data['password'])
