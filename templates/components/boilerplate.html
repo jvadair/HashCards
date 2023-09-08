@@ -19,3 +19,7 @@
 {% if not DEBUG %}
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 {% endif %}
+{# Chrome is weird about its scrollbar #}
+<script>
+    document.documentElement.style.setProperty('--scrollbar-width', (window.innerWidth - document.documentElement.clientWidth) + "px");
+</script>

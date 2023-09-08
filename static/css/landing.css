@@ -56,7 +56,8 @@ h1 {
 #info {
     display: flex;
     flex-direction: column;
-    width: 100vw;
+    /*noinspection CssUnresolvedCustomProperty*/
+    width: calc(100vw - var(--scrollbar-width));
     grid-gap: 5em;
 }
 
