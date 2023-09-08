@@ -23,7 +23,7 @@
         <input id="identifier" type="text" name="identifier" placeholder="Username or email" required>
         {% elif auth_method == 'register' %}
         <label for="email" style="display: none">Email</label>
-        <input id="email" type="email" name="email" placeholder="Email" required>
+        <input id="email" type="email" name="email" placeholder="Email" required {% if email %}value="{{ email }}"{% endif %}>
         <label for="username" style="display: none">Username</label>
         <input id="username" type="text" name="username" placeholder="Username" required>
         {% endif %}

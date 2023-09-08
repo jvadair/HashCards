@@ -322,7 +322,7 @@ def login_page():
 
 @app.route('/register')
 def register_page():
-    return render_template('auth.html', auth_method='register')
+    return render_template('auth.html', auth_method='register', email=request.args.get('email'))
 
 
 @app.route('/takeout/<takeout_id>')
@@ -414,8 +414,8 @@ def preregister():
         preregister_list = Node('db/preregistered.pyn')
         if email in preregister_list._values:
             return error(400, "That email is already registered!")
-        preregister_list.set(email, datetime.now())
-        preregister_list.save()
+        # preregister_list.set(email, datetime.now())  # Toggle the comment to enable/disable pre-registration
+        # preregister_list.save()
         session['pre-registered'] = True
         sendmail.send_template('email/preregister.html', "You pre-registered for HashCards!", email)
         return render_template("thank_you.html", message="We'll let you know as soon as you can start using HashCards!")
@@ -452,6 +452,10 @@ def register():
     #                  "Sorry, registration is not yet available. However, you can pre-register via the homepage.")
     # noinspection PyUnreachableCode
     data = request.form
+    preregister_list = Node('db/preregistered.pyn')
+    if data['email'] not in preregister_list._values:
+        return error(401,
+                     "Sorry, registration is not yet available. If you pre-registered, make sure to use the email you did so with.")
     response = r_api.register(data['username'], data['email'], data['password'])
     if type(response) != str and 400 <= response[1] < 500:
         return error(*reversed(response))
@@ -828,6 +832,10 @@ def google_auth():
     # print("Google login:", token['user_id'])
     # print("Google token:", token)
     email = token['userinfo']['email']
+    preregister_list = Node('db/preregistered.pyn')
+    if email not in preregister_list._values:
+        return error(401,
+                     "Sorry, registration is not yet available. If you pre-registered, make sure to use the email you did so with.")
     username = email.split('@gmail.com')[0]  # This will look weird for non-gmails, but solves potential conflicts
     was_created = r_api.handle_social_login(username, 'google', session)
     user_db = get_user_db(session['id'])
