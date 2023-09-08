@@ -834,7 +834,7 @@ def google_auth():
     email = token['userinfo']['email']
     preregister_list = Node('db/preregistered.pyn')
     username = email.split('@gmail.com')[0]  # This will look weird for non-gmails, but solves potential conflicts
-    if email not in preregister_list._values and username not in registration_api.verified.google._values:
+    if email not in preregister_list._values and username not in registration_api.socials.google._values:
         return error(401,
                      "Sorry, registration is not yet available. If you pre-registered, make sure to use the email you did so with.")
     was_created = r_api.handle_social_login(username, 'google', session)
