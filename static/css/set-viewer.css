@@ -283,7 +283,7 @@
 
 }
 
-/* Tablet viewport */
+/* Mobile & tablet viewport */
 @media screen and (max-width: 850px) {
     #card-view {
         justify-content: center;
@@ -339,5 +339,12 @@
     }
     #list-view table td {
         padding: 10px;
+    }
+    #card-viewer #card .front, #card-viewer #card .back {
+        flex-direction: column;
+        grid-gap: 1em;
+    }
+    #card-viewer #card .front img {
+        width: 75%;
     }
 }
