@@ -273,4 +273,11 @@ $(document).ready(function() {
             change_position(cardpos_initial, cardpos_final);
         }
     });
+   $('#visibility').change(function() {
+        if ($('#visibility').val() === 'private') {
+            $('#visibility').css('color','#ff6b79');
+        } else {
+            $('#visibility').css('color','var(--success)');
+        }
+   });
 });

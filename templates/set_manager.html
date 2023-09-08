@@ -48,6 +48,13 @@
                         $('#options #visibility option[value="{{ set.visibility._val }}"]').prop('selected', true);
                     </script>
                 </select>
+                <script>
+                    if ($('#visibility').val() === 'private') {
+                        $('#visibility').css('color','#ff6b79');
+                    } else {
+                        $('#visibility').css('color','var(--success)');
+                    }
+                </script>
 {#                <div id="autosave">#}
 {#                    <label for="autosave-toggle">Autosave</label>#}
 {#                    <input id="autosave-toggle" name="autosave" type="checkbox" {{ 'checked' if set.autosave._val else '' }}>#}
