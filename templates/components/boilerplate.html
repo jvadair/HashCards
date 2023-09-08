@@ -21,5 +21,7 @@
 {% endif %}
 {# Chrome is weird about its scrollbar #}
 <script>
-    document.documentElement.style.setProperty('--scrollbar-width', (window.innerWidth - document.documentElement.clientWidth) + "px");
+    $(document).ready(function() {
+        document.documentElement.style.setProperty('--scrollbar-width', (window.innerWidth - document.documentElement.clientWidth) + "px");
+    });
 </script>
