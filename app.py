@@ -129,7 +129,7 @@ def error(code, message):
 def find_similar_results(set_id, looking_for, card_id):
     set_db = get_set_db(set_id)
     answer = set_db.cards.get(card_id).get(looking_for)()
-    search_through = {card: set_db.cards.get(card).get(looking_for)() for card in set_db.cards() if set_db.cards.get(card).get(looking_for)() != answer}
+    search_through = {card: set_db.cards.get(card).get(looking_for)() for card in tuple(set_db.cards().keys()) if set_db.cards.get(card).get(looking_for)().lower() != answer.lower()}
     results = fuzz_process.extract(answer, search_through, limit=3)
     results = {r[2]: r[0] for r in results}
     results[card_id] = answer
