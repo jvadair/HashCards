@@ -276,8 +276,12 @@ $(document).ready(function() {
    $('#visibility').change(function() {
         if ($('#visibility').val() === 'private') {
             $('#visibility').css('color','#ff6b79');
-        } else {
-            $('#visibility').css('color','var(--success)');
+        }
+        else if ($('#visibility').val() === 'unlisted') {
+            $('#visibility').css('color','#eba050');
+        }
+        else {
+            $('#visibility').css('color','#43AA8B');
         }
    });
 });

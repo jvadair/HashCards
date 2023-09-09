@@ -346,11 +346,17 @@ def set_viewer(set_id):
     else:
         return error(401,
                      "The set is either private or does not exist. If you own this set and bookmarked it, sign in and try again.")
-    if set_db.visibility() == 'public' or set_db.author() == session.get('id'):
+    if set_db.visibility() in ('public', 'unlisted') or set_db.author() == session.get('id'):
         if session.get('id'):
             hashcards.calculate_exp_gain(session['id'], set_id, action='view')
             hashcards.update_recent_sets(session['id'], set_id)
-        export_text = '\n'.join([card.front._val + '\t' + card.back._val for card in set_db.cards.get(*set_db.cards._values)])
+        if set_db.cards._values:
+            cards = set_db.cards.get(*set_db.cards._values)
+            if type(cards) is Node:  # Account for single value being returned
+                cards = [cards]
+            export_text = '\n'.join([card.front._val + '\t' + card.back._val for card in cards])  # The [] ensures that single values don't throw errors
+        else:
+            export_text = ''
         return render_template('set_viewer.html', set=set_db, export_text=export_text)
     else:
         return error(401,
@@ -715,6 +721,17 @@ def add_image(data):
             hashcards.modify_card(set_id, card_id, image=None)
             return 200, 'OK'
     return 401, "You are not signed in."
+
+
+# Share from the set viewer page
+@socketio.on("make_public")
+def make_public(data):
+    set_id = data['set_id']
+    if session.get('id'):
+        if hashcards.is_author(set_id, session['id']):
+            hashcards.modify_set(set_id, visibility='public')
+            return 200
+    return 401, "You must be logged in to make a a set public."
 
 
 # Study mode

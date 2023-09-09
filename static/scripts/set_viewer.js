@@ -75,6 +75,15 @@ function card_forward() {
 
 function showDialog(dialog_name, transition=true) {
     let initial_duration
+    if (dialog_name === 'share' && visibility === 'private') {
+        let socket = io.connect(location.protocol + "//" + document.domain + ':' + location.port);
+        socket.emit("make_public", {"set_id": set_id}, (response) => {
+            console.log(response);
+            if (response === 401) {
+                $("#share-link-container").html("<p>There was an issue sharing your set. Reload the page and try again.</p>")
+            }
+        });
+    }
     if (!transition) {
         $("#popup-modal").addClass("notransition");
     }

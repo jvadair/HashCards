@@ -100,7 +100,7 @@ def modify_set(set_id, **kwargs) -> None:
     set = get_set_db(set_id)
     for kwarg in kwargs:
         if kwarg in SET_TEMPLATE and kwarg not in SET_NOMODIFY:
-            if kwarg == 'visibility' and kwargs[kwarg] not in ('private', 'public', 'group'):
+            if kwarg == 'visibility' and kwargs[kwarg] not in ('private', 'public', 'group', 'unlisted'):
                 continue
             if kwarg in ('autosave',):  # Bool type-forcer
                 set.set(kwarg, bool(kwargs[kwarg]))
