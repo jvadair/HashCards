@@ -184,12 +184,12 @@
     background-color: rgba(var(--background-variable-opacity), 50%);
 }
 
-.card .card-image label.desktop, .image_added_overlay {
+.card .card-image label, .image_added_overlay {
+    height: 100%;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100%;
-    width: 100%;
     text-align: center;
     font-size: 4em;
     cursor: pointer;
@@ -277,6 +277,7 @@
 @media screen and (max-width: 850px) {
     .card .card-image label.mobile {
         display: flex;
+        font-size: initial;
     }
     .card .card-image label.desktop {
         display: none;
