@@ -88,6 +88,7 @@
     margin: 0;
     max-height: 100%;
     word-break: break-word;
+    font-weight: initial;  /* Chrome bolds headers */
 }
 
 #card-viewer #card .front, #card-viewer #card .back {
