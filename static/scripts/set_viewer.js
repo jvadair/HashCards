@@ -1,7 +1,7 @@
 let set_id = window.location.pathname.split('/')[2];
 
 function get_card_from_table(n) {
-    let front = $(`table tr:nth-of-type(${n}) td:nth-of-type(2)`).html();
+    let front = $(`table tr:nth-of-type(${n}) td:nth-of-type(2) div`).html();
     let back = $(`table tr:nth-of-type(${n}) td:nth-of-type(3)`).text();
     return [front, back];
 }

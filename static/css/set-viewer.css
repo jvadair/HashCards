@@ -81,6 +81,7 @@
     height: 100%;
     cursor: pointer;
     overflow: hidden;
+    -webkit-tap-highlight-color: transparent; /* Fix blue overlay on tap on Chrome mobile */
 }
 
 #card-viewer #card h2 {
@@ -192,10 +193,12 @@
     text-align: center;
 }
 
-#list-view table td:nth-of-type(2) {
+#list-view table td:nth-of-type(2) div {  /* I wouldn't have to do it w/ nested div if Chrome didn't suck :( */
     width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: row;
+    align-items: center;
     grid-gap: 1em;
 }
 
@@ -206,6 +209,7 @@
 #list-view table td:not(:last-child) {
     border-right: 3px solid var(--text);
 }
+
 
 /* Popup dialog */
 #popup-modal {
@@ -334,7 +338,7 @@
     #list-view table td:not(:last-child) {
         border-right: 2px solid var(--text);
     }
-    #list-view table td:nth-of-type(2) {
+    #list-view table td:nth-of-type(2) div {
         flex-direction: column;
     }
     #list-view table td {
