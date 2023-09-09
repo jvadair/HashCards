@@ -17,7 +17,7 @@
             <div id="card-viewer">
                 {% if len(set.card_order._val) > 0 %}
                     <p class="arrow desktop" id="arrow-back" onclick="card_back()"><span class="material-symbols-outlined">arrow_back_ios_new</span></p>
-                    <div id="card" class="roboto">
+                    <div id="card">
                         <div class="front">
                             {% if set.cards.get(set.card_order._val[0]).image._val %}
                                 <img src="/static/images/card_images/{{ set.cards.get(set.card_order._val[0]).image._val }}.png" alt="Card image">
