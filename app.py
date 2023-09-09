@@ -350,7 +350,8 @@ def set_viewer(set_id):
         if session.get('id'):
             hashcards.calculate_exp_gain(session['id'], set_id, action='view')
             hashcards.update_recent_sets(session['id'], set_id)
-        return render_template('set_viewer.html', set=set_db)
+        export_text = '\n'.join([card.front._val + '\t' + card.back._val for card in set_db.cards.get(*set_db.cards._values)])
+        return render_template('set_viewer.html', set=set_db, export_text=export_text)
     else:
         return error(401,
                      "The set is either private or does not exist. If you own this set and bookmarked it, sign in and try again.")
@@ -363,6 +364,24 @@ def set_manager(set_id):
     else:
         return error(401,
                      "You are not the author of this set, so you can't edit it. If you do happen to be the owner, please try switching accounts.")
+
+
+@app.route('/set/<set_id>/export/')
+def export_file(set_id):
+    if '_' not in set_id and os.path.exists(f'db/sets/{set_id}.pyn'):
+        set_db = get_set_db(set_id)
+    else:
+        return error(401,
+                     "The set is either private or does not exist. If you own this set and bookmarked it, sign in and try again.")
+    if set_db.visibility() == 'public' or set_db.author() == session.get('id'):
+        if not os.path.exists(f"db/temp/set_{set_id}.pyn"):
+            set_db = get_set_db(set_id)
+            set_db.file.password = None
+            set_db.save(f"db/temp/set_{set_id}.pyn")
+        return send_from_directory('db/temp', 'set_' + set_id + '.pyn')
+    else:
+        return error(401,
+                     "The set is either private or does not exist. If you own this set and bookmarked it, sign in and try again.")
 
 
 @app.route('/set/<set_id>/', methods=("DELETE",))

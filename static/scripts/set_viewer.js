@@ -73,21 +73,35 @@ function card_forward() {
     }
 }
 
-function showDialog(dialog_name) {
+function showDialog(dialog_name, transition=true) {
+    let initial_duration
+    if (!transition) {
+        $("#popup-modal").addClass("notransition");
+    }
     $("#popup-modal").show();
     $(`#popup #${dialog_name}`).show();
     $("#popup-modal").addClass("active");
+    if (!transition) {
+        $("#popup-modal").removeClass("notransition");
+    }
 }
 
-function hideDialog() {
+function hideDialog(delay=true) {
     $("#popup-modal").removeClass("active");
-    setTimeout(function(){
+    if (delay) {
+        setTimeout(function(){
+            $("#popup-modal").hide();
+            $("#popup-modal #popup > div").hide();
+        }, 300)
+    }
+    else {
         $("#popup-modal").hide();
         $("#popup-modal #popup > div").hide();
-    }, 300)
+    }
 }
 
 $(document).ready(function(){
+    hideDialog(0);
     $('body').on("keydown", function(e){
         if (e.keyCode === 32) {
             e.preventDefault();

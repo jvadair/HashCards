@@ -53,7 +53,7 @@
                     <p class="chip" id="pin-set">{{ "Unpin" if set.id._val in get_user_db(session['id']).pinned._val else 'Pin' }}</p>
                 {% endif %}
                 <p class="chip" onclick="showDialog('share');">Share</p>
-                <p class="chip"><span class="material-symbols-outlined">more_horiz</span></p> {# TODO: Pop-up menu #}
+                <p class="chip" onclick="showDialog('more_options')"><span class="material-symbols-outlined">more_horiz</span></p>
                 {# IDEAS:
                     - Add to group
                 #}
@@ -81,26 +81,33 @@
             <h2>Share</h2>
             <div id="share-link-container">
                 <label for="share-link" style="display: none;">Shareable link</label>
-                <input type="text" id="share-link" disabled>
+                <input type="text" id="share-link" readonly>
                 <script>
                     $("#share-link").val("https://hashcards.net" + window.location.pathname);
                 </script>
-                <button class="btn-circle" onclick="navigator.clipboard.writeText($('#share-link').val());"><span class="material-symbols-outlined">content_copy</span></button>
+                <button class="btn-circle" onclick="$('#share-link').select();navigator.clipboard.writeText($('#share-link').val());"><span class="material-symbols-outlined">content_copy</span></button>
             </div>
         </div>
-        {# <div id="export"> #}
-            {#<h2>Export</h2>#}
-            {#<div>#}
-                {#<p>Download set file</p>#}
-                {#<a href="./export" class="btn">Download</a>#}
-            {#</div>#}
-        {#</div>#}
+         <div id="export">
+            <h2>Export</h2>
+            <div>
+                <label>Download set file</label>
+                <a href="./export" class="btn">Download</a>
+            </div>
+            <div>
+                <label for="export_text">Copy set text</label>
+                <div id="text_copier">
+                    <textarea id="export_text" onclick="$(this).select();">{{ export_text }}</textarea>
+                    <button class="btn-circle" onclick="$('#export_text').select();navigator.clipboard.writeText($('#export_text').val());"><span class="material-symbols-outlined">content_copy</span></button>
+                </div>
+            </div>
+        </div>
+        <div id="more_options">
+            <button class="btn" onclick="hideDialog(false);showDialog('export')">Export set</button>
+        </div>
         <button class="btn" id="done-button" onclick="hideDialog();">Done!</button>
     </div>
 </div>
-<script>
-    $("#popup-modal").hide();
-</script>
 {% include "components/footer.html" %}
 <script src="https://cdn.jsdelivr.net/gh/nnattawat/flip@master/dist/jquery.flip.min.js"></script>
 <script src="/static/scripts/set_viewer.min.js"></script>

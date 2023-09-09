@@ -237,6 +237,10 @@
     transition-timing-function: ease-out;
 }
 
+#popup-modal.notransition {
+    transition: none;
+}
+
 #popup-modal.active {
     opacity: 1;
 }
@@ -248,7 +252,8 @@
     align-items: center;
     justify-content: center;
     background-color: var(--overlay);
-    height: 30vh;
+    /*height: 30vh;*/
+    min-height: max-content;
     width: 75vw;
     padding: 2em;
     grid-gap: 1em;
@@ -258,6 +263,41 @@
 #popup #done-button {
     width: min-content;
     font-size: 1.1em;
+}
+
+#popup > div {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: min-content;
+}
+
+#popup #more_options button {
+    width: 90%;
+}
+
+#popup #export {
+    grid-gap: 2em;
+}
+
+#popup #export > div {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    grid-gap: 1em;
+}
+
+#popup #export #text_copier {
+    display: flex;
+    flex-direction: row;
+    grid-gap: 1em;
+}
+
+#popup #export #text_copier textarea {
+    background-color: var(--background);
+    color: var(--text);
 }
 
 #popup #share {
