@@ -88,7 +88,6 @@ function getNextQuestion() {
 
 function submit_answer_mcq(answer) {
     socket.emit("check_answer", {"set_id": set_id, "card_id": answer}, (response) => {
-        console.log(answer);
         if (response.status === 401) {
             window.alert("You have been signed out. To continue studying, please sign in again.");
         }

@@ -619,7 +619,6 @@ def pin_set():
 def import_set():
     data = request.form
     if session.get('id'):
-        print(repr(data['text']))
         set_id = hashcards.import_set(session['id'], data['text'])
         hashcards.modify_set(set_id, title=data['title'])
         return redirect(f'/set/{set_id}')
