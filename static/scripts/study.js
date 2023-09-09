@@ -7,9 +7,9 @@ let answered = false;
 $(document).ready(function() {
     socket = io.connect(location.protocol + "//" + document.domain + ':' + location.port);
     getNextQuestion();
-    $("#answer-buttons p").on("click", function (event) {
+    $("#answer-buttons p").on("click", function () {
         if (!answered) {
-            let id = $(event.target).attr('id');
+            let id = $(this).attr('id');  // Using 'this' = container, event.target can return the children
             submit_answer_mcq(id);
         }
     });
@@ -88,6 +88,7 @@ function getNextQuestion() {
 
 function submit_answer_mcq(answer) {
     socket.emit("check_answer", {"set_id": set_id, "card_id": answer}, (response) => {
+        console.log(answer);
         if (response.status === 401) {
             window.alert("You have been signed out. To continue studying, please sign in again.");
         }
