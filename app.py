@@ -490,9 +490,9 @@ def register():
     # noinspection PyUnreachableCode
     data = request.form
     preregister_list = Node('db/preregistered.pyn')
-    if data['email'] not in preregister_list._values:
-        return error(401,
-                     "Sorry, registration is not yet available. If you pre-registered, make sure to use the email you did so with.")
+    # if data['email'] not in preregister_list._values:
+    #     return error(401,
+    #                  "Sorry, registration is not yet available. If you pre-registered, make sure to use the email you did so with.")
     response = r_api.register(data['username'], data['email'], data['password'])
     if type(response) != str and 400 <= response[1] < 500:
         return error(*reversed(response))
@@ -888,9 +888,9 @@ def google_auth():
     email = token['userinfo']['email']
     preregister_list = Node('db/preregistered.pyn')
     username = email.split('@gmail.com')[0]  # This will look weird for non-gmails, but solves potential conflicts
-    if email not in preregister_list._values and username not in registration_api.socials.google._values:
-        return error(401,
-                     "Sorry, registration is not yet available. If you pre-registered, make sure to use the email you did so with.")
+    # if email not in preregister_list._values and username not in registration_api.socials.google._values:
+    #     return error(401,
+    #                  "Sorry, registration is not yet available. If you pre-registered, make sure to use the email you did so with.")
     was_created = r_api.handle_social_login(username, 'google', session)
     user_db = get_user_db(session['id'])
     if was_created:
