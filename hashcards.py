@@ -4,6 +4,7 @@ hashcards.py
 This file contains the essential backend functions needed to create and modify sets.
 It does not contain other essential high-level functions such as account management.
 """
+import shutil
 
 from pyntree import Node
 from cryptography.fernet import InvalidToken
@@ -262,12 +263,21 @@ def import_set(user_id, content, data_type='file'):
         file_id = str(uuid4())
         content.save(f'db/temp/{file_id}.tar.gz')
         os.mkdir(f'db/temp/{file_id}')
-        with tarfile.open(f'db/temp/{file_id}.tar.gz', 'r') as tar:
-            tar.extractall(f'db/temp/{file_id}')
+        try:
+            with tarfile.open(f'db/temp/{file_id}.tar.gz', 'r') as tar:
+                tar.extractall(f'db/temp/{file_id}')
+        except tarfile.ReadError:
+            return False
+        finally:
+            os.remove(f'db/temp/{file_id}.tar.gz')
         # Verify images and copy
+        if not os.path.exists(f'db/temp/{file_id}/set_data.pyn'):
+            shutil.rmtree(f'db/temp/{file_id}')
+            return False
         try:
             set_db = Node(f'db/temp/{file_id}/set_data.pyn', password=EXPORT_KEY)
         except InvalidToken:
+            shutil.rmtree(f'db/temp/{file_id}')
             return False
         images = {set_db.cards.get(card).id(): set_db.cards.get(card).image()
                   for card in set_db.cards._values
@@ -308,6 +318,7 @@ def import_set(user_id, content, data_type='file'):
         set_db.save(f"db/sets/{set_db.id()}.pyn", password=DATAKEY2)
         author.sets().append(set_db.id())
         author.save()
+        shutil.rmtree(f'db/temp/{file_id}')
         return set_db.id()
 
 

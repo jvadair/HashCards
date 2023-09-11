@@ -397,7 +397,7 @@ def export_set(set_id):
                 for img in images:
                     tar.add(f'static/images/card_images/{img}', arcname=f'img/{img}')
             os.remove(f"db/temp/set_data.pyn")
-        return send_from_directory('db/temp', f'set_{set_id}.hcset')
+        return send_from_directory('db/temp', f'set_{set_id}.hcset', download_name=f"{set_db.title() if set_db.title() else 'New set'}.hcset")
     return error(401,
                  "The set is either private or does not exist. If you own this set and bookmarked it, sign in and try again.")
 
@@ -646,7 +646,7 @@ def import_set():
         if set_id:
             return redirect(f'/set/{set_id}')
         else:
-            return error("400", "The file you provided is either corrupt or outdated.")
+            return error("400", "HashCards couldn't understand the file you uploaded. Check to make sure you uploaded the right file. The file you provided is either corrupt or outdated.")
     else:
         return error(401, "You must be logged in to import a set.")
 
