@@ -24,6 +24,7 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 import shutil
 from jinja2.exceptions import TemplateNotFound
 from process_photo import process_filename, process_photo
+import tarfile
 
 app = Flask(__name__)
 r_api = registration_api.API()
@@ -373,21 +374,26 @@ def set_manager(set_id):
 
 
 @app.route('/set/<set_id>/export/')
-def export_file(set_id):
+def export_set(set_id):
     if '_' not in set_id and os.path.exists(f'db/sets/{set_id}.pyn'):
         set_db = get_set_db(set_id)
     else:
         return error(401,
                      "The set is either private or does not exist. If you own this set and bookmarked it, sign in and try again.")
     if set_db.visibility() == 'public' or set_db.author() == session.get('id'):
-        if not os.path.exists(f"db/temp/set_{set_id}.pyn"):
+        if not os.path.exists(f"db/temp/set_{set_id}.hcset"):
             set_db = get_set_db(set_id)
             set_db.file.password = None
             set_db.save(f"db/temp/set_{set_id}.pyn")
-        return send_from_directory('db/temp', 'set_' + set_id + '.pyn')
-    else:
-        return error(401,
-                     "The set is either private or does not exist. If you own this set and bookmarked it, sign in and try again.")
+            images = [set_db.cards.get(card).image() + '.png' for card in set_db.cards._values if set_db.cards.get(card).image()]
+            with tarfile.open('db/temp/set_' + set_id + '.hcset', "w:gz") as tar:
+                tar.add(f"db/temp/set_{set_id}.pyn", arcname=f"set_{set_id}.pyn")
+                for img in images:
+                    tar.add(f'static/images/card_images/{img}', arcname=f'img/{img}')
+            os.remove(f"db/temp/set_{set_id}.pyn")
+        return send_from_directory('db/temp', 'set_' + set_id + '.hcset')
+    return error(401,
+                 "The set is either private or does not exist. If you own this set and bookmarked it, sign in and try again.")
 
 
 @app.route('/set/<set_id>/', methods=("DELETE",))
