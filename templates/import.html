@@ -9,7 +9,7 @@
 {% include "components/header.html" %}
 <main>
 <div id="import">
-    <form id="import-settings" method="post" action="/api/v1/set/import">
+    <form id="import-settings" method="post" action="/api/v1/set/import" enctype="multipart/form-data">
         <div id="info">
             <div class="button-header">
                 <a href=".."><span class="material-symbols-outlined">arrow_back</span></a>
@@ -21,7 +21,13 @@
         <input id="set-title" name="title" placeholder="Set title">
         <label for="set-text">Set text</label>
         <textarea id="set-text" placeholder="Paste your set here" name="text"></textarea>
-        <button type="submit" class="btn">Import</button>
+        <div id="import-option-buttons">
+            <button type="submit" class="btn"><span class="material-symbols-outlined">arrow_forward</span> Import from text</button>
+            <label class="btn" for="file">
+                <span class="material-symbols-outlined">upload_file</span> Import from file
+                <input name="file" id="file" type="file" style="display:none" onchange="$('#import-settings').submit();">
+            </label>
+        </div>
     </form>
 </div>
 </main>

@@ -6,13 +6,15 @@ It does not contain other essential high-level functions such as account managem
 """
 
 from pyntree import Node
-from encryption_assistant import get_group_db, get_set_db, get_org_db, get_user_db, DATAKEY2
+from cryptography.fernet import InvalidToken
+from encryption_assistant import get_group_db, get_set_db, get_org_db, get_user_db, DATAKEY2, EXPORT_KEY
 from datetime import datetime, timedelta
 from copy import copy
 from uuid import uuid4
 from thefuzz import process as fuzz_process
-from tools import sort_by_value
+from tools import sort_by_value, hash_file
 from random import shuffle
+import tarfile
 import os
 
 SET_TEMPLATE = {
@@ -241,20 +243,72 @@ def move_card(set_id, initial, final):
     set.save()
 
 
-def import_set(user_id, text):
-    # Splitting by \t first allows us to use rsplit with a max of 1 to preserve intentional newlines
-    text_split = text.split('\t')
-    text_split = [x.rsplit('\n', maxsplit=1) for x in text_split]
-    cards = []
-    for i in range(0,len(text_split)-1):
-        cards.append((text_split[i][-1], text_split[i+1][0]))  # The -1 ensures that the first item works too
-    set_id = create_set(user_id)
-    for card in cards:
+def import_set(user_id, content, data_type='file'):
+    if data_type == 'text':
+        # Splitting by \t first allows us to use rsplit with a max of 1 to preserve intentional newlines
+        text_split = content.split('\t')
+        text_split = [x.rsplit('\n', maxsplit=1) for x in text_split]
+        cards = []
+        for i in range(0,len(text_split)-1):
+            cards.append((text_split[i][-1], text_split[i+1][0]))  # The -1 ensures that the first item works too
+        set_id = create_set(user_id)
+        for card in cards:
+            try:
+                add_card(set_id, card[0], card[1])
+            except KeyError:
+                pass
+        return set_id
+    else:
+        file_id = str(uuid4())
+        content.save(f'db/temp/{file_id}.tar.gz')
+        os.mkdir(f'db/temp/{file_id}')
+        with tarfile.open(f'db/temp/{file_id}.tar.gz', 'r') as tar:
+            tar.extractall(f'db/temp/{file_id}')
+        # Verify images and copy
         try:
-            add_card(set_id, card[0], card[1])
-        except KeyError:
-            pass
-    return set_id
+            set_db = Node(f'db/temp/{file_id}/set_data.pyn', password=EXPORT_KEY)
+        except InvalidToken:
+            return False
+        images = {set_db.cards.get(card).id(): set_db.cards.get(card).image()
+                  for card in set_db.cards._values
+                  if set_db.cards.get(card).image()
+                  }
+        for image in images.items():
+            card = image[0]  # Card id
+            img = image[1]  # Image id
+            if set_db.image_hashes.get(img)() == hash_file(f'db/temp/{file_id}/img/{img}.png'):
+                new_image_id = str(uuid4())
+                set_db.cards.get(card).image = new_image_id
+                os.rename(f'db/temp/{file_id}/img/{img}.png', f'static/images/card_images/{new_image_id}.png')
+        SET_TEMPLATE = {
+            "id": None,
+            "title": "Unnamed set",
+            "description": "",
+            "author": None,
+            "crtime": None,
+            "mdtime": None,
+            "group": None,
+            "visibility": 'private',
+            "cards": {},
+            "card_order": [],
+            "subject": "",
+            "views": [],
+            "autosave": True,
+        }
+        author = get_user_db(user_id)
+        set_db.original_set = set_db.id()
+        set_db.id = str(uuid4())
+        set_db.author = author.id()
+        set_db.visibility = 'private'
+        set_db.crtime = datetime.now()
+        set_db.mdtime = datetime.now()
+        set_db.group = None
+        set_db.views = []
+        set_db.title = "(Imported) " + set_db.title()
+        set_db.save(f"db/sets/{set_db.id()}.pyn", password=DATAKEY2)
+        author.sets().append(set_db.id())
+        author.save()
+        return set_db.id()
 
 
 def is_author(set_id: str, author_id: str) -> bool:

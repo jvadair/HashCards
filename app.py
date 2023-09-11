@@ -4,12 +4,12 @@ import hashcards
 from registrationAPI import registration_api, sendmail
 from authlib.integrations.flask_client import OAuth
 from pyntree import Node
-from tools import is_valid_email
+from tools import is_valid_email, hash_file
 from datetime import datetime, timedelta
 from werkzeug.exceptions import HTTPException, NotFound
 import os
 import account_manager
-from encryption_assistant import get_user_db, get_set_db, get_org_db, get_group_db
+from encryption_assistant import get_user_db, get_set_db, get_org_db, get_group_db, EXPORT_KEY
 import time
 from sys import argv
 import atexit
@@ -25,10 +25,12 @@ import shutil
 from jinja2.exceptions import TemplateNotFound
 from process_photo import process_filename, process_photo
 import tarfile
+from cryptography.fernet import Fernet
 
 app = Flask(__name__)
 r_api = registration_api.API()
 config = Node('config.json')
+app.config['MAX_CONTENT_PATH'] = 100 * 1000000  # mb -> bytes
 DEBUG = True if os.getenv('DEBUG') == "1" else False
 if DEBUG:
     app.secret_key = b'hashcards is the best'
@@ -383,15 +385,19 @@ def export_set(set_id):
     if set_db.visibility() == 'public' or set_db.author() == session.get('id'):
         if not os.path.exists(f"db/temp/set_{set_id}.hcset"):
             set_db = get_set_db(set_id)
-            set_db.file.password = None
-            set_db.save(f"db/temp/set_{set_id}.pyn")
+            set_db.file.password = EXPORT_KEY
             images = [set_db.cards.get(card).image() + '.png' for card in set_db.cards._values if set_db.cards.get(card).image()]
-            with tarfile.open('db/temp/set_' + set_id + '.hcset', "w:gz") as tar:
-                tar.add(f"db/temp/set_{set_id}.pyn", arcname=f"set_{set_id}.pyn")
+            set_db.set('image_hashes', {})
+            for img in images:
+                img_hash = hash_file(f'static/images/card_images/{img}')
+                set_db.image_hashes.set(img.replace('.png', ''), img_hash)
+            set_db.save(f"db/temp/set_data.pyn")
+            with tarfile.open(f'db/temp/set_{set_id}.hcset', "w:gz") as tar:
+                tar.add(f"db/temp/set_data.pyn", arcname=f"set_data.pyn")
                 for img in images:
                     tar.add(f'static/images/card_images/{img}', arcname=f'img/{img}')
-            os.remove(f"db/temp/set_{set_id}.pyn")
-        return send_from_directory('db/temp', 'set_' + set_id + '.hcset')
+            os.remove(f"db/temp/set_data.pyn")
+        return send_from_directory('db/temp', f'set_{set_id}.hcset')
     return error(401,
                  "The set is either private or does not exist. If you own this set and bookmarked it, sign in and try again.")
 
@@ -630,10 +636,17 @@ def pin_set():
 @app.route('/api/v1/set/import/', methods=['POST'])
 def import_set():
     data = request.form
+    file = request.files.get('file')
     if session.get('id'):
-        set_id = hashcards.import_set(session['id'], data['text'])
-        hashcards.modify_set(set_id, title=data['title'])
-        return redirect(f'/set/{set_id}')
+        if file:
+            set_id = hashcards.import_set(session['id'], file, data_type='file')
+        else:
+            set_id = hashcards.import_set(session['id'], data['text'], data_type='text')
+            hashcards.modify_set(set_id, title=data['title'])
+        if set_id:
+            return redirect(f'/set/{set_id}')
+        else:
+            return error("400", "The file you provided is either corrupt or outdated.")
     else:
         return error(401, "You must be logged in to import a set.")
 

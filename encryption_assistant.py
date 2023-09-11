@@ -4,6 +4,7 @@ from os import getenv, path
 
 ENCRYPTION_KEY = getenv('RAPI_AUTHKEY')
 DATAKEY2 = getenv('HC_DATAKEY2')
+EXPORT_KEY = getenv("EXPORT_KEY")
 
 
 def get_user_db(user_id, autosave=False):
