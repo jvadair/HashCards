@@ -206,7 +206,7 @@
 
 #list-view table td:nth-of-type(2) div > * {
     margin: 0;
-    text-align: center;
+    text-align: left;
 }
 
 #list-view table td:nth-of-type(3) {
