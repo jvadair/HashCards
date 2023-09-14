@@ -36,6 +36,10 @@
     height: 100%;
 }
 
+#study #answer #answer-buttons span {
+	color: var(--text);
+}
+
 #study #answer #answer-buttons p.correct {
     background-color: rgba(var(--success-variable-opacity), .6);
 }
