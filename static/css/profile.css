@@ -12,14 +12,23 @@
     justify-content: center;
     align-items: center;
     grid-gap: 5em;
+    width: 100%;
+    max-width: calc(100vw - 10em);
 }
 
 #overview {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    width: 100%;
+    align-items: center;
     grid-gap: 25px;
+    width: calc(100% - 5em);
+}
+
+#overview #name {
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    word-break: break-word;
 }
 
 #overview #text {
@@ -28,6 +37,7 @@
     justify-content: center;
     align-items: center;
     text-align: left;
+    width: 100%;
 }
 
 #overview img#profile-picture {
@@ -52,7 +62,6 @@
 }
 
 #overview #stats, #overview #name {
-    width: 100%;
     margin: 0;
 }
 
@@ -141,6 +150,10 @@ section#members {
     #info {
         width: 100%;
     }
+    #overview img#profile-picture {
+        height: 3em;
+        width: 3em;
+    }
     #info section {
         border-radius: 0;
         background-color: var(--background);
@@ -150,5 +163,9 @@ section#members {
     }
     #member-box {
         grid-template-columns: repeat(3, 1fr);
+    }
+    #profile-header {
+        grid-gap: 1em;
+        max-width: initial;
     }
 }

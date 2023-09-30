@@ -9,6 +9,7 @@
     {% include "components/boilerplate.html" %}
     <title>{{ name }} | HashCards</title>
     <link rel="stylesheet" href="/static/css/profile.min.css">
+    <script src="/static/scripts/boxfit.min.js"></script>
 </head>
 <body>
 {% include "components/header.html" %}
@@ -26,6 +27,9 @@
                 {% endif %}
                 <div id="text">
                     <h1 id="name">{{ name }}</h1>
+                    <script>
+                        $("#name").boxfit();
+                    </script>
                     <div id="stats">
                         {% if type == 'user' %}
                             <h4 id="level">Lv. <span class="lv-num">{{ db.level._val }}</span></h4>
