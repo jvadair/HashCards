@@ -26,7 +26,6 @@ const showSaveDialog = async () => {
     $("#save-indicator").removeClass("animate");
 };
 
-let socket;
 $(document).ready(function() {
     $('#options input, #options textarea').on("keyup", function (event) {
         queue[event.target.name] = $(event.target).val();
@@ -37,7 +36,6 @@ $(document).ready(function() {
     $('#options input[type=checkbox]').on("change", function (event) {
         queue[event.target.name] = $(event.target).is(":checked");
     })
-    socket = io.connect(location.protocol + "//" + document.domain + ':' + location.port);
 });
 
 function save(exit=false, manual=false) {

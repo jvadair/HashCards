@@ -25,3 +25,10 @@
         document.documentElement.style.setProperty('--scrollbar-width', (window.innerWidth - document.documentElement.clientWidth) + "px");
     });
 </script>
+{# Connect to socketio #}
+<script>
+    let socket;
+    $(document).ready(function() {
+        socket = io.connect(location.protocol + "//" + document.domain + ':' + location.port);
+    });
+</script>

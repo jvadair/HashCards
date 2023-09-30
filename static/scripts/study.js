@@ -1,11 +1,9 @@
 let set_id = window.location.pathname.split('/')[2];
-let options
-let socket;
+let options;
 let type;
 let answered = false;
 
 $(document).ready(function() {
-    socket = io.connect(location.protocol + "//" + document.domain + ':' + location.port);
     getNextQuestion();
     $("#answer-buttons p").on("click", function () {
         if (!answered) {

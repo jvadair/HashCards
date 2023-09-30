@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include "components/boilerplate.html" %}
+    <title>Admin panel | HashCards</title>
+</head>
+<body>
+{% include "components/header.html" %}
+<main>
+    <div id="admin" style="display: flex; flex-direction: column; width: 100%; padding: 0 1em;">
+        <h3>User count: {{ num_users }}</h3>
+        <h3>Connected clients: {{ num_connected }} pages open</h3>
+        <h3>Sets created: {{ num_sets }}</h3>
+    </div>
+</main>
+{% include "components/footer.html" %}
+</body>
+</html>

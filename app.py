@@ -30,6 +30,7 @@ from cryptography.fernet import Fernet
 app = Flask(__name__)
 r_api = registration_api.API()
 config = Node('config.json')
+connected_clients = 0
 app.config['MAX_CONTENT_PATH'] = 100 * 1000000  # mb -> bytes
 DEBUG = True if os.getenv('DEBUG') == "1" else False
 if DEBUG:
@@ -214,6 +215,16 @@ def index():
         return render_template('dash.html', user=get_user_db(session['id']))
     else:
         return render_template('landing.html', num_preregistered=len(Node('db/preregistered.pyn')._values))
+
+
+@app.route('/admin')
+def admin_panel():
+    if session.get('id') == "4277857a-3546-4500-9ade-6c9d6dca51b7" or DEBUG:
+        num_sets = len([item for item in os.listdir('db/sets') if not item.startswith('_')])
+        num_users = len([item for item in os.listdir('db/users') if not item.startswith('_')])
+        return render_template('admin.html', num_sets=num_sets, num_users=num_users, num_connected=connected_clients)
+    else:
+        return error(404, "The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.")
 
 
 @app.route('/about')
@@ -652,6 +663,18 @@ def import_set():
 
 # Sockets
 
+
+# Connection count
+@socketio.on("connect")
+def connect():
+    global connected_clients
+    connected_clients += 1
+
+
+@socketio.on("disconnect")
+def disconnect():
+    global connected_clients
+    connected_clients -= 1
 
 # Set saving
 @socketio.on("update_set")
