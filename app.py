@@ -381,7 +381,7 @@ def set_viewer(set_id):
 @app.route('/set/<set_id>/edit/', methods=("GET",))
 def set_manager(set_id):
     if hashcards.is_author(set_id, session.get('id')):
-        return render_template('set_manager.html', set=get_set_db(set_id))
+        return render_template('set_manager.html', set=get_set_db(set_id), subjects=config.subjects())
     else:
         return error(401,
                      "You are not the author of this set, so you can't edit it. If you do happen to be the owner, please try switching accounts.")
