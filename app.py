@@ -183,6 +183,10 @@ if 'accupdate' in argv:
 
 
 # Background workers
+def update_frontend():
+    os.system('git pull')
+
+
 def clear_files(age=0, temporary=True, takeout=True):
     """
     :param takeout: Delete takeout data
@@ -992,6 +996,7 @@ if __name__ == '__main__':
     scheduler = BackgroundScheduler()
     scheduler.add_job(func=lambda: registration_api.clear_unverified_accounts(age=24*60), trigger="interval", hours=1)
     scheduler.add_job(func=lambda: clear_files(age=7 * 24 * 60), trigger="interval", seconds=1)
+    scheduler.add_job(func=update_frontend, trigger="interval", hours=1)
     scheduler.start()
     # Run
     if DEBUG:
