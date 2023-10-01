@@ -104,5 +104,8 @@
   "SMTP_SERVER": "smtppro.zoho.com",
   "SMTP_EMAIL": "hello@hashcards.net",
   "SMTP_PORT": "465",
-  "SMTP_ENVPASS": "HC_SMTPPWD"
+  "SMTP_ENVPASS": "HC_SMTPPWD",
+  "ADMIN": [
+    "4277857a-3546-4500-9ade-6c9d6dca51b7"
+  ]
 }

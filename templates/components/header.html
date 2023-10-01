@@ -11,11 +11,11 @@
             <input id="header-search-query" class="query" name="q" type="text" placeholder="Search">
             <button type="submit"><span class="material-symbols-outlined">explore</span></button>
         </form>
-{#        {% if session.get('id') == "4277857a-3546-4500-9ade-6c9d6dca51b7" %}#}
+        {% if session.get('id') in ADMIN %}
             <div class="admin-btn" onclick="window.location.href = '/admin';" style="display: flex; justify-content: center; cursor: pointer">
                 <span style="scale: 1.5;" class="material-symbols-outlined">build_circle</span>
             </div>
-{#        {% endif %}#}
+        {% endif %}
         <script>
         $(document).ready(function() {
             $("form.search_bar input").on("keyup keydown", function () {

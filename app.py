@@ -74,6 +74,7 @@ app.jinja_env.globals.update(
     len=len,
     Node=Node,
     DEBUG=DEBUG,
+    ADMIN=config.ADMIN(),
     get_user_db=get_user_db,
     get_set_db=get_set_db,
     get_group_db=get_group_db,
@@ -219,7 +220,7 @@ def index():
 
 @app.route('/admin')
 def admin_panel():
-    if session.get('id') == "4277857a-3546-4500-9ade-6c9d6dca51b7" or DEBUG:
+    if session.get('id') in config.ADMIN() or DEBUG:
         num_sets = len([item for item in os.listdir('db/sets') if not item.startswith('_')])
         num_users = len([item for item in os.listdir('db/users') if not item.startswith('_')])
         return render_template('admin.html', num_sets=num_sets, num_users=num_users, num_connected=connected_clients)
