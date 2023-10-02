@@ -32,6 +32,7 @@ r_api = registration_api.API()
 config = Node('config.json')
 connected_clients = 0
 app.config['MAX_CONTENT_PATH'] = 100 * 1000000  # mb -> bytes
+app.config['TEMPLATES_AUTO_RELOAD'] = True
 DEBUG = True if os.getenv('DEBUG') == "1" else False
 if DEBUG:
     app.secret_key = b'hashcards is the best'
