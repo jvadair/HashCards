@@ -16,9 +16,9 @@
             </div>
             <form id="options">
                 <label for="title">Title</label>
-                <input id="title" name="title" type="text" placeholder="Title" value="{{ set.title._val }}">
+                <input autocomplete="off" id="title" name="title" type="text" placeholder="Title" value="{{ set.title._val }}">
                 <label for="description">Description</label>
-                <textarea id="description" name="description">{{ set.description._val }}</textarea>
+                <textarea autocomplete="off" id="description" name="description">{{ set.description._val }}</textarea>
                 <label for="subject">Subject</label>
                 <select id="subject" name="subject">
                     <option value="">None</option>
