@@ -1,7 +1,23 @@
 # HashCards
-HashCards is a flashcard system designed to engage users and remedy some of their biggest complaints with other platforms
+<b>Flashcards, sans flashy.</b>
 
-## Getting started
-1. Clone [this repository](https://github.com/jvadair/registrationAPI)
-2. `mkdir db; mkdir db/users; mkdir db/sets`
-3. `mv secrets_template.json secrets.json` and modify
+## Table of Contents
+- [About](https://github.com/jvadair/HashCards#about)
+- [Features](https://github.com/jvadair/HashCards#features)
+
+## About
+HashCards is an online flashcard service without the ads, paywalls, or outdated user interface. It was created to address some of the major issues with online flashcard services today.
+
+## Features
+- Create and share sets
+- Add images to cards
+- Autosave
+- Import from other platforms
+- Study mode
+- Search & Explore
+- OAuth and traditional verified-email login options
+- Account management & privacy features
+- Export sets
+- Pin sets
+- Recent sets
+- User experience and leveling system
