@@ -79,8 +79,8 @@
                 </section>
             {% endif %}
             {% if type in ('user', 'group') %}
-                <section id="sets"> {# TODO: Make this work with real user-owned sets & test - then do the same for groups #}
-                    <h2>Public sets</h2>
+                <section id="sets">
+                    <h2>Public sets ({{ len(db.sets._val) }})</h2>
                     {% for set in db.sets._val %}
                         {% set set = get_set_db(set) %}
                         {% if set.visibility._val == 'public' %}
