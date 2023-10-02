@@ -307,9 +307,13 @@ def profile(target_id):
     if '_' in target_id:
         pass  # Protects map files
     elif os.path.exists(f'db/users/{target_id}.pyn'):
-        return render_template('profile.html', db=get_user_db(target_id), type='user')
+        db = get_user_db(target_id)
+        num_public = len([s for s in db.sets() if s in hashcards.set_map.title._values])
+        return render_template('profile.html', db=db, type='user', num_public=num_public)
     elif os.path.exists(f'db/groups/{target_id}'):
-        return render_template('profile.html', db=get_group_db(target_id), type='group')
+        db = get_group_db(target_id)
+        num_public = len([s for s in db.sets() if s in hashcards.set_map.title._values])
+        return render_template('profile.html', db=db, type='group', num_public=num_public)
     elif os.path.exists(f'db/orgs/{target_id}'):
         return render_template('profile.html', db=get_org_db(target_id), type='org')
     return error(404, "There are no users, groups, or organizations with that ID.")
