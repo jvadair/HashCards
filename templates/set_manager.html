@@ -90,8 +90,8 @@
                     <div class="card-body">
                         <div class="card-content">
                             <form>
-                                <label>Front<input type="text" class="card-text card-text-front" value="{{ card.front._val }}"></label>
-                                <label>Back&nbsp;<input type="text" class="card-text card-text-back" value="{{ card.back._val }}"></label>
+                                <label>Front<input type="text" autocomplete="off" class="card-text card-text-front" value="{{ card.front._val }}"></label>
+                                <label>Back&nbsp;<input type="text" autocomplete="off" class="card-text card-text-back" value="{{ card.back._val }}"></label>
                             </form>
                         </div>
                         <form class="card-image" {% if card.image._val %}style='background-image: url("/static/images/card_images/{{ card.image._val }}.png");'{% endif %}>

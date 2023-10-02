@@ -143,8 +143,8 @@ function add_card() {
             <div class="card-body">
                 <div class="card-content">
                     <form>
-                        <label>Front<input type="text" class="card-text card-text-front" value=""></label>
-                        <label>Back&nbsp;<input type="text" class="card-text card-text-back" value=""></label>
+                        <label>Front<input type="text" autocomplete="off" class="card-text card-text-front" value=""></label>
+                        <label>Back&nbsp;<input type="text" autocomplete="off" class="card-text card-text-back" value=""></label>
                     </form>
                 </div>
                 <form class="card-image">
