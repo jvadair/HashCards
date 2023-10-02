@@ -70,17 +70,24 @@
     width: 100%;
 }
 
-#options-container #setmanager-top-container {
+#options-container #setmanager-jump-container {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
     justify-content: flex-end;
+    grid-gap: 10px;
 }
 
-#options-container #setmanager-top {
+#options-container #jump-buttons a {
     padding: 1em;
-    position: sticky;
+}
+
+#options-container #jump-buttons {
     bottom: 1em;
+    position: sticky;
+    display: flex;
+    flex-direction: column;
+    grid-gap: .5em;
 }
 
 
@@ -346,7 +353,7 @@
         font-size: 1.5em;
         height: min-content;
     }
-    #options-container #setmanager-top-container {
+    #options-container #setmanager-jump-container {
         display: none;
     }
     #mobile_save_btn {

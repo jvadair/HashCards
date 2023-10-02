@@ -75,8 +75,11 @@
                 <input type="submit" style="display: none;">
             </form>
             <script src="/static/scripts/dropdown.min.js"></script>
-            <div id="setmanager-top-container">
-                <a class="chip" id="setmanager-top" href="#top"><span class="material-symbols-outlined">move_up</span> Back to top</a>
+            <div id="setmanager-jump-container">
+                <div id="jump-buttons">
+                    <a class="chip" id="setmanager-top" href="#top"><span class="material-symbols-outlined">move_up</span> Back to top</a>
+                    <a class="chip" id="setmanager-bottom" href="#bottom"><span class="material-symbols-outlined">move_down</span> Jump to bottom</a>
+                </div>
             </div>
         </div>
         <div id="card-container">
@@ -116,6 +119,7 @@
                     </div>
                 </div>
             {% endfor %}
+            <a id="bottom"></a>
             <div class="card new-card" id="new_card" onclick="add_card()">
                 <p class="cutout">+ New card</p>
             </div>
