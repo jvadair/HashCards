@@ -41,9 +41,12 @@
     <div id="advance">
         <h2 id="current-round">Round <span>{{ round }}</span></h2>
         <p class="btn" id="btn-skip" onclick="getNextQuestion()"><span class="material-symbols-outlined">cancel</span>&nbsp;Skip</p>
-        <p class="btn" id="btn-next" onclick="getNextQuestion()"><span class="material-symbols-outlined">arrow_forward</span>&nbsp;Next</p>
+        <div id="advance-ready">
+            <p>Press any key to continue</p>
+            <p class="btn" id="btn-next" onclick="getNextQuestion()"><span class="material-symbols-outlined">arrow_forward</span>&nbsp;Next</p>
+        </div>
         <script>
-            $("#btn-next").hide();
+            $("#advance-ready").hide();
             $("#study").hide();
         </script>
     </div>

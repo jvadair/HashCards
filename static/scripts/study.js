@@ -36,7 +36,7 @@ function getNextQuestion() {
         }
         $("#loading").hide();
         $("#btn-skip").show();
-        $("#btn-next").hide();
+        $("#advance-ready").hide();
         $("#question h3").text(data["question"]);
         $("#current-round span").text(response["round"]);
         if (data["side"] === "back") {
@@ -79,6 +79,7 @@ function getNextQuestion() {
             $("#correct-answer").hide();
         }
         $("#study").show();
+        $("#answer-prompt input").focus();
         answered = false;
     });
 }
@@ -101,7 +102,7 @@ function submit_answer_mcq(answer) {
         $(`#answer-buttons #${correct_answer} span`).text("check_circle");
         $(`#answer-buttons #${correct_answer}`).addClass("correct");
         $("#btn-skip").hide();
-        $("#btn-next").show();
+        $("#advance-ready").show();
     });
     answered = true;
 }
@@ -127,7 +128,25 @@ function submit_answer_prompt(answer) {
         }
         $("#correct-answer").show();
         $("#btn-skip").hide();
-        $("#btn-next").show();
+        $("#advance-ready").show();
     });
     answered = true;
 }
+
+
+// Submit via button
+$(document).ready(function() {
+    $('body').on("keydown", function (e) {
+        if (answered) {
+            e.preventDefault();
+            getNextQuestion();
+        }
+        else if (49 <= e.keyCode <= 52) {
+            if (type === 'mc') {
+                e.preventDefault();
+                let id = $("#answer-buttons p").eq(e.keyCode - 49).prop("id");
+                submit_answer_mcq(id);
+            }
+        }
+    });
+});
