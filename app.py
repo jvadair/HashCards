@@ -228,7 +228,8 @@ def admin_panel():
     if session.get('id') in config.ADMIN() or DEBUG:
         num_sets = len([item for item in os.listdir('db/sets') if not item.startswith('_')])
         num_users = len([item for item in os.listdir('db/users') if not item.startswith('_')])
-        return render_template('admin.html', num_sets=num_sets, num_users=num_users, num_connected=connected_clients)
+        num_public = len(hashcards.set_map.title._values)
+        return render_template('admin.html', num_sets=num_sets, num_users=num_users, num_connected=connected_clients, num_public=num_public)
     else:
         return error(404, "The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.")
 
