@@ -4,7 +4,7 @@ import hashcards
 from registrationAPI import registration_api, sendmail
 from authlib.integrations.flask_client import OAuth
 from pyntree import Node
-from tools import is_valid_email, hash_file
+from tools import is_valid_email, hash_file, listdir_recursive, get_data_filenames
 from datetime import datetime, timedelta
 from werkzeug.exceptions import HTTPException, NotFound
 import os
@@ -26,8 +26,10 @@ from jinja2.exceptions import TemplateNotFound
 from process_photo import process_filename, process_photo
 import tarfile
 from cryptography.fernet import Fernet
+from flask_sitemapper import Sitemapper
 
 app = Flask(__name__)
+sitemapper = Sitemapper(app)
 r_api = registration_api.API()
 config = Node('config.json')
 connected_clients = 0
@@ -213,7 +215,7 @@ def clear_files(age=0, temporary=True, takeout=True):
 
 # Front-end routes
 
-
+@sitemapper.include()
 @app.route('/')
 def index():
     if session.get('id'):
@@ -234,11 +236,18 @@ def admin_panel():
         return error(404, "The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.")
 
 
+@app.route("/sitemap.xml")
+def sitemap():
+  return sitemapper.generate()
+
+
+@sitemapper.include()
 @app.route('/about')
 def about():
     return render_template('about.html')
 
 
+@sitemapper.include(url_variables={"path": listdir_recursive('templates/learn')})
 @app.route('/learn/<path:path>')
 def teach_features(path):
     try:
@@ -247,6 +256,7 @@ def teach_features(path):
         return error(404, "There are no help articles with that name. Check the URL and try again.")
 
 
+@sitemapper.include(priority=0.1)
 @app.route('/account')
 def account_settings():
     if session.get('id'):
@@ -270,11 +280,13 @@ def account_settings():
 #     )
 #
 
+@sitemapper.include(priority=.4)
 @app.route('/sets')
 def library():
     return render_template("library.html", user=get_user_db(session.get('id')))
 
 
+@sitemapper.include()
 @app.route('/import')
 def import_page():
     return render_template("import.html")
@@ -293,6 +305,7 @@ def import_page():
 #
 
 
+@sitemapper.include()
 @app.route('/search')
 def search():
     query = request.args.get('q')
@@ -303,6 +316,7 @@ def search():
         return render_template('search.html', query='', explore=hashcards.explore())
 
 
+@sitemapper.include(url_variables={"target_id": get_data_filenames('db/users') + get_data_filenames('db/groups') + get_data_filenames('db/orgs')})
 @app.route('/<target_id>/profile/')
 def profile(target_id):
     if '_' in target_id:
@@ -340,11 +354,13 @@ def profile(target_id):
 #     return render_template('collective-creation.html', type='group')
 
 
+@sitemapper.include()
 @app.route('/login', methods=['GET'])
 def login_page():
     return render_template('auth.html', auth_method='login')
 
 
+@sitemapper.include()
 @app.route('/register')
 def register_page():
     return render_template('auth.html', auth_method='register', email=request.args.get('email'))
@@ -358,12 +374,14 @@ def takeout(takeout_id):
         return error(400, "This data takeout link has expired or was never created.")
 
 
+@sitemapper.include(priority=.3)
 @app.route('/new')
 def new_set():
     set_id = hashcards.create_set(session['id'])
     return redirect(f'/set/{set_id}/edit')
 
 
+@sitemapper.include(url_variables={"set_id": get_data_filenames('db/sets')})
 @app.route('/set/<set_id>/', methods=("GET",))
 def set_viewer(set_id):
     if '_' not in set_id and os.path.exists(f'db/sets/{set_id}.pyn'):

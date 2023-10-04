@@ -1,5 +1,6 @@
 from string import ascii_letters, digits
 from blake3 import blake3
+import os
 
 
 def is_valid_email(email: str) -> bool:
@@ -29,3 +30,24 @@ def hash_file(filename):
             file_hash.update(chunk)
             chunk = file.read(8192)
     return file_hash.hexdigest()
+
+
+def listdir_recursive(directory, remove_extension=False):
+    file_paths = []
+    for root, directories, files in os.walk(directory):
+        for file in files:
+            file_path = os.path.join(root, file)
+            file_path = file_path.replace(directory + '/', '', 1)
+            if remove_extension:
+                file_path = '.'.join(file_path.split('.')[:-1])
+            file_paths.append(file_path)
+    return file_paths
+
+
+def get_data_filenames(directory, preserve_extension=False):
+    """
+    Strips the mapfiles out of the directory listing
+    :param directory:
+    :return:
+    """
+    return [file if preserve_extension else '.'.join(file.split('.')[:-1]) for file in os.listdir(directory) if not file.startswith('_')]
