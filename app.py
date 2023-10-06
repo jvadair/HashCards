@@ -39,7 +39,7 @@ DEBUG = True if os.getenv('DEBUG') == "1" else False
 if DEBUG:
     app.secret_key = b'hashcards is the best'
 else:
-    app.secret_key = os.urandom(32)
+    app.secret_key = os.getenv('FLASK_KEY')
 SCHEME = 'http' if DEBUG else 'https'
 LOGIN_REQUIRED = (
     "/new",
