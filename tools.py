@@ -1,6 +1,7 @@
 from string import ascii_letters, digits
 from blake3 import blake3
 import os
+import html
 
 
 def is_valid_email(email: str) -> bool:
@@ -50,4 +51,36 @@ def get_data_filenames(directory, preserve_extension=False):
     :param directory:
     :return:
     """
-    return [file if preserve_extension else '.'.join(file.split('.')[:-1]) for file in os.listdir(directory) if not file.startswith('_')]
+    return [file if preserve_extension else '.'.join(file.split('.')[:-1]) for file in os.listdir(directory) if
+            not file.startswith('_')]
+
+
+def metatags(title="HashCards", description="Create, find, share, and study flashcards for free without limits.",
+             image=None, path=None, card="summary_large_image", type="website"):
+    title = html.escape(title)
+    description = html.escape(description)
+    image = html.escape(image)
+    path = html.escape(path)
+    card = html.escape(card)
+    type = html.escape(type)
+
+    rendered = [
+        # Primary
+        f"""<meta name="title" content="{title}{' | HashCards' if title != 'HashCards' else ''}" />""",
+        f"""<meta name="description" content="{description}" />""",
+
+        # Open graph / Facebook
+        f"""<meta property="og:type" content="{type}" />""",
+        f"""<meta property="og:url" content="https://hashcards.net{path}" />""" if path is not None else '',
+        f"""<meta property="og:title" content="{title}" />""",
+        f"""<meta property="og:description" content="{description}" />""",
+        f"""<meta property="og:image" content="https://hashcards.net/static/images/{image}" />""" if image else '',
+
+        # Twitter / X
+        f"""<meta property="twitter:card" content="{card}" />""",
+        f"""<meta property="twitter:url" content="https://hashcards.net{path}" />""" if path is not None else '',
+        f"""<meta property="twitter:title" content="{title}" />""",
+        f"""<meta property="twitter:description" content="{description}" />""",
+        f"""<meta property="twitter:image" content="https://hashcards.net/static/images/{image}" />""" if image else ''
+    ]
+    return '\n'.join(rendered)

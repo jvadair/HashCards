@@ -5,23 +5,7 @@
     <title>{{ set.title._val if set.title._val else 'New set' }} | HashCards</title>
     <link rel="stylesheet" href="/static/css/set-viewer.min.css">
     <script src="/static/scripts/boxfit.min.js"></script>
-    <!-- Primary Meta Tags -->
-    <meta name="title" content="{{ set.title._val if set.title._val else 'New set' }} | HashCards" />
-    <meta name="description" content="{{ set.description._val }}" />
-
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://hashcards.net/set/{{ set.id._val }}" />
-    <meta property="og:title" content="{{ set.title._val if set.title._val else 'New set' }} | HashCards" />
-    <meta property="og:description" content="{{ set.description._val if set.description._val else 'No description provided' }}" />
-    <meta property="og:image" content="https://hashcards.net/static/images/logo.png" />
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://hashcards.net/set/{{ set.id._val }}" />
-    <meta property="twitter:title" content="{{ set.title._val if set.title._val else 'New set' }} | HashCards" />
-    <meta property="twitter:description" content="{{ set.description._val if set.description._val else 'No description provided' }}" />
-    <meta property="twitter:image" content="https://hashcards.net/static/images/logo.png" />
+    {{ metatags(title=set.title._val if set.title._val else 'New set', description=set.description._val if set.description._val else 'No description provided.', image="logo.png", path="/set/" + set.id._val) | safe }}
 </head>
 <body>
 {% include "components/header.html" %}

@@ -4,7 +4,7 @@ import hashcards
 from registrationAPI import registration_api, sendmail
 from authlib.integrations.flask_client import OAuth
 from pyntree import Node
-from tools import is_valid_email, hash_file, listdir_recursive, get_data_filenames
+from tools import is_valid_email, hash_file, listdir_recursive, get_data_filenames, metatags
 from datetime import datetime, timedelta
 from werkzeug.exceptions import HTTPException, NotFound
 import os
@@ -85,6 +85,7 @@ app.jinja_env.globals.update(
     max=max,
     bool=bool,
     time=time,
+    metatags=metatags,
 )
 
 # Tell Flask it is behind a proxy
