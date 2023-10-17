@@ -29,9 +29,9 @@
             {% include "components/set_card.html" %}
         {% endfor %}
         <script>
-            $('#library .set-container').sort(function(a, b) {
+            $('.multi-set .set-container').sort(function(a, b) {
                 return $(b).data('timestamp') - $(a).data('timestamp');
-            }).appendTo('#library');
+            }).appendTo('.multi-set');
         </script>
     </div>
 {% else %}
