@@ -1,5 +1,5 @@
-# HashCards
-<b>Flashcards, sans flashy.</b>
+![HashCards banner](static/images/cover_image_nobg.png)
+# Flashcards, sans flashy.
 
 ## Table of Contents
 - [About](https://github.com/jvadair/HashCards#about)
