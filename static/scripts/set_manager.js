@@ -134,8 +134,7 @@ function delete_card(card_id) {
 
 function add_card() {
     let temporary_id = 'temp' + uuidv4();
-    $("#card-container").append(
-        `<div class="card" data-card-id="${temporary_id}">
+    $(`<div class="card" data-card-id="${temporary_id}">
             <div class="card-header">
                 <p><span class="material-symbols-outlined drag-handle">drag_handle</span></p>
                 <p><span class="material-symbols-outlined delete-btn">delete</span></p>
@@ -162,8 +161,7 @@ function add_card() {
                 </form>
             </div>
         </div>`
-    );
-    $(`.card[data-card-id='${temporary_id}']`).insertBefore('#new_card');
+    ).insertBefore('#bottom');
     $(`.card[data-card-id='${temporary_id}']`)[0].scrollIntoView({
         behavior: 'smooth'
     });
