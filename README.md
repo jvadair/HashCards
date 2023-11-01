@@ -50,12 +50,13 @@ Here's a list of the technology HashCards runs on. Let me know if it's missing a
 3. [Flask](https://github.com/pallets/flask)
 4. [Flask-SocketIO](https://github.com/miguelgrinberg/flask-socketio)
 5. [SocketIO](https://github.com/socketio/socket.io)
-6. [Authlib](https://github.com/lepture/authlib)
-7. [APScheduler](https://github.com/agronholm/apscheduler)
-8. [TheFuzz](https://github.com/seatgeek/thefuzz)
-9. [cryptography](https://github.com/pyca/cryptography/)
-10. [flask-sitemapper](https://github.com/h-janes/flask-sitemapper)
-11. [pathvalidate](https://github.com/thombashi/pathvalidate)
+6. [jQuery](https://github.com/jquery/jquery)
+7. [Authlib](https://github.com/lepture/authlib)
+8. [APScheduler](https://github.com/agronholm/apscheduler)
+9. [TheFuzz](https://github.com/seatgeek/thefuzz)
+10. [cryptography](https://github.com/pyca/cryptography/)
+11. [flask-sitemapper](https://github.com/h-janes/flask-sitemapper)
+12. [pathvalidate](https://github.com/thombashi/pathvalidate)
 
 ## Self-hosting
 HashCards was not designed to be self-hosted. If you are looking to self-host a copy of HashCards, please feel free to [reach out to me](#support-and-feedback).
