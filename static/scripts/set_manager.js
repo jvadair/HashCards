@@ -5,9 +5,9 @@ function uuidv4() {
   );
 }
 
-// --- Autosave  TODO: Make everything a single queue and socket listener, and then create multiple functions in app.py
+// --- Autosave
 
-let queue = {};
+let queue = [];
 let card_queue = {};
 let set_id = window.location.pathname.split('/')[2];
 let card_being_dragged = "";
@@ -28,13 +28,13 @@ const showSaveDialog = async () => {
 
 $(document).ready(function() {
     $('#options input, #options textarea').on("keyup", function (event) {
-        queue[event.target.name] = $(event.target).val();
+        queue.push([event.target.name, $(event.target).val()]);
     });
     $('#options select').on("change", function (event) {
-        queue[event.target.name] = $(event.target).val();
+        queue.push([event.target.name, $(event.target).val()]);
     });
     $('#options input[type=checkbox]').on("change", function (event) {
-        queue[event.target.name] = $(event.target).is(":checked");
+        queue.push([event.target.name, $(event.target).is(":checked")]);
     })
 });
 
@@ -44,46 +44,55 @@ function save(exit=false, manual=false) {
     let finished_cards = false;
     let sent_data = false;
     let errors = false;
-    if (!$.isEmptyObject(queue)) {
-        let data = {...queue}  // Copy the queue
+    if (!$.isEmptyObject(card_queue)) {
+        // for (let card_id in card_queue) {
+        let data = {...card_queue};
         data['set_id'] = set_id;
-        socket.emit("update_set", data, (response) => {
+            // data['card_id'] = card_id
+        //     socket.emit("update_card", data, (response) => {
+        //         if (response === 'success') {
+        //             finished_cards = true;
+        //             sent_data = true;
+        //             card_queue = {};
+        //         }
+        //         else {
+        //             errors = true;
+        //         }
+        //     });
+        // }
+        socket.emit("update_cards", data, (response) => {
             if (response === 'success') {
-                finished_set = true;
+                finished_cards = true;
                 sent_data = true;
-                queue = {};
-            }
-            else {
-                errors = true;
+                card_queue = {};
             }
         });
     }
-    else { finished_set = true; }
-    if (!$.isEmptyObject(card_queue)) {
-        for (let card_id in card_queue) {
-            let data = {...card_queue[card_id]};
-            data['set_id'] = set_id;
-            data['card_id'] = card_id
-            socket.emit("update_card", data, (response) => {
+    else { finished_cards = true; }
+    let interval
+    interval = setInterval(function save_process() {
+        if (errors) {
+            window.alert('There was an issue saving this set. Try again, or make a copy of your work and reload the page.')
+            clearInterval(interval);
+        }
+        else if (finished_cards) {
+            finished_cards = false;
+            if (!$.isEmptyObject(queue)) {
+            let data = {...queue}  // Copy the queue
+            socket.emit("update_set", [set_id, data], (response) => {
                 if (response === 'success') {
-                    finished_cards = true;
+                    finished_set = true;
                     sent_data = true;
-                    card_queue = {};
+                    queue = [];
                 }
                 else {
                     errors = true;
                 }
             });
+            }
+            else { finished_set = true; }
         }
-    }
-    else { finished_cards = true; }
-    let interval
-    interval = setInterval(function () {
-        if (errors) {
-            window.alert('There was an issue saving this set. Try again, or make a copy of your work and reload the page.')
-            clearInterval(interval);
-        }
-        else if (finished_set && finished_cards) {
+        else if (finished_set) {
             if (exit) {
                 window.location.href = '..';
             }
@@ -92,7 +101,8 @@ function save(exit=false, manual=false) {
                 showSaveDialog();
             }
         }
-    }, 200)
+        return save_process
+    }(), 200)
 }
 
 setInterval(function() {
@@ -121,20 +131,13 @@ function delete_image(e) {
 
 function delete_card(card_id) {
     $(`.card[data-card-id="${card_id}"]`).hide();
-    socket.emit("delete_card", {"set_id": set_id, "card_id": card_id}, (response) => {
-        if (response === 'success') {
-            $(`.card[data-card-id="${card_id}"]`).remove();
-        }
-        else {
-           $(`.card[data-card-id="${card_id}"]`).show();
-           window.alert('Failed to delete card - try again or attempt to save and reload');
-        }
-    });
+    $(`.card[data-card-id="${card_id}"]`).remove();
+    queue.push(['delete_card', card_id]);
 }
 
 function add_card() {
-    let temporary_id = 'temp' + uuidv4();
-    $(`<div class="card" data-card-id="${temporary_id}">
+    let card_id = uuidv4();
+    $(`<div class="card" data-card-id="${card_id}">
             <div class="card-header">
                 <p><span class="material-symbols-outlined drag-handle">drag_handle</span></p>
                 <p><span class="material-symbols-outlined delete-btn">delete</span></p>
@@ -162,21 +165,11 @@ function add_card() {
             </div>
         </div>`
     ).insertBefore('#bottom');
-    $(`.card[data-card-id='${temporary_id}']`)[0].scrollIntoView({
+    $(`.card[data-card-id='${card_id}']`)[0].scrollIntoView({
         behavior: 'smooth'
     });
-    $(`.card[data-card-id='${temporary_id}'] input`)[0].focus();
-    socket.emit("new_card", {"set_id": set_id}, (response) => {
-        if (response !== 401) {
-            $(`.card[data-card-id=${temporary_id}] .card-text-front`).val(response['front']);
-            $(`.card[data-card-id=${temporary_id}] .card-text-back`).val(response['back']);
-            $(`.card[data-card-id=${temporary_id}]`).attr('data-card-id', response['id']);
-        }
-        else {
-            $(`.card[data-card-id=${temporary_id}]`).remove();
-            window.alert("Couldn't add a new card - try again or attempt to save and reload.");
-        }
-    });
+    $(`.card[data-card-id='${card_id}'] input`)[0].focus();
+    // queue.push(['new_card', card_id]);
 }
 
 function update_card(card_id, front, back) {
@@ -185,11 +178,10 @@ function update_card(card_id, front, back) {
 
 function change_position(cardpos_initial, cardpos_final) {
     if (cardpos_initial !== cardpos_final) {
-        socket.emit("change_position", {
-            "set_id": set_id,
+        queue.push(['change_position', {
             "initial": cardpos_initial,
             "final": cardpos_final
-        });
+        }])
     }
 }
 
@@ -200,7 +192,7 @@ function change_position(cardpos_initial, cardpos_final) {
 $(document).ready(function() {
     // -- Buttons
     $("#card-container").on("click", ".card .delete-btn", function (event) {
-        let card_id = $(event.target).parents().eq(2).data('card-id');
+        let card_id = $(event.target).parents().eq(2).attr('data-card-id');
         delete_card(card_id);
     });
     $('#delete-set').on("click", function (event) {
@@ -223,7 +215,7 @@ $(document).ready(function() {
     // --x
     // -- Card inputs
     $("#card-container").on("keyup", ".card input", function (event) {
-        let card_id = $(event.target).parents().eq(4).data('card-id');
+        let card_id = $(event.target).parents().eq(4).attr('data-card-id');
         if (!card_id.startsWith('temp')) {
             let form = $(event.target).parents().eq(1);
             let front = form.find('input').eq(0).val();
@@ -240,7 +232,7 @@ $(document).ready(function() {
     // -- Image uploading
     $("#card-container").on("change", "input.image-upload", function(event) {
         let file = $(event.target).prop('files')[0];
-        let card_id = $(event.target).parents().eq(3).data('card-id');
+        let card_id = $(event.target).parents().eq(3).attr('data-card-id');
         socket.emit("add_image", {"set_id": set_id, "card_id": card_id, "file": file, "filename": $(event.target).val()}, (response) => {
         if (response !== 401) {
             $(event.target).parents().eq(0).addClass('hidden');

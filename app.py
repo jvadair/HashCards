@@ -706,60 +706,87 @@ def disconnect():
     global connected_clients
     connected_clients -= 1
 
+
 # Set saving
 @socketio.on("update_set")
 def perform_update(data):
-    set_id = data.pop('set_id')
+    data = list(data)
+    set_id = data[0]
+    actions = list(data[1].values())
     if hashcards.is_author(set_id, session.get('id')):
-        hashcards.modify_set(set_id, **data)
+        for action_id, data in actions:
+            if action_id == "delete_card":
+                hashcards.delete_card(set_id, data)
+            elif action_id == "change_position":
+                hashcards.move_card(set_id, data['initial'], data['final'])
+            else:
+                hashcards.modify_set(set_id, **{action_id: data})
+
         return 'success'
+    # set_id = data.pop('set_id')
+    # if hashcards.is_author(set_id, session.get('id')):
+    #     hashcards.modify_set(set_id, **data)
+    #     return 'success'
     else:
         return 401, "You are not the author of this set, so you can't edit it. If you do happen to be the owner, please try switching accounts."
 
 
-@socketio.on("update_card")
-def perform_card_update(data):
+@socketio.on("update_cards")
+def update_cards(data):
     set_id = data.pop('set_id')
-    card_id = data.pop('card_id')
+    set_db = get_set_db(set_id)
     if hashcards.is_author(set_id, session.get('id')):
-        hashcards.modify_card(set_id, card_id, **data)
-        return 'success'
-    else:
-        return 401, "You are not the author of this set, so you can't edit it. If you do happen to be the owner, please try switching accounts."
+        for card_id in data:
+            if card_id not in set_db.card_order() and not hashcards.add_card(set_id, card_id=card_id):  # Attempt to create if not exists
+                return False
+            hashcards.modify_card(set_id, card_id, **data[card_id])
+    return "success"
 
 
-@socketio.on("new_card")
-def add_new_card(data):
-    try:
-        set_id = data.pop('set_id')
-        if hashcards.is_author(set_id, session.get('id')):
-            card_id = hashcards.add_card(set_id)
-            return hashcards.get_card(set_id, card_id)()
-        else:
-            return 401, "You are not the author of this set, so you can't edit it. If you do happen to be the owner, please try switching accounts."
-    except KeyError:
-        return 400, "That card doesn't exist"
+# @socketio.on("update_card")
+# def perform_card_update(data):
+#     print(data)
+#     set_id = data.pop('set_id')
+#     card_id = data.pop('card_id')
+#     if hashcards.is_author(set_id, session.get('id')):
+#         hashcards.modify_card(set_id, card_id, **data)
+#         return 'success'
+#     else:
+#         return 401, "You are not the author of this set, so you can't edit it. If you do happen to be the owner, please try switching accounts."
 
 
-@socketio.on("delete_card")
-def delete_card(data):
-    set_id = data.pop('set_id')
-    if hashcards.is_author(set_id, session.get('id')):
-        card_id = data['card_id']
-        hashcards.delete_card(set_id, card_id)
-        return 'success'
-    else:
-        return 401, "You are not the author of this set, so you can't edit it. If you do happen to be the owner, please try switching accounts."
+# @socketio.on("new_card")
+# def add_new_card(data):
+#     try:
+#         set_id = data.pop('set_id')
+#         if hashcards.is_author(set_id, session.get('id')):
+#             card_id = hashcards.add_card(set_id)
+#             return hashcards.get_card(set_id, card_id)()
+#         else:
+#             return 401, "You are not the author of this set, so you can't edit it. If you do happen to be the owner, please try switching accounts."
+#     except KeyError:
+#         return 400, "That card doesn't exist"
 
 
-@socketio.on("change_position")
-def change_card_position(data):
-    set_id = data.pop('set_id')
-    if hashcards.is_author(set_id, session.get('id')):
-        hashcards.move_card(set_id, data['initial'], data['final'])
-        return 'success'
-    else:
-        return 401, "You are not the author of this set, so you can't edit it. If you do happen to be the owner, please try switching accounts."
+# @socketio.on("delete_card")
+# def delete_card(data):
+#     set_id = data.pop('set_id')
+#     if hashcards.is_author(set_id, session.get('id')):
+#         card_id = data['card_id']
+#         hashcards.delete_card(set_id, card_id)
+#         return 'success'
+#     else:
+#         return 401, "You are not the author of this set, so you can't edit it. If you do happen to be the owner, please try switching accounts."
+#
+#
+# @socketio.on("change_position")
+# def change_card_position(data):
+#     set_id = data.pop('set_id')
+#     if hashcards.is_author(set_id, session.get('id')):
+#         hashcards.move_card(set_id, data['initial'], data['final'])
+#         return 'success'
+#     else:
+#         return 401, "You are not the author of this set, so you can't edit it. If you do happen to be the owner, please try switching accounts."
 
 
 @socketio.on("add_image")
@@ -777,9 +804,13 @@ def add_image(data):
                     file.write(data['file'])
                 new_filename = process_photo(f'db/temp/{image_id}.{extension}')
                 os.rename(new_filename, f'static/images/card_images/{image_id}.png')
+                set_db = get_set_db(set_id)
+                if card_id not in set_db.card_order() and not hashcards.add_card(set_id, card_id=card_id):  # Attempt to create if not exists
+                    return False
                 hashcards.modify_card(set_id, card_id, image=image_id)
                 return image_id
     return 401, "You are not signed in."
+
 
 @socketio.on("remove_image")
 def add_image(data):

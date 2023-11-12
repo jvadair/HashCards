@@ -2,6 +2,7 @@ from string import ascii_letters, digits
 from blake3 import blake3
 import os
 import html
+from uuid import UUID
 
 
 def is_valid_email(email: str) -> bool:
@@ -84,3 +85,11 @@ def metatags(title="HashCards", description="Create, find, share, and study flas
         f"""<meta property="twitter:image" content="https://hashcards.net/static/images/{image}" />""" if image else ''
     ]
     return '\n'.join(rendered)
+
+
+def verify_uuid(uuid, version=4):
+    try:
+        result = UUID(uuid, version=version)
+    except ValueError:
+        return False
+    return str(result) == uuid

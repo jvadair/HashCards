@@ -13,7 +13,7 @@ from datetime import datetime, timedelta
 from copy import copy
 from uuid import uuid4
 from thefuzz import process as fuzz_process
-from tools import sort_by_value, hash_file
+from tools import sort_by_value, hash_file, verify_uuid
 from random import shuffle
 import tarfile
 import os
@@ -55,6 +55,8 @@ CARD_NOMODIFY = (
 
 
 # First-run scenario
+if not os.path.exists('db/sets'):
+    os.mkdir('db/sets')
 if not os.path.exists('db/sets/_map.pyn'):
     Node({"title": {}, "description": {}}).save("db/sets/_map.pyn")
 
@@ -155,32 +157,38 @@ def delete_set(set_id: str) -> None:
             os.remove(f'static/images/card_images/{image_id}.png')
 
 
-def create_card(front: str, back: str, image: str) -> dict:
+def create_card(front: str, back: str, image: str, card_id: str = None) -> dict:
     """
     Create a new card from the template and return it
+    :param card_id:
     :param front:
     :param back:
     :param image:
     :return:
     """
     card = copy(CARD_TEMPLATE)
-    card['id'] = str(uuid4())
+    card['id'] = str(uuid4()) if None else card_id
     card['front'] = front
     card['back'] = back
     card['image'] = image
     return card
 
 
-def add_card(set_id: str, front: str = '', back: str = '', image: str = None):
+def add_card(set_id: str, front: str = '', back: str = '', image: str = None, card_id: str = None):
     """
     Add a new card to the specified set
+    :param card_id:
     :param set_id:
     :param front:
     :param back:
     :param image:
     :return:
     """
-    card = create_card(front, back, image=image)
+    if card_id and not verify_uuid(card_id):
+        return False
+    elif not card_id:
+        card_id = str(uuid4())
+    card = create_card(front, back, image=image, card_id=card_id)
     set = get_set_db(set_id)
     set.cards.set(card['id'], card)
     set.card_order().append(card['id'])
@@ -216,6 +224,7 @@ def modify_card(set_id, card_id, **kwargs) -> None:
             if type(kwargs[kwarg]) in (str, int) and len(kwargs[kwarg]) > 100000:
                 continue
             card.set(kwarg, kwargs[kwarg])
+        print(kwarg, 'set to', kwargs[kwarg])
     set.mdtime = datetime.now()
     set.save()
 
