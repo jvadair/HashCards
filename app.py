@@ -716,7 +716,10 @@ def perform_update(data):
     if hashcards.is_author(set_id, session.get('id')):
         for action_id, data in actions:
             if action_id == "delete_card":
-                hashcards.delete_card(set_id, data)
+                try:
+                    hashcards.delete_card(set_id, data)
+                except AttributeError:
+                    pass
             elif action_id == "change_position":
                 hashcards.move_card(set_id, data['initial'], data['final'])
             else:
