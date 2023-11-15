@@ -24,11 +24,11 @@
                                 <img src="/static/images/card_images/{{ set.cards.get(set.card_order._val[0]).image._val }}.png" alt="Card image">
                             {% endif %}
                             {% if set.cards.get(set.card_order._val[0]).front._val  %}
-                                <h2>{{ set.cards.get(set.card_order._val[0]).front._val }}</h2>
+                                <h2 class="{{"convertMQ" if set.cards.get(set.card_order._val[0]).front._val.startswith("@@MQ@@") }}">{{ set.cards.get(set.card_order._val[0]).front._val.replace("@@MQ@@", "") }}</h2>
                             {% endif %}
                         </div>
                         <div class="back">
-                            <h2>{{ set.cards.get(set.card_order._val[0]).back._val }}</h2>
+                            <h2 class="{{"convertMQ" if set.cards.get(set.card_order._val[0]).back._val.startswith("@@MQ@@") }}">{{ set.cards.get(set.card_order._val[0]).back._val.replace("@@MQ@@", "") }}</h2>
                         </div>
                     </div>
                     <p class="arrow desktop{{ ' active' if len(set.card_order._val) > 1 else ''}}" id="arrow-forward" onclick="card_forward()"><span class="material-symbols-outlined">arrow_forward_ios</span></p>
@@ -68,8 +68,8 @@
                     {% set card = set.cards.get(card) %}
                     <tr>
                         <td>{{ num + 1 }}</td>
-                        <td><div>{% if card.image._val %}<img src="/static/images/card_images/{{ card.image._val }}.png" alt="Card image">{% endif %}{% if card.front._val %}<p>{{ card.front._val }}</p>{% endif %}</div></td>
-                        <td><p>{{ card.back._val }}</p></td>
+                        <td><div>{% if card.image._val %}<img src="/static/images/card_images/{{ card.image._val }}.png" alt="Card image">{% endif %}{% if card.front._val %}<p class="{{"convertMQ" if card.front._val.startswith("@@MQ@@") }}">{{ card.front._val.replace("@@MQ@@", "") }}</p>{% endif %}</div></td>
+                        <td><p class="{{"convertMQ" if card.back._val.startswith("@@MQ@@") }}">{{ card.back._val.replace("@@MQ@@", "") }}</p></td>
                     </tr>
                 {% endfor %}
             </table>

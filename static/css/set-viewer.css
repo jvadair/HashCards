@@ -90,6 +90,7 @@
     word-break: break-word;
     font-weight: initial;  /* Chrome bolds headers */
     font-family: "Alegreya Sans", sans-serif;
+    font-size: 1.5em;  /* Default, will be overwritten */
 }
 
 #card-viewer #card .front, #card-viewer #card .back {

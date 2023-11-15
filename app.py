@@ -248,8 +248,14 @@ def about():
     return render_template('about.html')
 
 
+@sitemapper.include()
+@app.route('/learn/')
+def learn_landing():
+    return render_template('learn.html')
+
+
 @sitemapper.include(url_variables={"path": listdir_recursive('templates/learn')})
-@app.route('/learn/<path:path>')
+@app.route('/learn/<path:path>/')
 def teach_features(path):
     try:
         return render_template("learn/" + path + '.html')
@@ -872,11 +878,12 @@ def generate_next_prompt(data):
             looking_for = 'front' if card_progress < 1 else 'back'
             session['currently_studying'] = card_id
             session['current_card_side'] = looking_for
+            mathquill = set_db.cards.get(card_id).get('front' if looking_for == 'back' else 'back')().startswith('@@MQ@@')
             if card_progress in (0, 2):
                 options = find_similar_results(set_id, 'front' if looking_for == 'back' else 'back', card_id)
                 return {"type": "mc", "side": looking_for, "question": set_db.cards.get(card_id).get(looking_for)(), "options": options, "round": study_db.rounds() + 1}
             else:
-                return {"type": "sr", "side": looking_for, "question": set_db.cards.get(card_id).get(looking_for)(), "round": study_db.rounds() + 1}
+                return {"type": "sr", "side": looking_for, "question": set_db.cards.get(card_id).get(looking_for)(), "round": study_db.rounds() + 1, "mathquill": mathquill}
     else:
         return error(401, "You must be signed in to use study mode.")
 

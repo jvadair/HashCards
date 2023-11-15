@@ -93,8 +93,16 @@
                     <div class="card-body">
                         <div class="card-content">
                             <form>
-                                <label>Front<input type="text" autocomplete="off" class="card-text card-text-front" value="{{ card.front._val }}"></label>
-                                <label>Back&nbsp;<input type="text" autocomplete="off" class="card-text card-text-back" value="{{ card.back._val }}"></label>
+                                <label>
+                                    Front
+                                    <input type="text" autocomplete="off" class="card-text{{ " convertMQ" if card.front._val.startswith("@@MQ@@") }}" value="{{ card.front._val.replace("@@MQ@@", "") }}">
+                                    <a class="math-toggle{{ " active" if card.front._val.startswith("@@MQ@@") }}" title="Write a math equation"><span class="material-symbols-outlined">function</span></a>
+                                </label>
+                                <label>
+                                    Back&nbsp;
+                                    <input type="text" autocomplete="off" class="card-text{{ " convertMQ" if card.back._val.startswith("@@MQ@@") }}" value="{{ card.back._val.replace("@@MQ@@", "") }}">
+                                    <a class="math-toggle{{ " active" if card.back._val.startswith("@@MQ@@") }}"><span class="material-symbols-outlined">function</span></a>
+                                </label>
                             </form>
                         </div>
                         <form class="card-image" {% if card.image._val %}style='background-image: url("/static/images/card_images/{{ card.image._val }}.png");'{% endif %}>
@@ -129,6 +137,7 @@
 </main>
 <p id="save-indicator"><span class="material-symbols-outlined">check_circle</span> Your set was saved.</p>
 {% include "components/footer.html" %}
+<script src="/static/scripts/mq_extras.min.js"></script>
 <script src="/static/scripts/set_manager.min.js"></script>
 </body>
 </html>

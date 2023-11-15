@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include "components/boilerplate.html" %}
+    <title>Learn: Math | HashCards</title>
+    <link rel="stylesheet" href="/static/css/learn.min.css">
+    <link rel="stylesheet" href="/static/css/mathfunctions.min.css">
+</head>
+<body>
+{% include "components/header.html" %}
+<main>
+<div id="learn">
+    <h1>Using math in the set editor</h1>
+    <section>
+        <p>Tl;dr: Click the f(x) button to enable equation support, then type math intuitively like you would on a platform such as Desmos.</p>
+    </section>
+    <section>
+        <h2>Toggle equation support</h2>
+        <figure>
+            <img src="/static/images/learn/math/toggle.png" alt="Equation toggle buttons">
+            <figcaption>The location of the buttons in HashCards' set editor</figcaption>
+        </figure>
+        <p>Click the <span class="material-symbols-outlined">function</span> button next to the front or back text boxes on a card to toggle equation mode. In this mode, you can type math equations in a more natural way. Look below to learn how to type math properly in this mode.</p>
+    </section>
+    <section>
+        <h2>Symbols & characters</h2>
+        <figure>
+            <img src="/static/images/learn/math/rrsum.png" alt="The right-riemann sum equation">
+            <figcaption>Some examples of symbols you can use in HashCards</figcaption>
+        </figure>
+        {% include 'components/mathdocs.html' %}
+    </section>
+</div>
+</main>
+{% include "components/footer.html" %}
+<script src="/static/scripts/mathdocs.min.js"></script>
+</body>
+</html>

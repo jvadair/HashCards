@@ -1,8 +1,9 @@
 let set_id = window.location.pathname.split('/')[2];
+let MQ = MathQuill.getInterface(2);
 
 function get_card_from_table(n) {
     let front = $(`table tr:nth-of-type(${n}) td:nth-of-type(2) div`).html();
-    let back = $(`table tr:nth-of-type(${n}) td:nth-of-type(3)`).text();
+    let back = $(`table tr:nth-of-type(${n}) td:nth-of-type(3)`).html();
     return [front, back];
 }
 
@@ -77,7 +78,6 @@ function showDialog(dialog_name, transition=true) {
     let initial_duration
     if (dialog_name === 'share' && visibility === 'private') {
         socket.emit("make_public", {"set_id": set_id}, (response) => {
-            console.log(response);
             if (response === 401) {
                 $("#share-link-container").html("<p>There was an issue sharing your set. Reload the page and try again.</p>")
             }
@@ -148,3 +148,12 @@ $(document).ready(function(){
             });
     });
 })
+
+// --- Convert as required to MathQuill
+$(document).ready(function() {
+    let to_convert = $(".convertMQ");
+    to_convert.each(function (i) {
+        MQ.StaticMath(to_convert.get(i));
+    })
+});
+// ---x

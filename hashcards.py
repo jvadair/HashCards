@@ -224,7 +224,6 @@ def modify_card(set_id, card_id, **kwargs) -> None:
             if type(kwargs[kwarg]) in (str, int) and len(kwargs[kwarg]) > 100000:
                 continue
             card.set(kwarg, kwargs[kwarg])
-        print(kwarg, 'set to', kwargs[kwarg])
     set.mdtime = datetime.now()
     set.save()
 

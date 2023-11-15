@@ -48,7 +48,7 @@
     background-color: rgba(var(--failure-variable-opacity), .6);
 }
 
-#study #answer #answer-buttons p span {
+#study #answer #answer-buttons p span.material-symbols-outlined {
     margin-right: .5em;
 }
 
@@ -74,6 +74,28 @@
     border-bottom: 2px solid var(--text);
 }
 
+#answer-prompt #answer-prompt-input .mq-math-mode .mq-hasCursor .mq-cursor {
+    border-left: 1px solid white !important;
+}
+
+.mq-math-mode .mq-hasCursor .mq-cursor {
+    border-left: none;
+}
+
+#answer-prompt .mq-editable-field, .mq-math-mode .mq-editable-field {
+    border: none;
+    outline: none;
+    width: 100%;
+    max-width: 100%;
+    border-bottom: 2px solid var(--text);
+    font-family: serif;
+}
+
+#answer-prompt .mq-editable-field.mq-focused, .mq-math-mode .mq-editable-field.mq-focused {
+    border-color: var(--text);
+    box-shadow: none;
+}
+
 #study #answer #answer-prompt .btn {
     scale: 120%;
 }
@@ -84,6 +106,12 @@
 
 #study #answer #correct-answer.incorrect {
     color: var(--failure);
+}
+
+#study #answer #correct-answer.incorrect span {
+    color: var(--failure) !important;
+    border-color: var(--failure) !important;
+    font-family: serif;
 }
 
 #study .card-part {

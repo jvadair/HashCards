@@ -1,0 +1,1 @@
+table{width:100%;max-width:500px;border-collapse:collapse}table tr:nth-child(odd){background-color:rgba(var(--overlay-variable-opacity),.8);padding:1em}table tr:nth-child(even){background-color:rgba(var(--overlay-variable-opacity),.4)}table thead th,table tr td{padding:.6em}table thead th{border-bottom:5px solid var(--text)}

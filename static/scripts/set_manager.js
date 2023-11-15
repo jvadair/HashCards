@@ -5,6 +5,8 @@ function uuidv4() {
   );
 }
 
+let MQ = MathQuill.getInterface(2);
+
 // --- Autosave
 
 let queue = [];
@@ -115,6 +117,30 @@ setInterval(function() {
 
 // --- Card operations
 
+function getCardData(card_id) {
+    let cardObj = $(`.card[data-card-id="${card_id}"]`);
+    let cardInputObjs = cardObj.find(".card-text, .math-field");
+    let output = {};
+    let result;
+    cardInputObjs.each(function(i) {
+        result = ""
+        if (cardInputObjs.eq(i).hasClass("math-field")) {
+            result = "@@MQ@@" + MQ.MathField(cardInputObjs.get(i)).latex();
+        }
+        else {
+            result = cardInputObjs.eq(i).val();
+        }
+
+        if (i === 0) {
+            output['front'] = result;
+        }
+        else {
+            output['back'] = result;
+        }
+    });
+    return output;
+}
+
 function delete_image(e) {
     let card_id = $(e).parents().eq(2).data('card-id');
     socket.emit("remove_image", {"set_id": set_id, "card_id": card_id}, (response) => {
@@ -145,8 +171,16 @@ function add_card() {
             <div class="card-body">
                 <div class="card-content">
                     <form>
-                        <label>Front<input type="text" autocomplete="off" class="card-text card-text-front" value=""></label>
-                        <label>Back&nbsp;<input type="text" autocomplete="off" class="card-text card-text-back" value=""></label>
+                         <label>
+                            Front
+                            <input type="text" autocomplete="off" class="card-text" value="">
+                            <a class="math-toggle" title="Write a math equation"><span class="material-symbols-outlined">function</span></a>
+                        </label>
+                        <label>
+                            Back&nbsp;
+                            <input type="text" autocomplete="off" class="card-text" value="">
+                            <a class="math-toggle"><span class="material-symbols-outlined">function</span></a>
+                        </label>
                     </form>
                 </div>
                 <form class="card-image">
@@ -214,13 +248,24 @@ $(document).ready(function() {
     // });
     // --x
     // -- Card inputs
-    $("#card-container").on("keyup", ".card input", function (event) {
-        let card_id = $(event.target).parents().eq(4).attr('data-card-id');
+    $("#card-container").on("keyup", ".card input, .card .math-field", function (event) {
+        let card_id = $(this).parents().eq(4).attr('data-card-id');
         if (!card_id.startsWith('temp')) {
-            let form = $(event.target).parents().eq(1);
-            let front = form.find('input').eq(0).val();
-            let back = form.find('input').eq(1).val();
-            update_card(card_id, front, back);
+            let form = $(this).parents().eq(1);
+            let data = getCardData(card_id);
+            update_card(card_id, data['front'], data['back']);
+        }
+    });
+    $("#card-container").on("click", ".card .math-toggle", function (event) {
+        if ($(this).hasClass("active")) {
+            $(this).removeClass("active");
+            let inputField = $(this).parents().eq(0).find('.math-field').eq(0);
+            convert_to_regular_field(inputField);
+        }
+        else {
+            $(this).addClass("active");
+            let inputField = $(this).parents().eq(0).find('input').eq(0);
+            make_math_field(inputField);
         }
     });
     // --
@@ -273,3 +318,14 @@ $(document).ready(function() {
         }
    });
 });
+
+// ---x
+
+// --- Convert as required to MathQuill
+$(document).ready(function() {
+    let to_convert = $(".convertMQ");
+    to_convert.each(function (i) {
+        make_math_field(to_convert.eq(i));
+    })
+});
+// ---x

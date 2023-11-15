@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include "components/boilerplate.html" %}
+    <title>Learn: Math | HashCards</title>
+    <link rel="stylesheet" href="/static/css/learn.min.css">
+    <link rel="stylesheet" href="/static/css/mathfunctions.min.css">
+</head>
+<body>
+{% include "components/header.html" %}
+<main>
+<div id="learn">
+    <h1>Using math in study mode</h1>
+    <section>
+        <p>Tl;dr: Type math intuitively like you would on a platform such as Desmos.</p>
+    </section>
+    <section>
+        <h2>How to type math for a short response question</h2>
+        <figure>
+            <img src="/static/images/learn/math/sr.png" alt="The short response field">
+            <figcaption>The location of the buttons in HashCards' set editor</figcaption>
+        </figure>
+        <p>If the creator of the set you are studying used HashCards' math feature, it will be easier to use the study mode on that set. Look below for how to type certain math keywords and functions.</p>
+    </section>
+    <section>
+        <h2>Symbols & characters</h2>
+        <figure>
+            <img src="/static/images/learn/math/rrsum.png" alt="The right-riemann sum equation">
+            <figcaption>Some examples of symbols you can use in HashCards</figcaption>
+        </figure>
+        {% include 'components/mathdocs.html' %}
+    </section>
+</div>
+</main>
+{% include "components/footer.html" %}
+<script src="/static/scripts/mathdocs.min.js"></script>
+</body>
+</html>

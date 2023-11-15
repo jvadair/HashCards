@@ -173,6 +173,49 @@
     width: 100%;
 }
 
+.card .card-content form .math-field span {
+    color: var(--text);
+    font-family: serif;
+}
+
+.mq-math-mode .mq-hasCursor .mq-cursor {
+    border-left: 1px solid white;
+}
+.mq-editable-field, .mq-math-mode .mq-editable-field {
+    border: none;
+    outline: none;
+    width: 100%;
+    max-width: 100%;
+    border-bottom: 2px solid var(--text);
+}
+
+.mq-editable-field.mq-focused, .mq-math-mode .mq-editable-field.mq-focused {
+    border-color: var(--text);
+    box-shadow: none;
+}
+
+.card .card-content .math-toggle {
+    background-color: rgba(255,255,255, .1);
+    border-radius: 15px;
+    transition-duration: .1s;
+    height: 2em;
+    width: 3em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card .card-content .math-toggle:hover {
+    background-color: rgba(255,255,255, .2);
+    cursor: pointer;
+}
+
+.card .card-content .math-toggle.active {
+    background-color: rgba(255,255,255, .5);
+    /*transition-duration: 0s;*/
+    color: var(--background);
+}
+
 .card .card-image {
     display: flex;
     height: 75%;

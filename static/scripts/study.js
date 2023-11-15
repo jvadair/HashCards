@@ -2,6 +2,7 @@ let set_id = window.location.pathname.split('/')[2];
 let options;
 let type;
 let answered = false;
+let MQ = MathQuill.getInterface(2);
 
 $(document).ready(function() {
     getNextQuestion();
@@ -11,16 +12,16 @@ $(document).ready(function() {
             submit_answer_mcq(id);
         }
     });
-    $("#prompt-response").on('keypress',function(event) {
+    $("#prompt-response, .mq-editable-field").on('keypress',function(event) {
         if (!answered) {
             if (event.which == 13) {
-                submit_answer_prompt($("#prompt-response").val());
+                submit_answer_prompt();
             }
         }
     });
     $("#prompt-submit").on('click',function(event) {
         if (!answered) {
-            submit_answer_prompt($("#prompt-response").val());
+            submit_answer_prompt();
         }
     });
 });
@@ -37,7 +38,10 @@ function getNextQuestion() {
         $("#loading").hide();
         $("#btn-skip").show();
         $("#advance-ready").hide();
-        $("#question h3").text(data["question"]);
+        $("#question h3").replaceWith("<h3>" + data["question"].replace('@@MQ@@', '') + "</h3>");
+        if (data["question"].startsWith("@@MQ@@")) {
+            $("#question h3").addClass('convertMQ');
+        }
         $("#current-round span").text(response["round"]);
         if (data["side"] === "back") {
             $("#answer-side").removeClass("cp-definition");
@@ -63,21 +67,32 @@ function getNextQuestion() {
             $("#answer-buttons p").removeClass("incorrect");
             $("#answer-buttons p").removeClass("correct");
             $("#answer-buttons p").hide();
+            reset_mcq_options();
             for (let key in options) {
-                $("#answer #answer-buttons p").eq(counter).html(`<span class="material-symbols-outlined">counter_${counter+1}</span> ${options[key]}`);
+                $("#answer #answer-buttons p .material-symbols-outlined").eq(counter).text(`counter_${counter+1}`);
+                $("#answer #answer-buttons p .option-text").eq(counter).text(options[key].replace("@@MQ@@", ''));
                 $("#answer #answer-buttons p").eq(counter).attr('id', key);
                 $("#answer #answer-buttons p").eq(counter).show();
+                if (options[key].startsWith("@@MQ@@")) {
+                    $("#answer #answer-buttons p .option-text").eq(counter).addClass("convertMQ");
+                }
                 counter += 1;
             }
         }
         else {
             $("#answer #answer-buttons").hide();
             $("#answer #answer-prompt").show();
-            $("#answer-prompt input").val("");
+            reset_sr_input();
             $("#correct-answer").removeClass('incorrect');
             $("#correct-answer").removeClass('correct');
             $("#correct-answer").hide();
+            $("#math-help").hide();
+            if (data['mathquill']) {
+                make_math_field($("#answer-prompt input"));
+                $("#math-help").show();
+            }
         }
+        convertMQ();
         $("#study").show();
         $("#answer-prompt input").focus();
         answered = false;
@@ -98,8 +113,8 @@ function submit_answer_mcq(answer) {
             correct_answer = response['correct'];
             $(`#answer-buttons #${answer}`).addClass("incorrect");
         }
-        $("#answer-buttons p span").text("cancel");
-        $(`#answer-buttons #${correct_answer} span`).text("check_circle");
+        $("#answer-buttons p span.material-symbols-outlined").text("cancel");
+        $(`#answer-buttons #${correct_answer} span.material-symbols-outlined`).text("check_circle");
         $(`#answer-buttons #${correct_answer}`).addClass("correct");
         $("#btn-skip").hide();
         $("#advance-ready").show();
@@ -107,15 +122,25 @@ function submit_answer_mcq(answer) {
     answered = true;
 }
 
-function submit_answer_prompt(answer) {
+function submit_answer_prompt() {
+    let answer
+    if ($("#prompt-response").val()) {
+        answer = $("#prompt-response").val();
+    }
+    else {
+        answer = "@@MQ@@" + MQ.MathField($(".math-field").get(0)).latex();
+    }
     socket.emit("check_answer", {"set_id": set_id, "answer": answer}, (response) => {
         if (response.status === 401) {
             window.alert("You have been signed out. To continue studying, please sign in again.");
         }
         let correct_answer = response['correct'];
+        if (correct_answer.startsWith("@@MQ@@")) {
+            correct_answer = "<span class='convertMQ'>" + correct_answer.replace("@@MQ@@", "") + "</span>"
+        }
         if (response['success']) {
             if (response['accuracy'] !== 100) {
-                $("#correct-answer").text(`Close enough. The right answer was: "${correct_answer}"`);
+                $("#correct-answer").html(`Close enough. The right answer was: "${correct_answer}"`);
             }
             else {
                 $("#correct-answer").text("Correct!");
@@ -123,9 +148,10 @@ function submit_answer_prompt(answer) {
             $("#correct-answer").addClass('correct');
         }
         else {
-            $("#correct-answer").text(`Sorry. The right answer was: "${correct_answer}"`);
+            $("#correct-answer").html(`Sorry. The right answer was: "${correct_answer}"`);
             $("#correct-answer").addClass('incorrect');
         }
+        convertMQ();
         $("#correct-answer").show();
         $("#btn-skip").hide();
         $("#advance-ready").show();
