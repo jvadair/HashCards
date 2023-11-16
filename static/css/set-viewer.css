@@ -303,6 +303,9 @@
 
 #popup #share {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    grid-gap: 1em;
 }
 
 #popup #share h2 {

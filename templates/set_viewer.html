@@ -88,6 +88,19 @@
                 </script>
                 <button class="btn-circle" onclick="$('#share-link').select();navigator.clipboard.writeText($('#share-link').val());"><span class="material-symbols-outlined">content_copy</span></button>
             </div>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" integrity="sha512-CNgIRecGo7nphbeZ04Sc13ka07paqdeTu0WR1IM4kNcpmBAUSHSQX0FslNhTDadL4O5SAGapGt4FodqL8My0mA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            <div id="qrcode" style="border: 5px solid white;"></div>
+            <script type="text/javascript">
+                var qrcode = new QRCode("qrcode", {
+                    text: $('#share-link').val(),
+                    width: 256,
+                    height: 256,
+                    colorDark : "#000000",
+                    colorLight : "#ffffff",
+                    correctLevel : QRCode.CorrectLevel.H
+                });
+            </script>
+            <div id="qrcode"></div>
         </div>
          <div id="export">
             <h2>Export</h2>
