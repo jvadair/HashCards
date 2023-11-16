@@ -29,7 +29,7 @@ HashCards is an online flashcard platform without the ads, paywalls, or outdated
 
 ## FAQs
 #### Why use HashCards when I can just keep using other platforms?
-A: HashCards strives to be the best platform for creating flash cards and studying them by providing a clean, user-friendly, and minimalistic (yet full-featured) interface. We don't trick our users by paywalling or limiting existing features. We believe in the potential of open development. Using HashCards should be frictionless and non-distracting. If it's not, make sure to [let me know](#support-and-feedback)!
+A: HashCards strives to be the best platform for creating flash cards and studying them by providing a clean, user-friendly, and minimalistic (yet full-featured) interface. It is also the best platform for math flashcards due to its unique math equation capabilities. We don't trick our users by paywalling or limiting existing features. We believe in the potential of open development. Using HashCards should be frictionless and non-distracting. If it's not, make sure to [let me know](#support-and-feedback)!
 
 #### How can I make a HashCards set?
 A: It's easy! Just [sign up for an account here](https://hashcards.net/register), then clcik "New". From there, the editor is quite user-friendly and will automatically save your work as you go.
@@ -44,7 +44,7 @@ If you would like to make a feature request or need help, create an issue here o
 Contributions to HashCards are currently closed. If you would like to contribute to HashCards, please [contact me](#support-and-feedback) or wait until contributions are enabled.
 
 ## Tech stack
-Here's a list of the technology HashCards runs on. Let me know if it's missing anything.
+Here's a list of the technology/libraries HashCards uses. Let me know if it's missing anything.
 1. [pyntree](https://github.com/jvadair/pyntree)
 2. [registrationAPI](https://github.com/jvadair/registrationAPI)
 3. [Flask](https://github.com/pallets/flask)
@@ -57,6 +57,8 @@ Here's a list of the technology HashCards runs on. Let me know if it's missing a
 10. [cryptography](https://github.com/pyca/cryptography/)
 11. [flask-sitemapper](https://github.com/h-janes/flask-sitemapper)
 12. [pathvalidate](https://github.com/thombashi/pathvalidate)
+13. [MathQuill](https://github.com/mathquill/mathquill)
+14. [QRCode.js](https://github.com/davidshimjs/qrcodejs)
 
 ## Self-hosting
 HashCards was not designed to be self-hosted. If you are looking to self-host a copy of HashCards, please feel free to [reach out to me](#support-and-feedback).
