@@ -19,6 +19,7 @@ HashCards is an online flashcard platform without the ads, paywalls, or outdated
 - Autosave
 - Import from other platforms
 - Study mode
+- Intuitive math typing (like Desmos)
 - Search & Explore
 - OAuth and traditional verified-email login options
 - Account management & privacy features
