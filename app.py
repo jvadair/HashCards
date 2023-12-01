@@ -1063,7 +1063,7 @@ def privacypolicy():
 @app.before_request
 def check_permissions():
     domain_name = request.host_url.split('/')[2]
-    if domain_name == "share.hashcards.net":
+    if domain_name == "share.hashcards.net" and not request.path.startswith('/static'):
         try:
             return redirect(f"hashcards.net/set/{short_urls.get(request.path)}")
         except:
