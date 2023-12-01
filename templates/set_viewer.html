@@ -84,7 +84,11 @@
                 <label for="share-link" style="display: none;">Shareable link</label>
                 <input type="text" id="share-link" readonly>
                 <script>
-                    $("#share-link").val("https://hashcards.net" + window.location.pathname);
+                    {% if set.has("short_url") %}
+                        $("#share-link").val("https://hashcards.net/" + {{ set.get("short_url")._val }});
+                    {% else %}
+                        $("#share-link").val("https://hashcards.net" + window.location.pathname);
+                    {% endif %}
                 </script>
                 <button class="btn-circle" onclick="$('#share-link').select();navigator.clipboard.writeText($('#share-link').val());"><span class="material-symbols-outlined">content_copy</span></button>
             </div>

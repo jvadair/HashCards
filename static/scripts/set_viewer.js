@@ -78,8 +78,21 @@ function showDialog(dialog_name, transition=true) {
     let initial_duration
     if (dialog_name === 'share' && visibility === 'private') {
         socket.emit("make_public", {"set_id": set_id}, (response) => {
-            if (response === 401) {
+            if (response[0] === 401) {
                 $("#share-link-container").html("<p>There was an issue sharing your set. Reload the page and try again.</p>")
+            }
+            else {
+                $("#share-link").val("https://share.hashcards.net/" + response[1]);
+            }
+        });
+    }
+    else if (dialog_name === 'share' &&  $("#share-link").val() === "https://hashcards.net" + window.location.pathname) {
+        socket.emit("make_shorturl", {"set_id": set_id}, (response) => {
+            if (response[0] === 401) {
+                $("#share-link-container").html("<p>There was an issue generating the short url. Reload the page and try again.</p>")
+            }
+            else {
+                $("#share-link").val("https://share.hashcards.net/" + response[1]);
             }
         });
     }

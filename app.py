@@ -27,11 +27,13 @@ from process_photo import process_filename, process_photo
 import tarfile
 from cryptography.fernet import Fernet
 from flask_sitemapper import Sitemapper
+import short_url
 
 app = Flask(__name__)
 sitemapper = Sitemapper(app)
 r_api = registration_api.API()
 config = Node('config.json')
+short_urls = Node('db/short_urls.json', autosave=True)
 connected_clients = 0
 app.config['MAX_CONTENT_PATH'] = 100 * 1000000  # mb -> bytes
 app.config['TEMPLATES_AUTO_RELOAD'] = True
@@ -840,10 +842,25 @@ def add_image(data):
 def make_public(data):
     set_id = data['set_id']
     if session.get('id'):
-        if hashcards.is_author(set_id, session['id']):
+        if hashcards.is_author(set_id, session['id']) and get_set_db(set_id).visibility() not in ('public', 'unlisted'):
             hashcards.modify_set(set_id, visibility='public')
-            return 200
-    return 401, "You must be logged in to make a a set public."
+            short = short_url.encode_url(len(short_urls._values))
+            short_urls.set(short, set_id)
+            hashcards.modify_set(set_id, short_url=short)
+            return [200, short]
+    return [401, "You must be logged in to make a a set public."]
+
+
+@socketio.on("make_shorturl")
+def make_shorturl(data):
+    set_id = data['set_id']
+    print(get_set_db(set_id).has("short_url"))
+    if not get_set_db(set_id).has("short_url"):
+        short = short_url.encode_url(len(short_urls._values))
+        short_urls.set(short, set_id)
+        hashcards.modify_set(set_id, short_url=short)
+        return [200, short]
+    return [401, "You must be logged in to make a a set public."]
 
 
 # Study mode
@@ -1045,6 +1062,12 @@ def privacypolicy():
 # Login-restricted pages
 @app.before_request
 def check_permissions():
+    domain_name = request.host_url.split('/')[2]
+    if domain_name == "share.hashcards.net":
+        try:
+            return redirect(f"hashcards.net/set/{short_urls.get(request.path)}")
+        except:
+            return error(404, "The set could not be found.")
     if request.path in LOGIN_REQUIRED and not session.get('id'):
         return error(401, "You must be logged in to view this page.")
     elif request.path in HIDE_WHEN_LOGGED_IN and session.get('id'):
