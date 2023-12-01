@@ -1065,8 +1065,8 @@ def check_permissions():
     domain_name = request.host_url.split('/')[2]
     if domain_name == "share.hashcards.net" and not request.path.startswith('/static'):
         try:
-            return redirect(f"hashcards.net/set/{short_urls.get(request.path)._val}")
-        except:
+            return redirect(f"hashcards.net/set/{short_urls.get(request.path.replace('/', ''))._val}")
+        except AttributeError:
             return error(404, "The set could not be found.")
     if request.path in LOGIN_REQUIRED and not session.get('id'):
         return error(401, "You must be logged in to view this page.")
