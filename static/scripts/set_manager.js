@@ -251,7 +251,6 @@ $(document).ready(function() {
     $("#card-container").on("keyup", ".card input, .card .math-field", function (event) {
         let card_id = $(this).parents().eq(4).attr('data-card-id');
         if (!card_id.startsWith('temp')) {
-            let form = $(this).parents().eq(1);
             let data = getCardData(card_id);
             update_card(card_id, data['front'], data['back']);
         }
@@ -266,6 +265,11 @@ $(document).ready(function() {
             $(this).addClass("active");
             let inputField = $(this).parents().eq(0).find('input').eq(0);
             make_math_field(inputField);
+        }
+        let card_id = $(this).parents().eq(4).attr('data-card-id');
+        if (!card_id.startsWith('temp')) {
+            let data = getCardData(card_id);
+            update_card(card_id, data['front'], data['back']);
         }
     });
     // --
