@@ -9,7 +9,7 @@ function get_card_from_table(n) {
 
 function update_card() {
     $('#card').replaceWith("<div id='card'></div>")  // Replacing the card is the only way to avoid the animation
-    $('#card').append(`<div class='front'>${current_card[0]}</h2>`.replace("<p>", "<h2>").replace("</p>", "</h2>"))
+    $('#card').append(`<div class='front'>${current_card[0]}</div>`.replace("<p", "<h2").replace("</p>", "</h2>"))
     $('#card').append(`<div class='back'><h2>${current_card[1]}</h2></div>`)
     $('#card').flip({
         trigger: 'click'
