@@ -12,6 +12,15 @@
         <h3>Connected clients: {{ num_connected }} pages open</h3>
         <h3>Sets created: {{ num_sets }}</h3>
         <h3>Public sets: {{ num_public }}</h3>
+        <h3><u>References:</u></h3>
+        <table style="width: min-content;">
+            {% for r in references._values %}
+                <tr style="display: flex; flex-direction: row; grid-gap: 1.5em;">
+                    <td>{{ r }}</td>
+                    <td style="margin-left: auto">{{ references.get(r)._val }}</td>
+                </tr>
+            {% endfor %}
+        </table>
     </div>
 </main>
 {% include "components/footer.html" %}

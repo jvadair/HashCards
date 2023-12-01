@@ -34,6 +34,7 @@ sitemapper = Sitemapper(app)
 r_api = registration_api.API()
 config = Node('config.json')
 short_urls = Node('db/short_urls.json', autosave=True)
+references = Node('db/reftags.json', autosave=True)
 connected_clients = 0
 app.config['MAX_CONTENT_PATH'] = 100 * 1000000  # mb -> bytes
 app.config['TEMPLATES_AUTO_RELOAD'] = True
@@ -234,7 +235,7 @@ def admin_panel():
         num_sets = len([item for item in os.listdir('db/sets') if not item.startswith('_')])
         num_users = len([item for item in os.listdir('db/users') if not item.startswith('_')])
         num_public = len(hashcards.set_map.title._values)
-        return render_template('admin.html', num_sets=num_sets, num_users=num_users, num_connected=connected_clients, num_public=num_public)
+        return render_template('admin.html', num_sets=num_sets, num_users=num_users, num_connected=connected_clients, num_public=num_public, references=references)
     else:
         return error(404, "The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.")
 
@@ -1072,6 +1073,10 @@ def check_permissions():
         return error(401, "You must be logged in to view this page.")
     elif request.path in HIDE_WHEN_LOGGED_IN and session.get('id'):
         return error(400, "You are already logged in!")
+
+    ref = request.args.get('ref')
+    if ref in references._values:
+        references.set(ref, references.get(ref)()+1)
 
 
 # Error handling
