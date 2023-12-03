@@ -7,6 +7,12 @@
 <body>
 {% include "components/header.html" %}
 <main>
+    {% if success == 'true' %}
+        <div id="updated" style="width: 100%; background-color: var(--success);display:flex;flex-direction: row;justify-content: center;align-items: center">
+            <span style="color: var(--background);" class="material-symbols-outlined">new_releases</span>
+            <h3 style="color: var(--background);">&nbsp;Front-end files updated</h3>
+        </div>
+    {% endif %}
     <div id="admin" style="display: flex; flex-direction: column; width: 100%; padding: 0 1em;">
         <h3>User count: {{ num_users }}</h3>
         <h3>Connected clients: {{ num_connected }} pages open</h3>
@@ -21,6 +27,8 @@
                 </tr>
             {% endfor %}
         </table>
+        <hr style="opacity: 0;">
+        <a class="chip" href="/admin/update" style="width: max-content;padding: 1em;">Update front-end files</a>
     </div>
 </main>
 {% include "components/footer.html" %}

@@ -220,7 +220,16 @@ def admin_panel():
         num_sets = len([item for item in os.listdir('db/sets') if not item.startswith('_')])
         num_users = len([item for item in os.listdir('db/users') if not item.startswith('_')])
         num_public = len(hashcards.set_map.title._values)
-        return render_template('admin.html', num_sets=num_sets, num_users=num_users, num_connected=connected_clients, num_public=num_public, references=references)
+        return render_template('admin.html', num_sets=num_sets, num_users=num_users, num_connected=connected_clients, num_public=num_public, references=references, success=request.args.get('success'))
+    else:
+        return error(404, "The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.")
+
+
+@app.route('/admin/update')
+def admin_perform_update():
+    if session.get('id') in config.ADMIN() or DEBUG:
+        update_frontend()
+        return redirect('/admin?success=true')
     else:
         return error(404, "The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.")
 
