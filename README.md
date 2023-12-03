@@ -38,6 +38,10 @@ A: It's easy! Just [sign up for an account here](https://hashcards.net/register)
 #### What about my data? Can I import and export?
 A: HashCards supports [importing sets from other sites such as Quizlet](https://hashcards.net/learn/import). You can also export HashCards sets individually, and request a copy of all of your data.
 
+#### Can I use HashCards' code or parts of it for my own purposes?
+Currently, HashCards is not licensed. Therefore, the code falls under "All rights reserved", meaning that you cannot make copies/distribute it. However, I plan to add a license in the future. The reason there is no license yet is because I do not want another entity to be able to commercialize HashCards, and I have not found a license that aligns with this yet.
+
+
 ## Support and Feedback
 If you would like to make a feature request or need help, create an issue here on GitHub or shoot me an email at dev@jvadair.com.
 
@@ -60,6 +64,7 @@ Here's a list of the technology/libraries HashCards uses. Let me know if it's mi
 12. [pathvalidate](https://github.com/thombashi/pathvalidate)
 13. [MathQuill](https://github.com/mathquill/mathquill)
 14. [QRCode.js](https://github.com/davidshimjs/qrcodejs)
+15. [short_url](https://github.com/Alir3z4/python-short_url/)
 
 ## Self-hosting
 HashCards was not designed to be self-hosted. If you are looking to self-host a copy of HashCards, please feel free to [reach out to me](#support-and-feedback).
