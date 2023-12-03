@@ -41,6 +41,10 @@ function convertMQ() {
     to_convert.each(function (i) {
         to_convert.eq(i).removeClass('convertMQ');
         MQ.StaticMath(to_convert.get(i));
-    })
+    });
+    to_convert = $(".convertMQ_edit");
+    to_convert.each(function (i) {
+        make_math_field(to_convert.eq(i));
+    });
 }
 // --x

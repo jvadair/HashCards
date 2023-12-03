@@ -4,6 +4,7 @@ hashcards.py
 This file contains the essential backend functions needed to create and modify sets.
 It does not contain other essential high-level functions such as account management.
 """
+import random
 import shutil
 
 from pyntree import Node
@@ -13,10 +14,11 @@ from datetime import datetime, timedelta
 from copy import copy
 from uuid import uuid4
 from thefuzz import process as fuzz_process
-from tools import sort_by_value, hash_file, verify_uuid
+from tools import sort_by_value, hash_file, verify_uuid, find_similar_results
 from random import shuffle
 import tarfile
 import os
+from math import floor, ceil
 
 SET_TEMPLATE = {
     "id": None,
@@ -424,6 +426,44 @@ def explore():
     return {
         "random": random_sets[0:3]
     }
+
+
+def generate_test(set_id, num_mcq=None, num_srq=None, question_side="both"):
+    """
+    :param set_id: The set to study
+    :param num_mcq: The number of multiple choice questions to give - defaults to total - num_srq, or half the questions, rounded up
+    :param num_srq: The number of short response questions to give - defaults to total - num_mcq, or half the questions, rounded down
+    :param question_side: Whether to use the "front", "back", or "both" as the question
+    :return: A list of questions, each formatted as (card_id, question, options, answer, question_side, type)
+    """
+    SIDES = ("front", "back")
+    response = []
+    set_db = get_set_db(set_id)
+    total_cards = len(set_db.card_order())
+    if num_mcq is None and num_srq is None:
+        # floor & ceil are used because you can't have .5 of a card
+        num_mcq = ceil(total_cards/2)
+        num_srq = floor(total_cards/2)
+    elif num_mcq is None:
+        num_mcq = total_cards - num_srq
+    elif num_srq is None:
+        num_srq = total_cards - num_mcq
+    if num_mcq + num_srq > total_cards:
+        return False
+    card_list = copy(set_db.card_order())
+    shuffle(card_list)
+    cards = iter(card_list)
+    for amount, question_type in zip((num_mcq, num_srq), ('mcq', 'srq')):
+        for _ in range(0, amount):
+            card_id = next(cards)
+            card = set_db.cards.get(card_id)
+            question_side = question_side if question_side in SIDES else random.choice(SIDES)  # Pick random if question_side is "both"
+            answer_side = SIDES[len(SIDES) - 1 - SIDES.index(question_side)]  # Get inverse side
+            question = card.get(question_side)()
+            answer = card.get(answer_side)() if question_type == 'srq' else card_id
+            options = find_similar_results(set_id, answer_side, card_id) if question_type == 'mcq' else None
+            response.append((card_id, question, options, answer, question_side, question_type))
+    return response
 
 
 def patch_all_setfiles():  # TODO: patch_all_cards function

@@ -34,6 +34,10 @@ body, main, header, footer, article, html {
     margin: 0;
 }
 
+h1,h2,h3,h4,h5,h6 {
+    font-weight: normal;
+}
+
 * {
     box-sizing: border-box;
     color: var(--text);
@@ -434,5 +438,18 @@ form input.btn {
     }
     header div.search_bar.mobile span {
         color: var(--background);
+    }
+}
+
+@media print {
+    header, footer {
+        display: none;
+    }
+    :root {
+        --background-variable-opacity: 255, 255, 255;
+        --background: #fff;
+        --overlay-variable-opacity: 178, 178, 178;
+        --overlay: #b2b2b2;
+        --text: #000;
     }
 }

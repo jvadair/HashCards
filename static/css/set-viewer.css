@@ -274,8 +274,14 @@
     height: min-content;
 }
 
+#popup #more_options {
+    display: flex;
+    flex-direction: column;
+    grid-gap: 1em;
+}
+
 #popup #more_options button {
-    width: 90%;
+    width: 50%;
 }
 
 #popup #export {
@@ -401,5 +407,8 @@
     }
     #card-viewer #card .front img {
         width: 75%;
+    }
+    #popup #more_options button {
+        width: 90%;
     }
 }

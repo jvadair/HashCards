@@ -1,0 +1,131 @@
+#test {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 0 10%;
+    min-height: calc(100vh - var(--header-height));
+    font-size: 110%;
+}
+
+.question {
+    display: block;
+    max-width: 500px;
+}
+
+.question.mcq .options {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.question.mcq .option {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+}
+
+.question.mcq input[type="radio"] {
+    opacity: 0;
+    /*position: absolute;*/
+    height: 20px;
+    width: 20px;
+    cursor: pointer;
+    z-index: 1;
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+.question.mcq .radio-button {
+    position: absolute;
+    border-radius: 50%;
+    height: 20px;
+    width: 20px;
+    border: 2px solid var(--text);
+}
+
+.question.mcq input:checked ~ .radio-button {
+    background-color: var(--accent);
+}
+
+.question.mcq .option-text {
+    margin-left: .5em;
+}
+
+
+.question.srq input {
+    display: flex;
+    background-color: var(--background);
+    color: var(--text);
+    border: none;
+    border-bottom: 2px solid var(--text);
+    font-size: 110%;
+    outline: none;
+    width: 100%;
+}
+
+#test .question.srq label span.mq-math-mode .mq-hasCursor .mq-cursor {
+    border-left: 1px solid white !important;
+}
+
+#test .question.srq span.mq-math-mode .mq-hasCursor .mq-cursor {
+    border-left: none !important;
+}
+
+.question.srq .mq-editable-field, .mq-math-mode .mq-editable-field {
+    border: none;
+    outline: none;
+    width: 100%;
+    max-width: 100%;
+    border-bottom: 2px solid var(--text);
+    font-family: serif;
+}
+
+.question.srq .mq-editable-field.mq-focused, .mq-math-mode .mq-editable-field.mq-focused {
+    border-color: var(--text);
+    box-shadow: none;
+}
+
+#print_btn {
+    position: sticky;
+    bottom: 2em;
+    padding: 1em;
+    width: max-content;
+    margin-left: auto;
+}
+
+
+/* Tablet and mobile viewports */
+@media screen and (max-width: 850px) {
+    #print_btn {
+        position: initial;
+        width: 80%;
+        align-self: center;
+        margin-left: 0;
+        margin-top: 1.5em;
+    }
+}
+
+@media print {
+    .question.mcq .radio-button {
+        display: none;
+    }
+    .question.mcq input[type="radio"] {
+        opacity: 1;
+    }
+    #print_btn {
+        display: none;
+    }
+    .question, .options {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+    .options {
+        border: 1px solid transparent;
+        display: block;
+    }
+    .question.srq input, .question.srq .mq-editable-field, .mq-math-mode .mq-editable-field {
+        border-bottom: 1px solid var(--text);
+    }
+}

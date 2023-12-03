@@ -3,6 +3,9 @@ from blake3 import blake3
 import os
 import html
 from uuid import UUID
+from encryption_assistant import get_user_db, get_set_db, get_org_db, get_group_db
+from random import shuffle
+from thefuzz import process as fuzz_process
 
 
 def is_valid_email(email: str) -> bool:
@@ -93,3 +96,17 @@ def verify_uuid(uuid, version=4):
     except ValueError:
         return False
     return str(result) == uuid
+
+
+# Study mode functions
+def find_similar_results(set_id, looking_for, card_id):
+    set_db = get_set_db(set_id)
+    answer = set_db.cards.get(card_id).get(looking_for)()
+    search_through = {card: set_db.cards.get(card).get(looking_for)() for card in tuple(set_db.cards().keys()) if set_db.cards.get(card).get(looking_for)().lower() != answer.lower()}
+    results = fuzz_process.extract(answer, search_through, limit=3)
+    results = {r[2]: r[0] for r in results}
+    results[card_id] = answer
+    results = list(results.items())
+    shuffle(results)
+    results = dict(results)
+    return results

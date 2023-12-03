@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include "components/boilerplate.html" %}
+    <title>HashCards</title>
+    <link rel="stylesheet" href="/static/css/test.min.css">
+</head>
+<body>
+{% include "components/header.html" %}
+<main>
+<div id="test">
+    <h1><u>Test: {{ set.title._val if set.title._val else 'New set' }}</u></h1>
+    {% for question, number in zip(test_data, range(1,len(test_data)+1)) %}
+        {% if question[-1] == 'mcq' %}
+            <div class="question mcq">
+                <h3>{{ number }}. <span class="{{ "convertMQ" if question[1].startswith("@@MQ@@") else "" }}">{{ question[1].replace("@@MQ@@", "") }}</span></h3>
+                <form class="options" autocomplete="off">
+                    {% for option_id, option_text in question[2].items() %}
+                        <label class="option">
+                            <input type="radio" name="choice" id="{{ option_id }}" value="{{ option_id }}">
+                            <span class="radio-button"></span>
+                            <span class="option-text {{ "convertMQ" if option_text.startswith("@@MQ@@") else "" }}">{{ option_text.replace("@@MQ@@", "") }}</span>
+                        </label>
+                    {% endfor %}
+                </form>
+            </div>
+        {% else %}
+             <div class="question srq">
+                <h3>{{ number }}. <span class="{{ "convertMQ" if question[1].startswith("@@MQ@@") else "" }}">{{ question[1].replace("@@MQ@@", "") }}</span></h3>
+                <label><input type="text" autocomplete="off" class="{{ "convertMQ_edit" if question[3].startswith("@@MQ@@") else "" }}"></label>
+            </div>
+        {% endif %}
+        <hr style="opacity: 0;"> {# Needed to make print query work - printing is weird! #}
+    {% endfor %}
+    <p id="print_btn" class="chip" onclick="print();">
+        <span class="material-symbols-outlined">print</span>
+        Print test
+    </p>
+</div>
+</main>
+</div>
+{% include "components/footer.html" %}
+<script src="/static/scripts/mq_extras.min.js"></script>
+<script>
+    let MQ = MathQuill.getInterface(2);
+    convertMQ();
+</script>
+</body>
+</html>

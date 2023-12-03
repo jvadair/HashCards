@@ -4,7 +4,7 @@ import hashcards
 from registrationAPI import registration_api, sendmail
 from authlib.integrations.flask_client import OAuth
 from pyntree import Node
-from tools import is_valid_email, hash_file, listdir_recursive, get_data_filenames, metatags
+from tools import is_valid_email, hash_file, listdir_recursive, get_data_filenames, metatags, find_similar_results
 from datetime import datetime, timedelta
 from werkzeug.exceptions import HTTPException, NotFound
 import os
@@ -17,7 +17,6 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from zipfile import ZipFile
 from uuid import uuid4
 from thefuzz import fuzz
-from thefuzz import process as fuzz_process
 from random import shuffle
 from copy import copy
 from werkzeug.middleware.proxy_fix import ProxyFix
@@ -135,20 +134,6 @@ oauth.register(
 # Specialized page functions
 def error(code, message):
     return render_template("error.html", message=message, code=code), code
-
-
-# Study mode functions
-def find_similar_results(set_id, looking_for, card_id):
-    set_db = get_set_db(set_id)
-    answer = set_db.cards.get(card_id).get(looking_for)()
-    search_through = {card: set_db.cards.get(card).get(looking_for)() for card in tuple(set_db.cards().keys()) if set_db.cards.get(card).get(looking_for)().lower() != answer.lower()}
-    results = fuzz_process.extract(answer, search_through, limit=3)
-    results = {r[2]: r[0] for r in results}
-    results[card_id] = answer
-    results = list(results.items())
-    shuffle(results)
-    results = dict(results)
-    return results
 
 
 # Additional helper functions
@@ -423,6 +408,16 @@ def set_manager(set_id):
     else:
         return error(401,
                      "You are not the author of this set, so you can't edit it. If you do happen to be the owner, please try switching accounts.")
+
+
+@app.route('/set/<set_id>/test')
+def generate_test(set_id):
+    # args = request.args
+    test_data = hashcards.generate_test(set_id)
+    if test_data:
+        return render_template('test.html', test_data=test_data, set=get_set_db(set_id))
+    else:
+        return error(400, "Looks like you tried to make a test incorrectly. Make sure you didn't ask for more questions than there are cards.")
 
 
 @app.route('/set/<set_id>/export/')
