@@ -128,4 +128,7 @@
     .question.srq input, .question.srq .mq-editable-field, .mq-math-mode .mq-editable-field {
         border-bottom: 1px solid var(--text);
     }
+    .notice {
+        display: none !important;
+    }
 }

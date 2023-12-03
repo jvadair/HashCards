@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     {% include "components/boilerplate.html" %}
-    <title>HashCards</title>
+    <title>Test: {{ set.title._val if set.title._val else 'New set' }} | HashCards</title>
     <link rel="stylesheet" href="/static/css/test.min.css">
 </head>
 <body>
@@ -10,6 +10,7 @@
 <main>
 <div id="test">
     <h1><u>Test: {{ set.title._val if set.title._val else 'New set' }}</u></h1>
+    <p class="notice" style="color: var(--failure);display: flex;align-items: center;"><span style="color: var(--failure);" class="material-symbols-outlined">error</span> Test mode is still in beta, and there is no online scoring yet.</p>
     {% for question, number in zip(test_data, range(1,len(test_data)+1)) %}
         {% if question[-1] == 'mcq' %}
             <div class="question mcq">
