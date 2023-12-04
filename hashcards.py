@@ -114,7 +114,7 @@ def modify_set(set_id, **kwargs) -> None:
                 continue
             if kwarg in ('autosave',):  # Bool type-forcer
                 set.set(kwarg, bool(kwargs[kwarg]))
-            elif type(kwargs[kwarg]) not in (str, int) or len(kwargs[kwarg]) > 100000:  # Prevent spammers and whatnot
+            elif type(kwargs[kwarg]) not in (str, int) or len(kwargs[kwarg]) > 4000:  # Prevent spammers and whatnot
                 continue
             set.set(kwarg, kwargs[kwarg])
             if kwarg in ('title', 'description'):
