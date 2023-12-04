@@ -85,7 +85,7 @@
                 <input type="text" id="share-link" readonly>
                 <script>
                     {% if set.has("short_url") %}
-                        $("#share-link").val("https://hashcards.net/" + "{{ set.get("short_url")._val }}");
+                        $("#share-link").val("https://share.hashcards.net/" + "{{ set.get("short_url")._val }}");
                     {% else %}
                         $("#share-link").val("https://hashcards.net" + window.location.pathname);
                     {% endif %}
