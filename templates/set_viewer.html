@@ -3,7 +3,7 @@
 <head>
     {% include "components/boilerplate.html" %}
     <title>{{ set.title._val if set.title._val else 'New set' }} | HashCards</title>
-    <link rel="stylesheet" href="/static/css/set-viewer.min.css">
+    <link rel="stylesheet" href="/static/css/set-viewer.min.css?v=2">
     <script src="/static/scripts/boxfit.min.js"></script>
     {{ metatags(title=set.title._val if set.title._val else 'New set', description=set.description._val if set.description._val else 'No description provided.', image="logo.png", path="/set/" + set.id._val) | safe }}
 </head>
@@ -132,7 +132,7 @@
 <script>
     let visibility = "{{ set.visibility._val }}";
 </script>
-<script src="/static/scripts/set_viewer.min.js"></script>
+<script src="/static/scripts/set_viewer.min.js?v=2"></script>
 
 </body>
 </html>

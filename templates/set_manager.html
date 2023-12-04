@@ -3,7 +3,7 @@
 <head>
     {% include "components/boilerplate.html" %}
     <title>Edit {{ set.title._val if set.title._val else "new set" }} | HashCards</title>
-    <link rel="stylesheet" href="/static/css/set-manager.min.css">
+    <link rel="stylesheet" href="/static/css/set-manager.min.css?v=2">
 
 </head>
 <body>
@@ -137,7 +137,7 @@
 </main>
 <p id="save-indicator"><span class="material-symbols-outlined">check_circle</span> Your set was saved.</p>
 {% include "components/footer.html" %}
-<script src="/static/scripts/mq_extras.min.js"></script>
-<script src="/static/scripts/set_manager.min.js"></script>
+<script src="/static/scripts/mq_extras.min.js?v=2"></script>
+<script src="/static/scripts/set_manager.min.js?v=2"></script>
 </body>
 </html>
