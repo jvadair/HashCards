@@ -167,7 +167,7 @@ $(document).ready(function() {
     $('body').on("keyup", function (e) {
         if (answered) {
             e.preventDefault();
-            getNextQuestion();
+            setTimeout(getNextQuestion, 200);
         }
         else if (49 <= e.keyCode <= 52) {
             if (type === 'mc') {
