@@ -40,12 +40,14 @@
   align-items: center;
   text-align: center;
   width: 100%;
-  grid-gap: 2em;
+  grid-gap: 1em;
 }
 
 #recent .set {
-    width: 85%;
-    background-color: var(--overlay);
+  width: 85%;
+  background-color: var(--overlay);
+  padding: 0;
+  border-radius: 25px;
 }
 
 /* Feed */
