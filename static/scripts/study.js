@@ -15,7 +15,7 @@ $(document).ready(function() {
     $("#study").on('keyup',function(event) {
         if (!answered) {
             if (event.which == 13) {
-                submit_answer_prompt();
+                setTimeout(submit_answer_prompt, 150);
             }
         }
     });
@@ -167,7 +167,7 @@ $(document).ready(function() {
     $('body').on("keyup", function (e) {
         if (answered) {
             e.preventDefault();
-            setTimeout(getNextQuestion, 200);
+            getNextQuestion();
         }
         else if (49 <= e.keyCode <= 52) {
             if (type === 'mc') {
