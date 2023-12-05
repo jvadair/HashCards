@@ -23,7 +23,7 @@ function convert_to_regular_field(target) {
 }
 
 function reset_sr_input() {
-    let target = $("#answer-prompt input");
+    let target = $("#answer-prompt .math-field");
     target.replaceWith(`<input id="prompt-response" placeholder="Type your answer here" autocomplete="off" value="">`);
 }
 

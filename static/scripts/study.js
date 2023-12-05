@@ -12,7 +12,7 @@ $(document).ready(function() {
             submit_answer_mcq(id);
         }
     });
-    $("#prompt-response, .mq-editable-field").on('keypress',function(event) {
+    $("#study").on('keyup',function(event) {
         if (!answered) {
             if (event.which == 13) {
                 submit_answer_prompt();
@@ -88,6 +88,7 @@ function getNextQuestion() {
             $("#correct-answer").hide();
             $("#math-help").hide();
             if (data['mathquill']) {
+                $("#answer-prompt input").val("");
                 make_math_field($("#answer-prompt input"));
                 $("#math-help").show();
             }
@@ -127,7 +128,7 @@ function submit_answer_prompt() {
     if ($("#prompt-response").val()) {
         answer = $("#prompt-response").val();
     }
-    else {
+    else if ($('.math-field')) {
         answer = "@@MQ@@" + MQ.MathField($(".math-field").get(0)).latex();
     }
     socket.emit("check_answer", {"set_id": set_id, "answer": answer}, (response) => {
