@@ -83,6 +83,7 @@ function getNextQuestion() {
             $("#answer #answer-buttons").hide();
             $("#answer #answer-prompt").show();
             reset_sr_input();
+            $("#answer-prompt input").val("");
             $("#correct-answer").removeClass('incorrect');
             $("#correct-answer").removeClass('correct');
             $("#correct-answer").hide();
