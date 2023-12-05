@@ -15,7 +15,7 @@ $(document).ready(function() {
     $("#study").on('keyup',function(event) {
         if (!answered) {
             if (event.which == 13) {
-                setTimeout(submit_answer_prompt, 150);
+                setTimeout(submit_answer_prompt, 50);
             }
         }
     });
