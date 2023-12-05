@@ -164,7 +164,7 @@ function submit_answer_prompt() {
 
 // Submit via button
 $(document).ready(function() {
-    $('body').on("keydown", function (e) {
+    $('body').on("keyup", function (e) {
         if (answered) {
             e.preventDefault();
             getNextQuestion();
