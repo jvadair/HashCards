@@ -29,7 +29,7 @@
         });
         </script>
         {% if not session['id'] %}
-            <a href="/login" id="header-login-button">Login</a>
+            <a href="/login" id="header-login-button" class="btn">Login</a>
             <script>
                 let redirect_path = window.location.pathname;
                 if (redirect_path.startsWith('/api') || ['/register', '/login'].includes(redirect_path)) {

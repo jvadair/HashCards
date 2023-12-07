@@ -19,6 +19,7 @@ font-family: 'Roboto', sans-serif;
     --secondary: #48d96c;
     --success: #43AA8B;
     --failure: #aa434d;
+    --accent-variable-opacity: 51, 159, 224;
     --success-variable-opacity: 67, 170, 139;
     --failure-variable-opacity: 170, 67, 77;
 
@@ -211,9 +212,13 @@ header {
     padding: 10px;
 }
 
-header a {
+header a:not(.btn) {
     text-decoration: none;
     font-size: 125%;
+}
+
+header a.btn {
+    font-size: 110%;
 }
 
 header nav {

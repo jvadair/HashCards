@@ -46,14 +46,14 @@
                 $("#card h2").boxfit({multiline: true, maximum_font_size: 25});
             </script>
             <div id="widgets">
-                <a class="chip" href="./study">Study</a>
+                <a class="chip" href="./study"><span class="material-symbols-outlined">school</span> Study</a>
                 {% if session.get('id') %}
                     {% if author.id._val == session['id'] %}
-                        <a class="chip" href="./edit">Edit</a>
+                        <a class="chip" href="./edit"><span class="material-symbols-outlined">border_color</span> Edit</a>
                     {% endif %}
-                    <p class="chip" id="pin-set">{{ "Unpin" if set.id._val in get_user_db(session['id']).pinned._val else 'Pin' }}</p>
+                    <p class="chip" id="pin-set"><span class="material-symbols-outlined">push_pin</span> {{ "Unpin" if set.id._val in get_user_db(session['id']).pinned._val else 'Pin' }}</p>
                 {% endif %}
-                <p class="chip" onclick="showDialog('share');">Share</p>
+                <p class="chip" onclick="showDialog('share');"><span class="material-symbols-outlined">share</span> Share</p>
                 <p class="chip" onclick="showDialog('more_options')"><span class="material-symbols-outlined">more_horiz</span></p>
                 {# IDEAS:
                     - Add to group
