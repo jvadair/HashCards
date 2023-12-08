@@ -421,13 +421,16 @@ def set_manager(set_id):
 
 @app.route('/set/<set_id>/test')
 def generate_test(set_id):
-    # args = request.args
-    test_data = hashcards.generate_test(set_id)
-    if test_data:
-        return render_template('test.html', test_data=test_data, set=get_set_db(set_id))
+    set_db = get_set_db(set_id)
+    if set_db.visibility() in ('public', 'unlisted') or set_db.author() == session.get('id'):
+        test_data = hashcards.generate_test(set_id)
+        if test_data:
+            return render_template('test.html', test_data=test_data, set=get_set_db(set_id))
+        else:
+            return error(400, "Looks like you tried to make a test incorrectly. Make sure you didn't ask for more questions than there are cards.")
     else:
-        return error(400, "Looks like you tried to make a test incorrectly. Make sure you didn't ask for more questions than there are cards.")
-
+        return error(401,
+                     "The set is either private or does not exist. If you own this set and bookmarked it, sign in and try again.")
 
 @app.route('/set/<set_id>/export/')
 def export_set(set_id):
