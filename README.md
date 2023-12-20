@@ -49,7 +49,7 @@ If you would like to make a feature request or need help, create an issue here o
 Contributions to HashCards are currently closed. If you would like to contribute to HashCards, please [contact me](#support-and-feedback) or wait until contributions are enabled.
 
 ## Tech stack
-Here's a list of the technology/libraries HashCards uses. Let me know if it's missing anything.
+Here's a list of the technology/libraries HashCards uses. Please let me know if it neglects to mention a library used in the project.
 1. [pyntree](https://github.com/jvadair/pyntree)
 2. [registrationAPI](https://github.com/jvadair/registrationAPI)
 3. [Flask](https://github.com/pallets/flask)
