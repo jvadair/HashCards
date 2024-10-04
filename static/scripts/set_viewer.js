@@ -151,11 +151,11 @@ $(document).ready(function(){
                     window.alert("Could not pin set - you are not signed in.");
                 }
                 else {
-                    if ($("#pin-set").text() == "Pin") {
-                        $("#pin-set").text("Unpin");
+                    if ($("#pin-set").text() == "push_pin Pin") {
+                        $("#pin-set").html("<span class=\"material-symbols-outlined\">push_pin</span> Unpin");
                     }
                     else {
-                        $("#pin-set").text("Pin");
+                        $("#pin-set").html("<span class=\"material-symbols-outlined\">push_pin</span> Pin");
                     }
                 }
             });
