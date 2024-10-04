@@ -46,10 +46,10 @@ Currently, HashCards is not licensed. Therefore, the code falls under "All right
 If you would like to make a feature request or need help, create an issue here on GitHub or shoot me an email at dev@jvadair.com.
 
 ## Contributing
-Contributions to HashCards are currently closed. If you would like to contribute to HashCards, please [contact me](#support-and-feedback) or wait until contributions are enabled.
+HashCards welcomes new contributors. To get started, fork the repository, make some changes, and submit a pull request. I will manually review all pull requests; I do not guarantee approval of any specific pull request (though I will likely provide an explanation if initially rejected!). If you have any questions, please feel free to [contact me](#support-and-feedback).
 
 ## Tech stack
-Here's a list of the technology/libraries HashCards uses. Let me know if it's missing anything.
+Here's a list of the technology/libraries HashCards uses. Please let me know if it neglects to mention a library used in the project.
 1. [pyntree](https://github.com/jvadair/pyntree)
 2. [registrationAPI](https://github.com/jvadair/registrationAPI)
 3. [Flask](https://github.com/pallets/flask)
@@ -71,4 +71,18 @@ HashCards was not designed to be self-hosted. If you are looking to self-host a 
 
 ---
 
-<p align="center">&copy; James Adair 2023. All rights reserved.</p>
+<p align="center">&copy; James Adair 2023.</p>
+
+---
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this repository except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
